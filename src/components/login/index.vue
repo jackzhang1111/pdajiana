@@ -78,7 +78,7 @@ export default {
         //登录
         denglu(){
             if(this.formData.username == '' || this.formData.password == ''){
-                Toast('用户名或者密码不能为空')
+                Toast('Name/Password cannot be empty')
                 return
             }
             this.login(this.formData)

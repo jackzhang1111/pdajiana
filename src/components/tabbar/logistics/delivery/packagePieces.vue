@@ -78,7 +78,7 @@ export default {
         pickuplogisticsorder(orderId){
             pickuplogisticsorderApi({orderId}).then(res => {
                 if(res.code == 0){
-                    Toast('成功揽件')
+                    Toast('Successfully taken')
                     this.logisticsorderinfo(this.$route.query.orderid)
                 }
             })

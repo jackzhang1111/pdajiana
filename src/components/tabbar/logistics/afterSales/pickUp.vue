@@ -123,7 +123,7 @@ export default {
         pickupbacklogisticsorder(id){
             pickupbacklogisticsorderApi({orderId:id}).then(res => {
                 if(res.code == 0){
-                    Toast('成功取件')
+                    Toast('Successfully taken')
                     setTimeout(()=>{this.backlogisticsorderinfo(this.$route.query.orderid)},1000)
                 }
             })

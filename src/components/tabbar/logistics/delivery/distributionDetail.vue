@@ -205,7 +205,7 @@ export default {
                     this.qianshouData.imgList = arr
                 })
                 if(this.qianshouData.imgList.length <= 0){
-                    Toast('签收图片不能为空')
+                    Toast('The picture of receiving cannot be empty')
                     return
                 }
             }else{
