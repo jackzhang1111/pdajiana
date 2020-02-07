@@ -1,8 +1,8 @@
 <template>
 <!-- 取件 -->
     <div class="pick-up">
-        <nosaomiao-header title="取件"></nosaomiao-header>
-        <div class="pick-up-order">物流单号：{{detailData.expressNo}}</div>
+        <nosaomiao-header title="Take Delivery"></nosaomiao-header>
+        <div class="pick-up-order">Tracking No:{{detailData.expressNo}}</div>
         <div class="order-detail">
             <div class="detail-header">
                 <van-icon name="play" class="play-left" :color="playLeft ? '#DCDCDC':'#333'" @click="cliPlayLeft"/>
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="btn-wcqj" @click="finishPicking" v-if="detailData.orderCourierStatusBack == 1">完成取件</div>
+        <div class="btn-wcqj" @click="finishPicking" v-if="detailData.orderCourierStatusBack == 1">OK</div>
     </div>
 </template>
 
@@ -44,11 +44,11 @@ export default {
             listLength:0,
             current:1,
             detailedGuigeList:[
-                {name:'规格属性',value:this.aaa},
-                {name:'销售退货数量',value:'100'},
-                {name:'FNSKU',value:'6461654'},
-                {name:'本次取件数量',value:'100'},
-                {name:'国际码',value:'FSN46166'},
+                {name:'Specifications',value:''},
+                {name:'Qty Returned',value:''},
+                {name:'FNSKU',value:''},
+                {name:'Qty of Packing',value:''},
+                {name:'International No',value:''},
             ],
             detailData:{},
             currentProduct:{},
@@ -80,8 +80,10 @@ export default {
         //完成取件
         finishPicking(){
             Dialog.confirm({
-                title: '温馨提示',
-                message: '您确认商品完成取件了吗？'
+                title: 'Tips',
+                message: 'Are you sure the return products were took?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                this.pickupbacklogisticsorder(this.$route.query.orderid)
             }).catch(() => {});
@@ -121,7 +123,6 @@ export default {
         pickupbacklogisticsorder(id){
             pickupbacklogisticsorderApi({orderId:id}).then(res => {
                 if(res.code == 0){
-                    
                     Toast('成功取件')
                     setTimeout(()=>{this.backlogisticsorderinfo(this.$route.query.orderid)},1000)
                 }

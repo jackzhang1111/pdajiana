@@ -5,19 +5,19 @@
             <!-- <span>自定义</span> -->
             <!-- <img slot="icon" slot-scope="props" :src="props.active ? icon.active : icon.inactive"> -->
             <van-tabbar-item route to="/control/warehousing">
-                <span>仓储</span>
+                <span>Warehouse</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.cangchu1 : icon.cangchu" class="icon-style">
             </van-tabbar-item>
              <van-tabbar-item route to="/control/logistics">
-                <span>物流</span>
+                <span>Delivery</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.wuliu1 : icon.wuliu" class="icon-style">
             </van-tabbar-item>
             <van-tabbar-item route to="/control/statistical">
-                <span>统计</span>
+                <span>Statistics</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.tongji1 : icon.tongji" class="icon-style">
             </van-tabbar-item>
             <van-tabbar-item route to="/control/account"> 
-                <span>我的</span>
+                <span>My</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.wode1 : icon.wode" class="icon-style">
             </van-tabbar-item>
         </van-tabbar>

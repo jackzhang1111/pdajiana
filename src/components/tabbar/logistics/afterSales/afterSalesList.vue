@@ -8,7 +8,7 @@
                         <div class="bscroll-con">
                             <div class="order" v-for="(data,index) in dataList" :key="index" >
                                 <div class="order-header">
-                                    <span>物流单号:{{data.expressNo}}</span>
+                                    <span>Tracking No:{{data.expressNo}}</span>
                                     <div class="fl-right">
                                         <span>{{orderStatus(data.orderCourierStatusBack,'statusList')}}</span>
                                     </div>
@@ -24,21 +24,21 @@
                                             <span>{{data.addressDetail}}</span>
                                         </div>
                                     </div>
-                                    <div class="btn fl-right" @click.stop="receipt(data.orderId)" v-if="data.orderCourierStatusBack == 0">接单</div>
-                                    <div class="btn fl-right" @click.stop="pieces(data.orderId)" v-if="data.orderCourierStatusBack == 1">取件</div>
+                                    <div class="btn fl-right" @click.stop="receipt(data.orderId)" v-if="data.orderCourierStatusBack == 0">Confirm</div>
+                                    <div class="btn fl-right" @click.stop="pieces(data.orderId)" v-if="data.orderCourierStatusBack == 1">Take Delivery</div>
                                 </div>
                                 <div class="order-footer">
                                     <div class="footer-item">
                                         <img src="@/assets/img/phone@2x.png">
-                                        <span>拨打电话</span> 
+                                        <span>Dial</span> 
                                     </div>
                                     <div class="footer-item">
                                         <img src="@/assets/img/navigation@2x.png">
-                                        <span>导航</span> 
+                                        <span>Navigation</span> 
                                     </div>
                                     <div class="footer-item">
                                         <img src="@/assets/img/abnormal@2x.png">
-                                        <span>异常</span> 
+                                        <span>Exception</span> 
                                     </div>
                                 </div>
                             </div>
@@ -61,11 +61,11 @@ export default {
     data() {
         return {
             tabList:[
-                {name:'全部',value:0},
-                {name:'待接单',value:1},
-                {name:'待取件',value:2},
-                {name:'待入库',value:3},
-                {name:'已入库',value:4},
+                {name:'All',value:0},
+                {name:'New Order',value:1},
+                {name:'Not Taken',value:2},
+                {name:'Unwarehoused',value:3},
+                {name:'Warehoused',value:4},
             ],
             dataList:[],
             recordGroup:[],
@@ -80,10 +80,10 @@ export default {
                 limit:10
             },
             statusList:[
-                {name:'待接单',type:0},
-                {name:'待取件',type:1},
-                {name:'待入库',type:2},
-                {name:'已入库',type:3},
+                {name:'New Order',type:0},
+                {name:'Not Taken',type:1},
+                {name:'Unwarehoused',type:2},
+                {name:'Warehoused',type:3},
             ]
         };
     },
@@ -184,8 +184,10 @@ export default {
         //接单
         receipt(id){
             Dialog.confirm({
-                title: '温馨提示',
-                message: '您确定要接单吗？'
+                title: 'Tips',
+                message: 'Are you sure to confirm the order?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                 this.receivebacklogisticsorder(id)
             }).catch(() => {});
@@ -217,7 +219,19 @@ export default {
         }
         .van-tabs__nav{
             .van-tab {
-                flex-basis:20% !important; 
+                // flex-basis:40% !important; 
+                &:nth-child(2){
+                    flex-basis:25% !important; 
+                }
+                &:nth-child(3){
+                    flex-basis:25% !important; 
+                }
+                &:nth-child(4){
+                    flex-basis:35% !important; 
+                }
+                &:nth-child(5){
+                    flex-basis:30% !important; 
+                }
             }
             
         }
@@ -229,10 +243,9 @@ export default {
         border-bottom: 1px solid #F2F3F5;
         margin-bottom: 20px;
         .order-header{
-            height: 79px;
-            line-height: 79px;
             border-bottom: 1px solid #F2F3F5;
-            padding: 0 30px;
+            padding:  30px;
+            overflow: hidden;
         }
         .order-con{
             padding: 30px 30px 19px;
@@ -255,12 +268,13 @@ export default {
                 }
             }
             .btn{
-                width:100px;
+                // width:100px;
                 height:48px;
                 border:1px solid #666666;
                 border-radius:6px;
                 line-height: 48px;
                 text-align: center;
+                padding: 0 20px;
             }
         }
         .order-footer{

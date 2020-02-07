@@ -1,13 +1,13 @@
 <template>
 <!-- 揽件详情 -->
     <div class="package-pieces">
-        <nosaomiao-header title="揽件"></nosaomiao-header>
+        <nosaomiao-header title="Pack Products"></nosaomiao-header>
         <div class="order-con">
             <div class="order-no">
-                <p>物流单号: &nbsp;{{detailData.expressNo}}</p>
+                <p>Tracking No: &nbsp;{{detailData.expressNo}}</p>
             </div>
             <div class="spqd">
-                <div class="spqd-header">商品清单</div>
+                <div class="spqd-header">Product List</div>
                 <div class="spqd-list" v-for="(detail,index) in detailData.detailList" :key="index">
                     <img :src="$webUrl+detail.skuImg" class="shangpin-img fl-left">
                     <div class="fl-left good-name">
@@ -20,13 +20,13 @@
                     </div>
                 </div>
                 <div class="spqd-footer">
-                    <span>总计:</span> 
+                    <span>Total:</span> 
                     <span>{{detailData.totalNum}}</span> 
                 </div>
             </div>
         </div>
         
-        <div class="qrlj-btn" @click="pieces" v-if="detailData.canPickup != 0">确认揽件</div>
+        <div class="qrlj-btn" @click="pieces" v-if="detailData.canPickup != 0">Confirm the Order</div>
         <div class="btn-place"></div>
     </div>
 </template>
@@ -60,8 +60,8 @@ export default {
         //揽件按钮
         pieces(){
             Dialog.confirm({
-                title: '温馨提示',
-                message: '您确认揽件并配送吗？'
+                title: 'Tips',
+                message: 'Are you sure to transit the order?'
                 }).then(() => {
                     this.pickuplogisticsorder(this.$route.query.orderid)
                 }).catch(() => {});

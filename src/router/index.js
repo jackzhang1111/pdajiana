@@ -32,7 +32,7 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {path:'/',redirect:{name:"login"}},  // 重定向到主页
+    {path:'/',redirect:{name:"logistics"}},  // 重定向到主页
     {
       path: '/login',
       name: 'login',

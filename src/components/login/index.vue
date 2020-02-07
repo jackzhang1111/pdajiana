@@ -9,13 +9,13 @@
                 <div class="user-name">
                     <img src="@/assets/img/user@2x.png" class="user-name-icon">
                     <div class="kuang">
-                        <input type="text" class="name-input" placeholder="请输入用户名" v-model="formData.username">
+                        <input type="text" class="name-input" placeholder="phone number" v-model="formData.username">
                     </div>
                 </div>
                 <div class="pass-word">
                     <img src="@/assets/img/password@2x.png" class="user-name-icon">
                     <div class="kuang">
-                        <input :type="inputType" class="name-input" placeholder="请输入密码" v-model="formData.password">
+                        <input :type="inputType" class="name-input" placeholder="Password" v-model="formData.password">
                         <van-icon :name="eyeName" size="18" @click="iconStatus = !iconStatus"/>
                     </div>
                 </div>
@@ -24,10 +24,10 @@
         <div class="login-bottom">
             <div class="mima">
                 <van-checkbox v-model="checked"></van-checkbox>
-                <span class="c-999">记住密码</span>
-                <span class="fl-right">忘记密码？</span>
+                <span class="c-999">Remember password</span>
+                <span class="fl-right">Forgot password?</span>
             </div>
-            <div class="login-btn" @click="denglu">登录</div>
+            <div class="login-btn" @click="denglu">Log In</div>
         </div>
     </div>
 </template>
@@ -58,8 +58,14 @@ export default {
 
     },
     mounted() {
-
+        window.addEventListener("keyup",this.keyupEnter,false);
     },
+    beforeDestroy() {
+        window.removeEventListener("keyup",this.keyupEnter,false);
+    }, //生命周期 - 销毁之前
+    destroyed() {
+        window.removeEventListener("keyup",this.keyupEnter,false);
+    }, //生命周期 - 销毁完成
     watch: {
         iconStatus:{
             handler:function(newVal){
@@ -86,7 +92,14 @@ export default {
                     this.$router.push({name:'logistics'})
                }
            })
-        }
+        },
+        //回车键
+        keyupEnter(){
+            if( window.event.keyCode == 13 ){
+                //执行登录方法
+                this.denglu()
+            }
+        },
     },
     components: {
 
@@ -109,7 +122,7 @@ export default {
         .mima{
             height: 50px;
             line-height: 50px;
-            font-size: 30px;
+            font-size: 26px;
             margin: 400px 75px 0;
             position: relative;
             top:0;

@@ -8,7 +8,7 @@
                         <div class="bscroll-con">
                             <div class="order" v-for="(data,index) in dataList" :key="index" >
                                 <div class="order-header">
-                                    <span>物流单号:{{data.expressNo}}</span>
+                                    <span>Tracking No:{{data.expressNo}}</span>
                                     <div class="fl-right">
                                         <span>{{orderStatus(data.orderCourierStatus,'statusList')}}</span>
                                     </div>
@@ -25,22 +25,22 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="btn fl-right" @click.stop="receipt(data.orderId)" v-if="data.orderCourierStatus==0">接单</div>
-                                    <div class="btn fl-right" @click.stop="pieces(data.orderId)" v-if="data.canPickup == 1">揽件</div>
-                                    <div class="sqtk fl-right" v-if="data.applyRefund == 1">申请退款</div>
+                                    <div class="btn fl-right" @click.stop="receipt(data.orderId)" v-if="data.orderCourierStatus==0">Confirm</div>
+                                    <div class="btn fl-right" @click.stop="pieces(data.orderId)" v-if="data.canPickup == 1">Pack Products</div>
+                                    <div class="sqtk fl-right" v-if="data.applyRefund == 1">Refund</div>
                                 </div>
                                 <div class="order-footer">
                                     <div class="footer-item">
                                         <img src="@/assets/img/phone@2x.png">
-                                        <span>拨打电话</span> 
+                                        <span>Dial</span> 
                                     </div>
                                     <div class="footer-item">
                                         <img src="@/assets/img/navigation@2x.png">
-                                        <span>导航</span> 
+                                        <span>Navigation</span> 
                                     </div>
                                     <div class="footer-item">
                                         <img src="@/assets/img/abnormal@2x.png">
-                                        <span>异常</span> 
+                                        <span>Exception</span> 
                                     </div>
                                 </div>
                             </div>
@@ -63,12 +63,12 @@ export default {
     data() {
         return {
             tabList:[
-                {name:'全部',value:0},
-                {name:'待接单',value:1},
-                {name:'待揽件',value:2},
-                {name:'配送中',value:3},
-                {name:'已签收',value:4},
-                {name:'已拒签',value:5},
+                {name:'All',value:0},
+                {name:'New Order',value:1},
+                {name:'Not Taken',value:2},
+                {name:'In Transit',value:3},
+                {name:'Received',value:4},
+                {name:'Refused',value:5},
             ],
             dataList:[],
             recordGroup:[],
@@ -83,11 +83,11 @@ export default {
             guanmengou:true,
             totalCount:0,
             statusList:[
-                {name:'待接单',type:0},
-                {name:'待揽件',type:1},
-                {name:'配送中',type:2},
-                {name:'已签收',type:3},
-                {name:'拒绝签收',type:4},
+                {name:'Pending Confirmation',type:0},
+                {name:'Not Taken',type:1},
+                {name:'In Transit',type:2},
+                {name:'Received',type:3},
+                {name:'Refused',type:4},
             ]
         };
     },
@@ -110,8 +110,10 @@ export default {
         //接单
         receipt(id){
            Dialog.confirm({
-                title: '温馨提示',
-                message: '您确定要接单吗？'
+                title: 'Tips',
+                message: 'Are you sure to confirm the order?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
                 }).then(() => {
                     // on confirm
                     this.receivelogisticsorder(id)
@@ -222,12 +224,12 @@ export default {
         }
         .van-tabs__nav{
             .van-tab {
-                flex-basis:17% !important; 
+                
                 &:nth-child(2){
-                    flex-basis:16% !important; 
+                    flex-basis:25% !important; 
                 }
-                &:nth-child(4){
-                    flex-basis:16% !important; 
+                &:nth-child(3){
+                    flex-basis:25% !important; 
                 }
             }
             
@@ -240,10 +242,9 @@ export default {
         border-bottom: 1px solid #F2F3F5;
         margin-bottom: 20px;
         .order-header{
-            height: 79px;
-            line-height: 79px;
             border-bottom: 1px solid #F2F3F5;
-            padding: 0 30px;
+            padding:  30px;
+            overflow: hidden;
         }
         .order-con{
             padding: 30px 30px 19px;
@@ -266,13 +267,13 @@ export default {
                 }
             }
             .btn{
-                width:100px;
                 height:48px;
                 border:1px solid #666666;
                 border-radius:6px;
                 line-height: 48px;
                 text-align: center;
                 margin-left:20px;
+                padding: 0 20px;
             }
             .sqtk{
                 height:48px;

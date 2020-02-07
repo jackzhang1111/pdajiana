@@ -6,9 +6,7 @@
       </div>
       <slot></slot>
        <!-- 底部提示信息 -->
-      <div class="bottom-tip" v-show="!pullup && data.length>0">
-          已经到底了
-      </div>
+      <div class="bottom-tip" v-show="!pullup && data.length>0">Wow! The end</div>
     </div>
   </div>
 </template>

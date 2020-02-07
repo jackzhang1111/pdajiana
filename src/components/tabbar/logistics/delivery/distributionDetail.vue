@@ -4,8 +4,8 @@
         <div class="detail-con">
             <div class="shxx">
                 <div class="shxx-header">
-                    <p class="p1">收货信息</p> 
-                    <p>订单号:{{detailData.expressNo}}</p>
+                    <p class="p1">Order Info</p> 
+                    <p>Order No:{{detailData.expressNo}}</p>
                 </div>
                 <div class="shxx-con">
                     <img :src="$webUrl+detailData.headImg" class="touxiang fl-left">
@@ -22,16 +22,16 @@
                 <div class="order-footer">
                     <div class="footer-item">
                         <img src="@/assets/img/phone@2x.png">
-                        <span>拨打电话</span> 
+                        <span>Dial</span> 
                     </div>
                     <div class="footer-item">
-                        <img src="@/assets/img/phone@2x.png">
-                        <span>导航</span> 
+                        <img src="@/assets/img/navigation@2x.png">
+                        <span>Navigation</span> 
                     </div>
                 </div>
             </div>
             <div class="spqd">
-                <div class="spqd-header">商品清单</div>
+                <div class="spqd-header">Product List</div>
                 <div class="spqd-list" v-for="(detail,index) in detailData.detailList" :key="index">
                     <img :src="$webUrl+detail.skuImg" class="shangpin-img fl-left">
                     <div class="fl-left good-name">
@@ -44,40 +44,39 @@
                     </div>
                 </div>
                 <div class="spqd-footer">
-                    <span>总计:</span>
+                    <span>Total:</span>
                     <span>{{detailData.totalNum}}</span>
                 </div>
             </div>
             <div class="order-time">
                 <div class="time-item" v-if="detailData.acceptTime">
-                    <span class="c-333">接单时间</span>
+                    <span class="c-333">Date of Confirming</span>
                     <div class="fl-right fs-22 c-666">{{detailData.acceptTime}}</div>
                 </div>
                 <div class="time-item" v-if="detailData.pickupTime">
-                    <span class="c-333">揽件时间</span>
+                    <span class="c-333">Date of Packing</span>
                     <div class="fl-right fs-22 c-666">{{detailData.pickupTime}}</div>
                 </div>
                 <div class="time-item" v-if="detailData.signTime">
-                    <span class="c-333">签收时间</span>
+                    <span class="c-333">Date of Receiving</span>
                     <div class="fl-right fs-22 c-666">{{detailData.signTime}}</div>
                 </div>  
             </div>
             <div class="qianshou" v-if="detailData.orderCourierStatus == 3">
                 <p>
-                   <span>签收凭证：</span>
-                   <span>客户签收</span>
+                   <span>Evidence: Photo</span>
                 </p>
                 <div class="pingzheng">
                     <img :src="$webUrl+i.imgUrl" v-for="(i,index) in detailData.imgList" :key="index">
                 </div>
             </div>
             <div class="qianshou" v-if="detailData.orderCourierStatus == 4">
-                <p>拒签原因:</p>
+                <p>Date of Refusing:</p>
                 <p>{{detailData.refuseSignReason}}</p>
             </div>
             <div class="btns" v-if="detailData.orderCourierStatus == 2">
-                <div class="btn-jq fl-left" @click="refuseTosign">客户拒签</div>
-                <div class="btn-qs fl-right" @click="qsShow=true">确认签收</div>
+                <div class="btn-jq fl-left" @click="refuseTosign">Refuse</div>
+                <div class="btn-qs fl-right" @click="qsShow=true">Receive</div>
             </div>
         </div>
 
@@ -86,16 +85,16 @@
         <zhezhao v-if="zhezhaoStatus">
             <div class="tanchuang">
                 <div>
-                    <div class="title">拍照签收</div>
+                    <div class="title">{{qhStatus?'Photo':'Reasons for refusing'}}</div>
                     <div class="kuang">
                         <upload-all @getfilePathList="getfilePathList" :maxCount="3" v-if="qhStatus"></upload-all>
                         <div v-else>
-                            <textarea class="textarea" placeholder="请填写客户拒签原因" v-model="qianshouData.refuseSignReason"></textarea>
+                            <textarea class="textarea" placeholder="Write down your reasons for refusing and give us your suggestion." v-model="qianshouData.refuseSignReason"></textarea>
                         </div>
                     </div>
                     <div class="tanchuang-btns">
-                        <div class="fl-left qx-btn" @click="cancel">取消</div>
-                        <div class="fl-left qd-btn" @click="confirm">确定</div>
+                        <div class="fl-left qx-btn" @click="cancel">Cancel</div>
+                        <div class="fl-left qd-btn" @click="confirm">Confirm</div>
                     </div>
                 </div>
                 
@@ -120,19 +119,19 @@ export default {
             qsShow: false,
             qhStatus:true,
             actions: [
-                { name: '拍照签收',value:1 },
+                { name: 'Photo',value:1 },
                 // { name: '客户签收',value:2 },
-                { name: '取消',value:0}
+                { name: 'Cancel',value:0}
             ],
             uploadList:[],
             zhezhaoStatus:false,
             detailData:{},
             statusList:[
-                {name:'待接单',type:0},
-                {name:'待揽件',type:1},
-                {name:'配送中',type:2},
-                {name:'已签收',type:3},
-                {name:'拒绝签收',type:4},
+                {name:'New Order',type:0},
+                {name:'Not Taken',type:1},
+                {name:'In Transit',type:2},
+                {name:'Received',type:3},
+                {name:'Refused',type:4},
             ],
             qianshouData:{
                 orderId:this.$route.query.orderid,

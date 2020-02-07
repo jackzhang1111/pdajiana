@@ -72,23 +72,23 @@ mainAxios.interceptors.response.use(function (response) {
         let data = response.data
         if(data.code < 0){
             if(data.code == -1){
-                data.msg = "token不能为空"
+                data.msg = "Token cannot be null"
                 setTimeout(()=>{main.$router.push({name: 'login'})},1000)
 
             }else if(data.code == -2){
-                data.msg = "用户信息不存在"
+                data.msg = "No account information! Please login again."
                 setTimeout(()=>{main.$router.push({name: 'login'})},1000)
 
             }else if(data.code == -3){
-                data.msg = "用户登录信息已失效"
+                data.msg = "The login is invalid. Please login again."
                 setTimeout(()=>{main.$router.push({name: 'login'})},1000)
 
             }else if(data.code == -4){
-                data.msg = "账户不存在或者密码错误"
+                data.msg = "Non-existent account/incorrect password"
             }
         }else{
             if (data.code == 500) {
-                data.msg = "网络繁忙，请稍后再试！"
+                data.msg = "Network is busy, please try again later!"
                 Toast(data.msg);
             }else if(data.code == 0){
                 Toast.clear();
@@ -108,7 +108,7 @@ mainAxios.interceptors.response.use(function (response) {
             console.log(402);
             // redirect()
         }
-        Toast("网络繁忙，请稍后再试！");
+        Toast("Network is busy, please try again later!");
     }
 
     return Promise.reject(error);
@@ -121,22 +121,22 @@ parkAxios.interceptors.response.use(function (response) {
         let data = response.data
         if(data.code < 0){
             if(data.code == -1){
-                data.msg = "token不能为空"
+                data.msg = "Token cannot be null"
                 setTimeout(()=>{main.$router.push({name: 'login'})},1000)
             }else if(data.code == -2){
-                data.msg = "用户信息不存在,请重新登录"
+                data.msg = "No account information! Please login again."
                 setTimeout(()=>{main.$router.push({name: 'login'})},1000)
                 
             }else if(data.code == -3){
-                data.msg = "用户登录信息已失效,请重新登录"
+                data.msg = "The login is invalid. Please login again."
                 setTimeout(()=>{main.$router.push({name: 'login'})},1000)
             }else if(data.code == -4){
-                data.msg = "账户不存在或者密码错误"
+                data.msg = "Non-existent account/incorrect password"
             }
             Toast(data.msg);
         }else{
             if (data.code == 500) {
-                data.msg = "网络繁忙，请稍后再试！"
+                data.msg = "Network is busy, please try again later!"
                 Toast(data.msg);
             }else if(data.code == 0){
                 Toast.clear();
@@ -159,7 +159,7 @@ parkAxios.interceptors.response.use(function (response) {
             console.log(402);
             // redirect()
         }
-        Toast("网络繁忙，请稍后再试！");
+        Toast("Network is busy, please try again later!");
     }
 
     return Promise.reject(error);

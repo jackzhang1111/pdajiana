@@ -4,11 +4,11 @@
         <div class="logistics-top">
             <div class="fl-left tongji">
                 <div class="fs-40 tongji-top">0</div>
-                <div class="c-999">待接单</div>
+                <div class="c-999">Pending Confirmation</div>
             </div>
             <div class="fl-left tongji">
                 <div class="fs-40 tongji-top">1266</div>
-                <div class="c-999">今日签收</div>
+                <div class="c-999">Today's Receiving</div>
             </div>
         </div>
         <div class="logistics-con">
@@ -19,7 +19,7 @@
         </div>
         <div class="saomiao-btn">
             <img src="@/assets/img/saomiao.svg">
-            <span>扫描条码</span>
+            <span>Scan the Barcode</span>
         </div>
     </div>
 </template>
@@ -40,27 +40,27 @@ export default {
             iconList:[
                 {
                     icon:peisong,
-                    name:'配送',
+                    name:'Delivery',
                     routerName:'distributionList'
                 },
                 {
                     icon:cheliang,
-                    name:'车辆',
+                    name:'Vehicle',
                     routerName:''
                 },
                 {
                     icon:shouhou,
-                    name:'售后',
+                    name:'After-sale Service',
                     routerName:'afterSalesList'
                 },
                 {
                     icon:yichangchuli,
-                    name:'异常处理',
+                    name:'Exception Handling',
                     routerName:''
                 },
                 {
                     icon:wodezichan,
-                    name:'我的资产',
+                    name:'My Asset',
                     routerName:''
                 },
             ]
@@ -116,10 +116,14 @@ export default {
         margin-bottom: 344px;
         .con-item{
             width: 230px;
-            height: 158px;
+            // height: 158px;
+            padding: 30px 0;
             text-align: center;
             img{
-                transform: scale(0.5);
+                width: 54px;
+                height: 50px;
+                padding-bottom: 30px;
+                // transform: scale(0.5);
             }
         }
     }

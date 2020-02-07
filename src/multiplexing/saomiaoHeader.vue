@@ -2,7 +2,7 @@
     <div>
         <div class="saomiao-header">
             <van-icon name="arrow-left" size="20" class="v-middle" @click="$router.go(-1)"/>
-            <van-search placeholder="请输入搜索关键词" v-model="searchName" class="v-middle" @search="onSearch"/>
+            <van-search placeholder="Enter key words" v-model="searchName" class="v-middle" @search="onSearch"/>
             <img src="@/assets/img/saomiao2.svg" class="v-middle">
         </div>
         <div class="place"></div>
