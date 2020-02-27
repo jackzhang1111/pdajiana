@@ -3,11 +3,11 @@
         <tabbar-header></tabbar-header>
         <div class="logistics-top">
             <div class="fl-left tongji">
-                <div class="fs-40 tongji-top">0</div>
+                <div class="fs-40 tongji-top">{{waitOrderCount}}</div>
                 <div class="c-999">Pending Confirmation</div>
             </div>
             <div class="fl-left tongji">
-                <div class="fs-40 tongji-top">1266</div>
+                <div class="fs-40 tongji-top">{{todaySignOrderCount}}</div>
                 <div class="c-999">Today's Receiving</div>
             </div>
         </div>
@@ -17,10 +17,17 @@
                 <div class="c-666">{{icon.name}}</div>
             </div>
         </div>
-        <div class="saomiao-btn">
+        <div class="saomiao-btn" @click="saomiaoBtn">
             <img src="@/assets/img/saomiao.svg">
             <span>Scan the Barcode</span>
         </div>
+
+        <zhezhao v-if="zhezhaoStatus" @cancalZhezhao="cancalZhezhao">
+            <div class="smxz">
+                <div class="tiaoshu" v-for="saomiaoItme in saomiaoList" :key="saomiaoItme.value" @click.stop="toSweepCode(saomiaoItme.value)">{{saomiaoItme.name}}</div>
+            </div>
+        </zhezhao>
+
     </div>
 </template>
 
@@ -31,6 +38,8 @@ import cheliang from '@/assets/img/cheliang.png'
 import shouhou from '@/assets/img/shouhou.png'
 import yichangchuli from '@/assets/img/yichangchuli.png'
 import wodezichan from '@/assets/img/wodezichan.png'
+import zhezhao from '@/multiplexing/zhezhao.vue'
+import {getlogisticscenterdataApi} from '@/api/logistics/index'
 export default {
     props: {
 
@@ -43,27 +52,35 @@ export default {
                     name:'Delivery',
                     routerName:'distributionList'
                 },
-                {
-                    icon:cheliang,
-                    name:'Vehicle',
-                    routerName:''
-                },
+                // {
+                //     icon:cheliang,
+                //     name:'Vehicle',
+                //     routerName:''
+                // },
                 {
                     icon:shouhou,
                     name:'After-sale Service',
                     routerName:'afterSalesList'
                 },
-                {
-                    icon:yichangchuli,
-                    name:'Exception Handling',
-                    routerName:''
-                },
-                {
-                    icon:wodezichan,
-                    name:'My Asset',
-                    routerName:''
-                },
-            ]
+                // {
+                //     icon:yichangchuli,
+                //     name:'Exception Handling',
+                //     routerName:''
+                // },
+                // {
+                //     icon:wodezichan,
+                //     name:'My Asset',
+                //     routerName:''
+                // },
+            ],
+            saomiaoList:[
+                {name:'Scan to pick up order',value:1},
+                {name:'Scan to receive order',value:2},
+                {name:'Scan to take order',value:3}
+            ],
+            zhezhaoStatus:false,
+            waitOrderCount:0,
+            todaySignOrderCount:0,
             
         };
     },
@@ -74,15 +91,35 @@ export default {
 
     },
     mounted() {
-        
+        this.getlogisticscenterdata({})
     },
     watch: {
 
     },
     methods: {
+        cancalZhezhao(flag){
+            this.zhezhaoStatus = flag
+        },
+        //点击物流类型
         iconItem(routerName){
             if(routerName == '') return
             this.$router.push({name:routerName})
+        },
+        //扫码
+        toSweepCode(value){
+            this.$router.push({name:'sweepCode',query:{code:value}})
+        },
+        saomiaoBtn(){
+            this.zhezhaoStatus = true;
+        },
+        //获取物流模块主页数据
+        getlogisticscenterdata(data){
+            getlogisticscenterdataApi(data).then(res => {
+                if(res.code == 0){
+                    this.todaySignOrderCount = res.Data.todaySignOrderCount
+                    this.waitOrderCount = res.Data.waitOrderCount
+                }
+            })
         }
     },
     components: {
@@ -93,14 +130,14 @@ export default {
 
 <style scoped lang="less">
 .logistics{
-    padding: 0 30px;
     font-size: 24px;
     .logistics-top{
+        // padding: 0 30px;
         height: 230px;
         background-color: #fff;
         box-shadow:0px 10px 10px 0px rgba(59,59,59,0.12);
         border-radius:20px;
-        margin:50px 0 60px;
+        margin:50px 30px 60px;
         .tongji{
             width: 50%;
             height: 100%;
@@ -113,21 +150,20 @@ export default {
     .logistics-con{
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 344px;
+        margin-bottom: 100px;
         .con-item{
             width: 230px;
-            // height: 158px;
-            padding: 30px 0;
+            height: 158px;
             text-align: center;
             img{
-                width: 54px;
-                height: 50px;
-                padding-bottom: 30px;
                 // transform: scale(0.5);
+                height: 50px;
+                margin-bottom: 15px;
             }
         }
     }
     .saomiao-btn{
+        margin:0 30px;
         height: 88px;
         line-height: 88px;
         font-size: 36px;
@@ -137,6 +173,21 @@ export default {
         border-radius:44px;
         img{
             vertical-align: middle;
+        }
+    }
+    .smxz{
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        .tiaoshu{
+            padding-left:30px;
+            width: 470px;
+            height: 100px;
+            background-color: #fff;
+            line-height: 100px;
+            font-size: 30px;
+            border-bottom: 1px solid #999;
         }
     }
 }

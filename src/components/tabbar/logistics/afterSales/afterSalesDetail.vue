@@ -107,6 +107,15 @@ export default {
             backlogisticsorderinfoApi({order_id:id}).then(res => {
                 if(res.code == 0){
                     this.detailData = res.Data
+                }else if(res.code == 1){
+                    Toast(res.orderSn+'isn’t your delivery order, please contact customer service.')
+                    setTimeout(()=>{this.$router.go(-1)},1000)
+                }else if(res.code == 2){
+                    Toast('cannot be found, please scan a new code')
+                    setTimeout(()=>{this.$router.go(-1)},1000)
+                }else if(res.code == 3){
+                    Toast(res.orderSn+'did not take the order. Please take the order first.')
+                    setTimeout(()=>{this.$router.go(-1)},1000)
                 }
             })
         },

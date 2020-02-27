@@ -141,6 +141,14 @@ export default {
             receivebacklogisticsorderApi({orderId:id}).then(res => {
                 if(res.code == 0){
                     this.refreshOrder()
+                }else if(res.code == 1){
+                    Toast('Parameter “requestModel” cannot be empty.')
+                }else if(res.code == 2){
+                    Toast('The ID of tracking order must be larger than 0')
+                }else if(res.code == 21){
+                    Toast('Cannot find the tracking order')
+                }else if(res.code == 22){
+                    Toast('The tracking order isn’t Pending Taking and cannot be taken.')
                 }
             })
         },

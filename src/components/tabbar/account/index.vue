@@ -1,17 +1,17 @@
 <template>
     <div class="account">
         <div class="account-header">
-            <span>我的</span>
+            <span>My</span>
             <van-icon name="setting-o" size="20" class="setting"/>
         </div>
         <div class="pd-30">
             <div class="business-card" @click="$router.push({name:'informationList'})">
                 <p class="card-name">{{userinfoPda.username}}</p>
-                <p>账号：{{userinfoPda.mobile}}</p>
+                <p>UserName：{{userinfoPda.mobile}}</p>
                 <van-icon name="arrow" size="20" class="arrow" color="#A3A3A3" />
             </div>
             <div class="option-list">
-                <div class="option-item">
+                <!-- <div class="option-item">
                     <img src="@/assets/img/message.png">
                     <span>留言</span>
                     <div class="fl-right">
@@ -38,14 +38,15 @@
                     <div class="fl-right">
                          <van-icon name="arrow" size="15" class="arrow" color="#A3A3A3"/>
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="login-out" @click="$router.push({name:'login'})">退出登录</div>
+            <div class="login-out" @click="logout">Log Out</div>
         </div>
     </div>
 </template>
 
 <script>
+import {logoutApi} from '@/api/login/index.js'
 export default {
     props: {
 
@@ -68,7 +69,13 @@ export default {
 
     },
     methods: {
-
+        logout(){
+            logoutApi().then(res => {
+               if(res.code == 0){
+                   this.$router.push({name:'login'})
+               } 
+            })
+        }
     },
     components: {
 

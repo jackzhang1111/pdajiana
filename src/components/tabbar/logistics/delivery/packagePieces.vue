@@ -71,6 +71,15 @@ export default {
             logisticsorderinfoApi({order_id:id}).then(res => {
                 if(res.code == 0){
                     this.detailData = res.Data
+                }else if(res.code == 1){
+                    Toast(res.orderSn+'isn’t your delivery order, please contact customer service.')
+                    setTimeout(()=>{this.$router.go(-1)},1000)
+                }else if(res.code == 2){
+                    Toast('cannot be found, please scan a new code.')
+                    setTimeout(()=>{this.$router.go(-1)},1000)
+                }else if(res.code == 3){
+                    Toast(res.orderSn+'did not take the order. Please take the order first.')
+                    setTimeout(()=>{this.$router.go(-1)},1000)
                 }
             })
         },
@@ -80,6 +89,20 @@ export default {
                 if(res.code == 0){
                     Toast('Successfully taken')
                     this.logisticsorderinfo(this.$route.query.orderid)
+                }else if(res.code == 1){
+                    Toast('Parameter “requestModel” cannot be empty.')
+                }else if(res.code == 2){
+                    Toast('The ID of tracking order must be larger than 0')
+                }else if(res.code == 21){
+                    Toast('Cannot find the tracking order')
+                }else if(res.code == 22){
+                    Toast('The tracking order isn’t Pending Taking and cannot be taken.')
+                }else if(res.code == 23){
+                    Toast('The tracking order is delivered and cannot be taken again.')
+                }else if(res.code == 24){
+                    Toast('The tracking order isn’t ex-warehoused and cannot be taken.')
+                }else if(res.code == 31){
+                    Toast('The tracking order isn’t belong to the courier and cannot be operated.')
                 }
             })
         }
