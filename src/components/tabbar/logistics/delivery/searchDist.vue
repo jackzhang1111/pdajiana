@@ -92,7 +92,7 @@ export default {
     },
     methods: {
         toDetail(orderid){
-            this.$router.push({name:'distributionDetail',query:{orderid}})
+            this.$router.push({name:'distributionDetail',query:{orderid,type:1}})
         },
         //接单
         receipt(id){
@@ -108,7 +108,7 @@ export default {
         },
         //揽件
         pieces(orderid){
-            this.$router.push({name:'packagePieces',query:{orderid}})
+            this.$router.push({name:'packagePieces',query:{orderid,type:1}})
         },
         //配送列表
         getlogisticsorder(data,flag){

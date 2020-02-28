@@ -91,7 +91,7 @@ export default {
     },
     methods: {
         toDetail(orderid){
-            this.$router.push({name:'afterSalesDetail',query:{orderid}})
+            this.$router.push({name:'afterSalesDetail',query:{orderid,type:1}})
         },
         //接单
         receipt(id){
@@ -106,7 +106,7 @@ export default {
         },
         //取件
         pieces(orderid){
-            this.$router.push({name:'afterSalesPickUp',query:{orderid}})
+            this.$router.push({name:'afterSalesPickUp',query:{orderid,type:1}})
         },
         //接单
         receivebacklogisticsorder(id){
