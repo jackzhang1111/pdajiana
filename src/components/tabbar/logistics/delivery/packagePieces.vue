@@ -4,7 +4,8 @@
         <nosaomiao-header title="Pack Products"></nosaomiao-header>
         <div class="order-con">
             <div class="order-no">
-                <p>Tracking No: &nbsp;{{detailData.expressNo}}</p>
+                <p>Tracking No: {{detailData.expressNo}}</p>
+                <p>Associated No: {{detailData.expressNo}}</p>
             </div>
             <div class="spqd">
                 <div class="spqd-header">Product List</div>
@@ -21,7 +22,8 @@
                 </div>
                 <div class="spqd-footer">
                     <span>Total:</span> 
-                    <span>{{detailData.totalNum}}</span> 
+                    <span>{{detailData.totalNum}}Pcs</span> 
+                    <span class="c-orange">{{jn}}{{detailData.orderAmountWebsite}}</span>
                 </div>
             </div>
         </div>
@@ -121,9 +123,9 @@ export default {
     .order-con{
         padding: 20px 30px 0;
         .order-no{
-            height: 88px;
-            line-height: 88px;
-            font-size: 30px;
+            line-height: 30px;
+            padding: 30px 0;
+            font-size: 28px;
             background-color: #fff;
             margin-bottom: 20px;
             p{
@@ -174,7 +176,7 @@ export default {
                 height: 88px;
                 line-height: 88px;
                 text-align: right;
-                span:nth-child(2){
+                span{
                     font-size: 30px;
                     margin-left:21px;
                 }

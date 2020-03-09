@@ -74,9 +74,9 @@ export default {
                 // },
             ],
             saomiaoList:[
-                {name:'Scan to pick up order',value:1},
-                {name:'Scan to receive order',value:2},
-                {name:'Scan to take order',value:3}
+                {name:'Scan delivery order',value:1},
+                {name:'Scan received order',value:2},
+                {name:'Scan return order',value:3}
             ],
             zhezhaoStatus:false,
             waitOrderCount:0,
@@ -103,6 +103,7 @@ export default {
         //点击物流类型
         iconItem(routerName){
             if(routerName == '') return
+            sessionStorage.setItem("activeIndex", 0);
             this.$router.push({name:routerName})
         },
         //扫码

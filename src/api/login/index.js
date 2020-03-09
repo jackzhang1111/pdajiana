@@ -24,3 +24,11 @@ export function logoutApi() {
         method: 'POST',
     })
 }
+
+//版本明细
+export function getversionApi() {
+    return park({
+        url:`PDAlogin/getversion`,
+        method: 'POST',
+    })
+}

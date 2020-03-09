@@ -4,8 +4,12 @@
         <div class="detail-con">
             <div class="shxx">
                 <div class="shxx-header">
-                    <p class="p1">Order Info</p> 
-                    <p>Order No:{{detailData.expressNo}}</p>
+                    <div>
+                        <span class="fl-right c-orange">{{jn}}{{detailData.orderAmountWebsite}}</span>
+                       <p class="p1">Order Info</p> 
+                    </div>
+                    <p>Tracking No:{{detailData.expressNo}}</p>
+                    <p>Associated No:{{detailData.saleOrderSn}}</p>
                 </div>
                 <div class="shxx-con">
                     <img :src="$webUrl+detailData.headImg" class="touxiang fl-left">
@@ -277,6 +281,7 @@ export default {
         .shxx-header{
             padding: 30px;
             border-bottom: 1px solid #F2F3F5;
+            line-height: 30px;
             .p1{
                 font-size: 32px;
                 margin-bottom: 56px;

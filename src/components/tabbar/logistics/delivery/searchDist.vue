@@ -7,6 +7,9 @@
                     <div class="order" v-for="(data,index) in dataList" :key="index" >
                         <div class="order-header">
                             <span>Tracking No:{{data.expressNo}}</span>
+                            <div>
+                                <span>Associated No:{{data.saleOrderSn}}</span>
+                            </div>
                             <div class="fl-right">
                                 <span>{{orderStatus(data.orderCourierStatus,'statusList')}}</span>
                             </div>
@@ -20,6 +23,7 @@
                                 </div>
                                 <div class="p2">
                                     <span>{{data.addressDetail}}</span>
+                                    <div class="money">{{jn}}{{data.orderAmountWebsite}}</div>
                                 </div>
                             </div>
                             <div class="btn fl-right" @click.stop="receipt(data.orderId)" v-if="data.orderCourierStatus==0">Confirm</div>
@@ -233,8 +237,9 @@ export default {
         border-bottom: 1px solid #F2F3F5;
         margin-bottom: 20px;
         .order-header{
+            line-height: 40px;
             border-bottom: 1px solid #F2F3F5;
-            padding:  30px;
+            padding:20px 30px;
             overflow: hidden;
         }
         .order-con{
@@ -255,6 +260,11 @@ export default {
                 .p2{
                     color: #999;
                     margin:30px 0 60px;
+                    .money{
+                        margin-top: 30px;
+                        float: right;
+                        color: #FA5300;
+                    }
                 }
             }
             .btn{
