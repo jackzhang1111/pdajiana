@@ -5,7 +5,7 @@
         <div class="order-con">
             <div class="order-no">
                 <p>Tracking No: {{detailData.expressNo}}</p>
-                <p>Associated No: {{detailData.expressNo}}</p>
+                <p>Associated No: {{detailData.saleOrderSn}}</p>
             </div>
             <div class="spqd">
                 <div class="spqd-header">Product List</div>

@@ -4,19 +4,19 @@
         <van-tabbar class="icons" v-model="active" active-color="#000" inactive-color="#010101" route>
             <!-- <span>自定义</span> -->
             <!-- <img slot="icon" slot-scope="props" :src="props.active ? icon.active : icon.inactive"> -->
-            <!-- <van-tabbar-item route to="/control/warehousing">
+            <!-- <van-tabbar-item route to="/control/warehousing" replace>
                 <span>Warehouse</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.cangchu1 : icon.cangchu" class="icon-style">
             </van-tabbar-item> -->
-             <van-tabbar-item route to="/control/logistics">
+             <van-tabbar-item route to="/control/logistics" replace>
                 <span>Delivery</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.wuliu1 : icon.wuliu" class="icon-style">
             </van-tabbar-item>
-            <!-- <van-tabbar-item route to="/control/statistical">
+            <!-- <van-tabbar-item route to="/control/statistical" replace>
                 <span>Statistics</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.tongji1 : icon.tongji" class="icon-style">
             </van-tabbar-item> -->
-            <van-tabbar-item route to="/control/account"> 
+            <van-tabbar-item route to="/control/account" replace> 
                 <span>My</span>
                 <img slot="icon" slot-scope="props" :src="props.active ? icon.wode1 : icon.wode" class="icon-style">
             </van-tabbar-item>
