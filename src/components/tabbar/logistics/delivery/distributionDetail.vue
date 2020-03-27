@@ -218,10 +218,10 @@ export default {
                     arr.push(obj)
                     this.qianshouData.imgList = arr
                 })
-                if(this.qianshouData.imgList.length <= 0){
-                    Toast('The picture of receiving cannot be empty')
-                    return
-                }
+                // if(this.qianshouData.imgList.length <= 0){
+                //     Toast('The picture of receiving cannot be empty')
+                //     return
+                // }
             }else{
                 this.qianshouData.imgList = []
             }

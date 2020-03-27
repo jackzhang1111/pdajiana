@@ -63,7 +63,9 @@ export default {
         pieces(){
             Dialog.confirm({
                 title: 'Tips',
-                message: 'Are you sure to transit the order?'
+                message: 'Are you sure to transit the order?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
                 }).then(() => {
                     this.pickuplogisticsorder(this.$route.query.orderid)
                 }).catch(() => {});
