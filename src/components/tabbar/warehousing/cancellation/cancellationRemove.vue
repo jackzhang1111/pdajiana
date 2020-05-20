@@ -277,9 +277,13 @@ export default {
             returngoodsstockdowmAllApi(data).then(res => {
                 if(res.code == 0){
                     Toast('Successful removing')
-                    setTimeout(()=>{
-                        this.$router.go(-1)
-                    },1500)
+                    if(this.$route.query.code == 'sweepCode'){
+                        this.$router.replace({name:'cancellationOutstock',query:{orderid:this.$route.query.orderid}})
+                    }else{
+                        setTimeout(()=>{
+                            this.$router.go(-1)
+                        },1500)
+                    }
                 }else if(res.code == 1){
                     Toast('The current removing product qty exceeds the maximum qty of available removing products (by subtracting the product qty of created removing order from the ex-warehousing product qty of the ex-warehousing order)')
                 }else if(res.code == 2){

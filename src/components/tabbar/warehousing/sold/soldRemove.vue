@@ -277,7 +277,6 @@ export default {
                             
                         })
                         if(obj.batchNo){
-                            console.log(obj,'obj');
                             arr.push(obj)
                         }
                     })
@@ -319,7 +318,6 @@ export default {
             },[]) //设置cur默认类型为数组，并且初始值为空的数组
 
             this.removeData.productlist = arr
-            console.log(this.removeData.productlist,'this.removeData');
             Dialog.confirm({
                 title: 'Tips',
                 message: 'Are you sure to remove?'
@@ -333,14 +331,12 @@ export default {
                     this.productArray.forEach(ele => {
                         num += ele.detailNum
                     })
-                    console.log(this.removeData,'this.removeData');
                     this.removeData.productlist.forEach(ele => {
                         ele.proRegion.forEach(item => {
                             num2 += item.downItemNum
                         })
                     })
                     if(num != num2){
-                        console.log(num,num2,'num');
                         flag = false
                     }
                 }
@@ -360,9 +356,13 @@ export default {
             returngoodsstockdowmAllApi(data).then(res => {
                 if(res.code == 0){
                     Toast('Successful removing')
-                    setTimeout(()=>{
-                        this.$router.go(-1)
-                    },1500)
+                    if(this.$route.query.code == 'sweepCode'){
+                        this.$router.replace({name:'soldOutstock',query:{orderid:this.$route.query.orderid}})
+                    }else{
+                        setTimeout(()=>{
+                            this.$router.go(-1)
+                        },1500)
+                    }
                 }else if(res.code == 1){
                     Toast('The current removing product qty exceeds the maximum qty of available removing products (by subtracting the product qty of created removing order from the ex-warehousing product qty of the ex-warehousing order)')
                 }else if(res.code == 2){

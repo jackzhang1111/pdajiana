@@ -157,9 +157,13 @@ export default {
             transferinstockdowmprobtnstockApi({orderId}).then(res => {
                 if(res.code == 0){
                     Toast('Success!')
-                    setTimeout(()=>{
-                        this.$router.go(-1)
-                    },1500)
+                    if(this.$route.query.code == 'sweepCode'){
+                        this.$router.replace({name:'allocationUppershelf',query:{orderid:this.$route.query.orderid}})
+                    }else{
+                        setTimeout(()=>{
+                            this.$router.go(-1)
+                        },1500)
+                    }
                 }
             })
         },

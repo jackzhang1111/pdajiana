@@ -292,9 +292,13 @@ export default {
             scanproductbarcodeApi(data).then(res => {
                 if(res.code == 0){
                     Toast('Success!')
-                    setTimeout(()=>{
-                        this.$router.go(-1)
-                    },1500)
+                    if(this.$route.query.code == 'sweepCode'){
+                        this.$router.replace({name:'suppliedShelves',query:{paramId:this.$route.query.orderid,typeId:1}})
+                    }else{
+                        setTimeout(()=>{
+                            this.$router.go(-1)
+                        },1500)
+                    }
                 }else if(res.code == 1){
                     Toast('The current warehousing product qty exceeds the maximum qty of available warehousing products (by subtracting the product qty of the created warehousing order from the supply qty)')
                 }else if(res.code == 2){
