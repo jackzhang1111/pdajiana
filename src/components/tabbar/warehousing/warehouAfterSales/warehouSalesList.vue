@@ -208,6 +208,12 @@ export default {
         .van-tabs__nav{
             .van-tab {
                 flex-basis:20% !important; 
+                &:nth-child(1){
+                    flex-basis:15% !important; 
+                }
+                &:nth-child(2){
+                    flex-basis:25% !important; 
+                }
             }
             
         }

@@ -70,11 +70,13 @@ export default {
                 {name:'Not removed',value:0},
                 {name:'Not ex-warehoused',value:1},
                 {name:'Ex-warehoused',value:2},
+                {}
             ],
             statusList:[
                 {name:'Not removed',type:0},
                 {name:'Not ex-warehoused',type:1},
                 {name:'Ex-warehoused',type:2},
+                {}
             ],
             activeOne:0,
             active:0,
@@ -290,6 +292,25 @@ export default {
     }
     .padding0{
         padding: 0;
+        /deep/ .van-tabs__nav{
+            .van-tab {
+                &:nth-child(1){
+                    flex-basis:15% !important; 
+                }
+                &:nth-child(2){
+                    flex-basis:30% !important; 
+                }
+                &:nth-child(3){
+                    flex-basis:45% !important; 
+                }
+                &:nth-child(4){
+                    flex-basis:35% !important; 
+                }
+                &:nth-child(5){
+                    display: none
+                }
+            }
+        }
     }
     .order{
         background-color: #fff;

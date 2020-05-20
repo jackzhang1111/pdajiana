@@ -95,8 +95,8 @@ export default {
             transordertotal:0,
             outordertotal:0,
             saomiaoList:[
-                {name:'扫描入库',value:1},
-                {name:'扫描出库',value:2},
+                {name:'Warehouse',value:1},
+                {name:'Ex-warehouse',value:2},
             ],
         };
     },

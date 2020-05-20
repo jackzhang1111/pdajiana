@@ -50,6 +50,7 @@ export default {
                 {name:'Not packed',value:0},
                 {name:'Not ex-warehoused',value:1},
                 {name:'Warehoused',value:2},
+                {}
             ],
             statusList:[
                 {name:'Not packed',type:0},
@@ -196,11 +197,20 @@ export default {
         }
         .van-tabs__nav{
             .van-tab{
-                &:nth-child(3){
-                    flex-basis: 15% !important;
+                &:nth-child(1){
+                    flex-basis:15% !important; 
                 }
                 &:nth-child(2){
-                    flex-basis: 15% !important;
+                    flex-basis:30% !important; 
+                }
+                &:nth-child(3){
+                    flex-basis:45% !important; 
+                }
+                &:nth-child(4){
+                    flex-basis:30% !important; 
+                }
+                &:nth-child(5){
+                    display: none
                 }
             }
         }

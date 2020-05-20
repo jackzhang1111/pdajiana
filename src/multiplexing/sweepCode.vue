@@ -77,7 +77,7 @@ export default {
 				}, [{
 					tag: 'font',
 					id: 'text',
-					text: '将条码放入框内,即可快速扫码',
+					text: 'Scan the barcode',
 					textStyles: {
 						color: '#FFFFFF'
 					}
