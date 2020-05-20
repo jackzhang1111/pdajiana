@@ -1,36 +1,32 @@
 <template>
 <!-- 供货入库列表 -->
     <div class="supplied-list">
-        <saomiao-header @search="search"></saomiao-header>
+        <saomiao-header @search="search" :value="$route.query.expressNo"></saomiao-header>
         <div class="commodity-tab">
-            <van-tabs type="card" color="#666666" title-active-color="#333333" @change="onClick" v-model="active">
-                <van-tab :title="tab.name" v-for='(tab,index) in tabList' :key="index">
-                    <scroll class="bscroll-wrapper" ref="wrapper" :data="recordGroup" :pulldown="pulldown" :pullup="pullup" @pulldown="_pulldown" @pullup="_pullup">
-                         <div class="bscroll-con">
-                                <div class="order" v-for="(data,index) in dataList" :key="index" >
-                                    <div class="order-header">
-                                        <span>Supply No:{{data.orderSn}}</span>
-                                        <div class="fl-right">
-                                            <span>{{orderStatus(data.wmsOrderStatus,'statusList')}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="order-con" @click="toDetail(data.orderId,data.wmsOrderStatus)">
-                                        <p>Supplier：{{data.businessName}}</p>
-                                        <p>Warehouse：{{data.warehouseName}}</p>
-                                        <p>Qty Supplied：{{data.totalNum}}</p>
-                                    </div>
-                                    <div class="order-footer" v-show="data.wmsOrderStatus == 2 || data.wmsOrderStatus == 3">
-                                        <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 2">打印供货单</div> -->
-                                        <div class="btn fl-right" v-if="data.wmsOrderStatus == 2" @click="toPickUp(data.orderId,data.wmsOrderStatus)">Warehouse</div>
-                                        <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 3">打印入库单</div> -->
-                                        <div class="btn fl-right" v-if="data.wmsOrderStatus == 3" @click="toshelves(data.orderId)">Shelve</div>
-                                        <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 4">打印上架单</div> -->
-                                    </div>
+            <scroll class="bscroll-wrapper" ref="wrapper" :data="recordGroup" :pulldown="pulldown" :pullup="pullup" @pulldown="_pulldown" @pullup="_pullup">
+                    <div class="bscroll-con">
+                        <div class="order" v-for="(data,index) in dataList" :key="index" >
+                            <div class="order-header">
+                                <span>Supply No:{{data.orderSn}}</span>
+                                <div class="fl-right">
+                                    <span>{{orderStatus(data.wmsOrderStatus,'statusList')}}</span>
                                 </div>
-                         </div>
-                    </scroll>
-                </van-tab>
-            </van-tabs>
+                            </div>
+                            <div class="order-con" @click="toDetail(data.orderId,data.wmsOrderStatus)">
+                                <p>Supplier：{{data.businessName}}</p>
+                                <p>Warehouse：{{data.warehouseName}}</p>
+                                <p>Qty Supplied：{{data.totalNum}}</p>
+                            </div>
+                            <div class="order-footer" v-show="data.wmsOrderStatus == 2 || data.wmsOrderStatus == 3">
+                                <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 2">打印供货单</div> -->
+                                <div class="btn fl-right" v-if="data.wmsOrderStatus == 2" @click="toPickUp(data.orderId,data.wmsOrderStatus)">Warehouse</div>
+                                <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 3">打印入库单</div> -->
+                                <div class="btn fl-right" v-if="data.wmsOrderStatus == 3" @click="toshelves(data.orderId)">Shelve</div>
+                                <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 4">打印上架单</div> -->
+                            </div>
+                        </div>
+                    </div>
+            </scroll>
         </div>
     </div>
 </template>
@@ -45,21 +41,13 @@ export default {
     },
     data() {
         return {
-            tabList:[
-                {name:'All',value:0},
-                {name:'Undelivered',value:1},
-                {name:'Not Stored',value:2},
-                {name:'Not Added',value:3},
-                {name:'Warehoused',value:4},
-            ],
             statusList:[
                 {name:'Unapproved',type:0},
                 {name:'Undelivered',type:1},
-                {name:'Not Stored',type:2},
-                {name:'Not Added',type:3},
+                {name:'Not Stored',type:2},
+                {name:'Not added',type:3},
                 {name:'Shelved',type:4},
             ],
-            active:0,
             recordGroup:[],
             pulldown:true,
             pullup:true,
@@ -81,11 +69,8 @@ export default {
 
     },
     mounted() {
+        this.formData.orderSn = this.$route.query.expressNo
         this.refreshOrder()
-        if(sessionStorage.getItem("activeIndex")){
-            this.active = Number(sessionStorage.getItem("activeIndex"))
-            this.formData.wmsOrderStatus = this.active
-        }
     },
     watch: {
 
@@ -93,12 +78,7 @@ export default {
     methods: { 
         //搜索框 
         search(value){
-            this.$router.push({name:'suppliedSearch',query:{expressNo:value}})
-        },
-        //切换tab
-        onClick(index) {
-            this.formData.wmsOrderStatus = index 
-            sessionStorage.setItem("activeIndex", index);
+            this.formData.orderSn = value
             this.refreshOrder()
         },
         //下拉刷新
@@ -199,21 +179,7 @@ export default {
         }
         .van-tabs__nav{
             .van-tab {
-                &:nth-child(1){
-                    flex-basis:15% !important; 
-                }
-                &:nth-child(2){
-                    flex-basis:28% !important; 
-                }
-                &:nth-child(3){
-                    flex-basis:28% !important; 
-                }
-                &:nth-child(4){
-                    flex-basis:28% !important; 
-                }
-                &:nth-child(5){
-                    flex-basis:28% !important; 
-                }
+                flex-basis:20% !important; 
             }
         }
     }
@@ -222,7 +188,8 @@ export default {
         font-size: 24px;
         overflow: hidden;
         border-bottom: 1px solid #F2F3F5;
-        margin-bottom: 20px;
+        margin:0 30px 20px;
+
         .order-header{
             line-height: 40px;
             border-bottom: 1px solid #F2F3F5;
@@ -236,6 +203,7 @@ export default {
             p{
                 font-size: 22px;
                 color: #333;
+                height: 40px;
                 line-height: 40px;
             }
         }

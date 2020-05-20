@@ -3,16 +3,16 @@
         <tabbar-header></tabbar-header>
         <div class="warehousing-top">
             <div class="fl-left tongji">
-                <div class="fs-40 tongji-top">{{waitOrderCount}}</div>
-                <div class="c-999">今日入库</div>
+                <div class="fs-40 tongji-top">{{inordertotal}}</div>
+                <div class="c-999">Today's Warehousing</div>
             </div>
             <div class="fl-left tongji">
-                <div class="fs-40 tongji-top">{{todaySignOrderCount}}</div>
-                <div class="c-999">调拨</div>
+                <div class="fs-40 tongji-top">{{transordertotal}}</div>
+                <div class="c-999">Allocation</div>
             </div>
             <div class="fl-left tongji">
-                <div class="fs-40 tongji-top">{{todaySignOrderCount}}</div>
-                <div class="c-999">今日出库</div>
+                <div class="fs-40 tongji-top">{{outordertotal}}</div>
+                <div class="c-999">Today's Ex-warehouse</div>
             </div>
         </div>
         <div class="warehousing-con">
@@ -21,11 +21,18 @@
                 <div class="c-666">{{icon.name}}</div>
             </div>
         </div>
-    
+        
         <div class="saomiao-btn" @click="saomiaoBtn">
             <img src="@/assets/img/saomiao.svg">
-            <span>扫描条码</span>
+            <span>Scan the Barcode</span>
         </div>
+
+
+        <zhezhao v-if="zhezhaoStatus" @cancalZhezhao="cancalZhezhao">
+            <div class="smxz">
+                <div class="tiaoshu" v-for="saomiaoItme in saomiaoList" :key="saomiaoItme.value" @click.stop="toSweepCode(saomiaoItme.value)">{{saomiaoItme.name}}</div>
+            </div>
+        </zhezhao>
     </div>
 </template>
 
@@ -38,6 +45,8 @@ import xsck from '@/assets/img/xsck.png'
 import diaobo from '@/assets/img/diaobo.png'
 import shangjia from '@/assets/img/shangjia.png'
 import xiajia from '@/assets/img/xiajia.png'
+import zhezhao from '@/multiplexing/zhezhao.vue'
+import {pdaselecthomeordertotalApi} from '@/api/warehousing/warehousSupplied/index.js'
 export default {
     props: {
 
@@ -47,43 +56,48 @@ export default {
             iconList:[
                 {
                     icon:ghrk,
-                    name:'供货入库',
+                    name:'Warehousing Supplied',
                     routerName:'suppliedList'
                 },
                 {
                     icon:cgthck,
-                    name:'采购退货出库',
+                    name:'Ex-warehouse for Cancellation',
                     routerName:'cancellationList'
                 },
                 {
                     icon:xsck,
-                    name:'销售出库',
+                    name:'Sold',
                     routerName:'soldList'
                 },
                 {
                     icon:diaobo,
-                    name:'调拨',
+                    name:'Allocation',
                     routerName:'allocationList'
                 },
                 {
                     icon:shouhou,
-                    name:'售后',
-                    routerName:'warehouAfterSales'
+                    name:'After-sale Service',
+                    routerName:'warehouSalesList'
                 },
                 {
                     icon:shangjia,
-                    name:'上架',
+                    name:'Shelve',
                     routerName:'shelveList'
                 },
                 {
                     icon:xiajia,
-                    name:'下架',
+                    name:'Remove',
                     routerName:'removeList'
                 },
             ],
             zhezhaoStatus:false,
-            waitOrderCount:0,
-            todaySignOrderCount:0,
+            inordertotal:0,
+            transordertotal:0,
+            outordertotal:0,
+            saomiaoList:[
+                {name:'扫描入库',value:1},
+                {name:'扫描出库',value:2},
+            ],
         };
     },
     computed: {
@@ -93,7 +107,7 @@ export default {
 
     },
     mounted() {
-        
+        this.pdaselecthomeordertotal()
     },
     watch: {
 
@@ -106,17 +120,34 @@ export default {
         iconItem(routerName){
             if(routerName == '') return
             this.$router.push({name:routerName})
+            try{
+                sessionStorage.removeItem('activeIndex')
+                sessionStorage.removeItem('activeOne')
+            }
+            catch(error){
+                console.log(err.message);
+            }
         },
         //扫码
         toSweepCode(value){
-            this.$router.push({name:'sweepCode',query:{code:value}})
+            this.$router.push({name:'warehousweepCode',query:{code:value}})
         },
         saomiaoBtn(){
             this.zhezhaoStatus = true;
         },
+        pdaselecthomeordertotal(){
+            pdaselecthomeordertotalApi().then(res => {
+                if(res.code == 0){
+                    this.inordertotal = res.Data.inordertotal
+                    this.outordertotal = res.Data.outordertotal
+                    this.transordertotal = res.Data.transordertotal
+                }
+            })
+        }
     },
     components: {
         tabbarHeader,
+        zhezhao
     },
 };
 </script>
