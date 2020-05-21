@@ -6,7 +6,7 @@
                 <div class="shxx-header">
                     <p class="p1">Order Info</p> 
                     <p>Return No:{{detailData.backSn}}</p>
-                    <p>Warehousing No:{{detailData.backInSn}}</p>
+                    <p v-show="$route.query.type != 1">Warehousing No:{{detailData.backInSn}}</p>
                 </div>
                 <div class="shxx-con">
                     <img :src="$webUrl+detailData.headImg" class="touxiang fl-left">
@@ -57,7 +57,7 @@
                     <img :src="$webUrl+detail.skuImg" class="shangpin-img fl-left">
                     <div class="fl-left good-name">
                         <p class="p1 clamp-2 c-333">{{detail.skuName}}</p>
-                        <p class="p2 c-666">Store-in Batch No:{{detail.batchNo}}</p>
+                        <p class="p2 c-666" v-show="$route.query.type != 1">Store-in Batch No:{{detail.batchNo}}</p>
                         <p class="p2 c-666">TSIN：{{detail.tisnCode}}</p>
                         <p class="p3 c-666">
                             <span>{{detail.titleValues}}</span>

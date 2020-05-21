@@ -46,10 +46,10 @@ export default {
                     }else if(res.Data.type == 3){
                         this.$router.replace({name:'warehouSalesPickUp',query:{backOrderId:res.Data.orderId,code:'sweepCode'}})
                     }
-                }else if(res.code == -1){
-                    Toast('No order')
-                }else if(res.code == -2){
-                    Toast('It was warehoused. No more operation')
+                }else if(res.code == 1){
+                    Toast('Inexistence! Scan again')
+                }else if(res.code == 2){
+                    Toast('Warehoused! No more operation')
                 }
             })
         },
@@ -64,8 +64,10 @@ export default {
                     }else if(res.Data.type == 3){
                         this.$router.replace({name:'cancellationRemove',query:{orderid:res.Data.orderId,code:'sweepCode'}})
                     }
-                }else if(res.code == -1){
-                    Toast('No order')
+                }else if(res.code == 1){
+                    Toast('Inexistence! Scan again')
+                }else if(res.code == 2){
+                    Toast('Ex-warehoused! No more operation')
                 }
             })
         },

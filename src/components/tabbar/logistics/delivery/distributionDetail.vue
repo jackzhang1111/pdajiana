@@ -254,6 +254,8 @@ export default {
                     Toast('Cannot find the tracking order')
                 }else if(res.code == 22){
                     Toast('The tracking order isn’t Pending Taking and cannot be taken.')
+                }else if(res.code == 23){
+                    Toast('It was applied for refund. No receiving or refusal.')
                 }else if(res.code == 31){
                     Toast('The tracking order isn’t belong to the courier and cannot be operated.')
                 }

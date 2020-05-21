@@ -157,9 +157,11 @@ export default {
                         this.$router.go(-1)
                     },1500)
                 }else if(res.code == 1){
-                    Toast('The ex-warehousing order is inexistent.')
+                    Toast('The ex-warehousing order is inexistent')
                 }else if(res.code == 2){
-                    Toast('It was ex-warehoused. No more operation.')
+                    Toast('It was ex-warehoused. No more operation')
+                }else if(res.code == 3){
+                    Toast('IIt was applied for ex-warehousing. No more operation')
                 }
             })
         },
