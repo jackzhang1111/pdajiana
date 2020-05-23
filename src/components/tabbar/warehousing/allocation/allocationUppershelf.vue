@@ -321,6 +321,14 @@ export default {
                     Toast('There are warehousing order with 0 adding')
                 }else if(res.code == 6){
                     Toast('The adding volume exceeds the available maximum volume(by subtracting the volume of created Not-Added order from the available volume)')
+                }else if(res.code == 7){
+                    Toast('It  isn’t pending putaway order and cannot be changed.')
+                }else if(res.code == 8){
+                    Toast('The putaway location must be an inventory area without shelf or a location.')
+                }else if(res.code == 9){
+                    Toast('It cannot be putaway in the superior area of non-site warehouse.')
+                }else if(res.code == 11){
+                    Toast('The details of original warehousing order are inexistent.')
                 }
             })
         },

@@ -50,6 +50,8 @@ export default {
                     Toast('Inexistence! Scan again')
                 }else if(res.code == 2){
                     Toast('Warehoused! No more operation')
+                }else if(res.code == 3){
+                    Toast('Warehoused! Please put it away')
                 }
             })
         },
@@ -68,6 +70,8 @@ export default {
                     Toast('Inexistence! Scan again')
                 }else if(res.code == 2){
                     Toast('Ex-warehoused! No more operation')
+                }else if(res.code == 3){
+                    Toast('Removed! Please finish the ex-warehousing')
                 }
             })
         },
