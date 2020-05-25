@@ -64,7 +64,7 @@
                     <p class="p2 c-666">Store-in Batch No：{{product.batchNo}}</p>
                     <p class="p2 c-666">TSIN：{{product.tsinCode}}</p>
                     <p class="p3 c-666">
-                        <span>{{product.skuValuesTitle}}</span>
+                        <span>{{product.skuValuesTitleEng}}</span>
                         <span class="fl-right">x{{product.detailNum}}</span>
                     </p>
                 </div>
@@ -77,12 +77,12 @@
         <div class="order-time" v-if="typeSatus != 1">
             <div class="time-item" >
                 <span class="c-333">Date of Delivery</span>
-                <div class="fl-right fs-22 c-666">{{detailData.deliverTime}}</div>
+                <div class="fl-right fs-22 c-666">{{detailData.deliverTimeEng}}</div>
             </div>
             <div class="time-item" v-if="typeSatus != 2">
                 
                 <span class="c-333">Date of Warehousing</span>
-                <div class="fl-right fs-22 c-666">{{detailData.stockInTime}}</div>
+                <div class="fl-right fs-22 c-666">{{detailData.stockInTimeEng}}</div>
             </div>
             <div class="time-item" v-if='typeSatus != 2 && typeSatus != 3'>
                 <span class="c-333">Date of Shelving</span>

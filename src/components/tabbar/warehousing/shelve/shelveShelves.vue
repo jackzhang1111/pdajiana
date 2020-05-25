@@ -299,7 +299,7 @@ export default {
                     {name:'Warehouse',value:''},
                     {name:'Unit Weight(kg)',value:''},
                 ]
-                this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle
+                this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitleEng
                 this.detailedGuigeList[1].value = this.currentProduct.businessName
                 this.detailedGuigeList[2].value = this.currentProduct.batchNo
                 this.detailedGuigeList[3].value = this.currentProduct.detailNum
@@ -325,7 +325,7 @@ export default {
                     {name:'Warehouse',value:''},
                     {name:'Gross Weight/Carton(kg)',value:''},
                 ]
-                this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle
+                this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitleEng
                 this.detailedGuigeList[1].value = this.currentProduct.businessName
                 this.detailedGuigeList[2].value = this.currentProduct.batchNo
                 this.detailedGuigeList[3].value = this.currentProduct.detailNum

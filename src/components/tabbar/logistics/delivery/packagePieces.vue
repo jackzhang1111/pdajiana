@@ -15,7 +15,7 @@
                         <p class="p1 clamp-2 c-333">{{detail.supplyName}}</p>
                         <p class="p2 c-666">TSIN：{{detail.tsinCode}}</p>
                         <p class="p3 c-666">
-                            <span>{{detail.skuValuesTitle}}</span>
+                            <span>{{detail.skuValuesTitleEng}}</span>
                             <span class="fl-right">x{{detail.detailNum}}</span>
                         </p>
                     </div>

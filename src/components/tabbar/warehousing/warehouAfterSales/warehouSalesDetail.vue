@@ -60,7 +60,7 @@
                         <p class="p2 c-666" v-show="$route.query.type != 1">Store-in Batch No:{{detail.batchNo}}</p>
                         <p class="p2 c-666">TSIN：{{detail.tisnCode}}</p>
                         <p class="p3 c-666">
-                            <span>{{detail.titleValues}}</span>
+                            <span>{{detail.titleValuesEng}}</span>
                             <span class="fl-right">x{{detail.totalNum}}</span>
                         </p>
                     </div>
@@ -73,19 +73,19 @@
             <div class="order-time">
                 <div class="time-item">
                     <span class="c-333">Date of Confirming</span>
-                    <div class="fl-right fs-22 c-666">{{detailData.acceptTime}}</div>
+                    <div class="fl-right fs-22 c-666">{{detailData.acceptTimeEng}}</div>
                 </div>
                 <div class="time-item" v-if="$route.query.type != 1">
                     <span class="c-333">Date of Receiving</span>
-                    <div class="fl-right fs-22 c-666">{{detailData.pickupTime}}</div>
+                    <div class="fl-right fs-22 c-666">{{detailData.pickupTimeEng}}</div>
                 </div>
                 <div class="time-item" v-if="$route.query.type == 4">
                     <span class="c-333">Date of Shelving</span>
-                    <div class="fl-right fs-22 c-666">{{detailData.finishTime}}</div>
+                    <div class="fl-right fs-22 c-666">{{detailData.finishTimeEng}}</div>
                 </div> 
                 <div class="time-item" v-if="$route.query.type == 4">
                     <span class="c-333">Date of Warehousing</span>
-                    <div class="fl-right fs-22 c-666">{{detailData.stockInTime}}</div>
+                    <div class="fl-right fs-22 c-666">{{detailData.stockInTimeEng}}</div>
                 </div>  
             </div>
             <div class="place"></div>

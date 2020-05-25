@@ -111,7 +111,7 @@ export default {
         },
         //当前商品基本属性
         setCurrentProduct(){
-            this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle
+            this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitleEng
             this.detailedGuigeList[1].value = this.currentProduct.detailNum
             this.detailedGuigeList[2].value = this.currentProduct.fnskuCode
             this.detailedGuigeList[3].value = this.currentProduct.detailNum
