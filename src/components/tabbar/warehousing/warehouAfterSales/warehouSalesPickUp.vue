@@ -241,13 +241,17 @@ export default {
                 if(res.code == 0){
                     this.$router.push({name:'warehouSalesUppershelf',query:{paramId:this.$route.query.backOrderId,typeId:1}})
                 }else if(res.code == 1){
-                    Toast('The current putaway qty exceeds the maximum qty of available putaway products (by subtracting the product qty of the created putaway order from the warehousing product qty of the warehousing order)')
+                    let txt = ''
+                    JSON.parse(res.resdata).forEach(item => {
+                        txt+=`Batch No：${item.batchNo},Maximum Warehousing Qty：${item.maxCanStockInNum}.`
+                    })
+                    Toast(`The warehousing qty cannot exceed the available qty of warehousing products(by subtracting the products of created warehousing order from the sales ex-warehousing qty). ${txt}`)
                 }else if(res.code == 2){
                     Toast('Warehousing qty must be equal to return qty')
                 }else if(res.code == 6){
                     Toast('The warehousing order isn’t pending warehousing. It cannot be changed.')
                 }else if(res.code == 7){
-                    Toast('The refund order isn’t pending warehousing. The warehousing order cannot be created or changed. ')
+                    Toast('Warehoused! No more operation!')
                 }else if(res.code == 8){
                     Toast('The refund order has associated warehousing order. It cannot be used repeatedly.')
                 }

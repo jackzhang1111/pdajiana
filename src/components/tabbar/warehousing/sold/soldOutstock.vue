@@ -175,6 +175,8 @@ export default {
                     Toast('It was ex-warehoused. No more operation.')
                 }else if(res.code == 3){
                     Toast('IIt was applied for ex-warehousing. No more operation')
+                }else if(res.code == 5){
+                    Toast('Ex-warehoused! No more operation.')
                 }
             })
         },

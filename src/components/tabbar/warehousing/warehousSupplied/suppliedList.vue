@@ -57,7 +57,7 @@ export default {
                 {name:'Undelivered',type:1},
                 {name:'Not Stored',type:2},
                 {name:'Not Added',type:3},
-                {name:'Shelved',type:4},
+                {name:'Warehoused',type:4},
             ],
             active:0,
             recordGroup:[],

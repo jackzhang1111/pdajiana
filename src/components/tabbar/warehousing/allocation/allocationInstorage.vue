@@ -164,6 +164,10 @@ export default {
                             this.$router.go(-1)
                         },1500)
                     }
+                }else if(res.code == 1){
+                    Toast('It’s not pending warehousing. No warehousing operation!')
+                }else if(res.code == 2){
+                    Toast('Warehoused! No more operation!')
                 }
             })
         },

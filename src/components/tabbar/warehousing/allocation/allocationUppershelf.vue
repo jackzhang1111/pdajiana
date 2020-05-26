@@ -316,7 +316,7 @@ export default {
                 }else if(res.code == 3){
                     Toast('Inconsistent warehouse!')
                 }else if(res.code == 4){
-                    Toast('There are Not-Added warehousing orders.')
+                    Toast('Finished putaway! No more operation!')
                 }else if(res.code == 5){
                     Toast('There are warehousing order with 0 adding')
                 }else if(res.code == 6){
