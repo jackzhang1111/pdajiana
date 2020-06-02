@@ -30,7 +30,7 @@ export default {
 						first = new Date().getTime(); //获取第一次点击的时间戳  
 						// console.log('再按一次退出应用');//用自定义toast提示最好  
 						// toast('双击返回键退出应用'); //调用自己写的吐丝提示 函数  
-						plus.nativeUI.toast("再按一次退出应用", {  
+						plus.nativeUI.toast("Logout the APP if you press again", {  
 							duration: 'short'  
 						}); //通过H5+ API 调用Android 上的toast 提示框  
 						// alert('123')
