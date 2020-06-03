@@ -15,7 +15,7 @@
                                         </div>
                                     </div>
                                     <div class="order-con" @click="toDetail(data.orderId,data.orderStatus)">
-                                        <p>Supply No:{{data.supplyOrderSn}}</p>
+                                        <p>Supply No.:{{data.supplyOrderSn}}</p>
                                         <p>Supplier：{{data.businessName}}</p>
                                         <p>Warehouse：{{data.warehouseName}}</p>
                                         <p>Qty Canceled：{{data.totalNum}}</p>

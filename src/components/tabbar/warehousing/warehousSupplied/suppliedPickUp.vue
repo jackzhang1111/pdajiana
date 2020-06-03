@@ -4,7 +4,7 @@
         <div class="pick-up" v-show="showPickUp">
             <saomiao-header @search="search"></saomiao-header>
             <div class="pick-up-order">
-                <span>Supply No：{{detailData.orderSn}}</span>
+                <span>Supply No.：{{detailData.orderSn}}</span>
                 <span class="fl-right">{{listLength}}</span>
             </div>
             <div class="order-detail" v-if="currentArray.length > 0">
@@ -37,7 +37,7 @@
                     </div>
                     <div class="detailed-item">
                         <span class="c-999">Type</span>&nbsp;&nbsp;&nbsp;
-                        <span class="c-666">{{currentProduct.stockIntype}}</span>
+                        <span class="c-666">{{orderStatus(currentProduct.typeValue,'stockIntypeList')}}</span>
                     </div>
                     <div class="detailed-item">
                         <span class="c-999">Unit Weight(kg)</span>&nbsp;&nbsp;&nbsp;
@@ -134,11 +134,11 @@ export default {
                 {name:'Qty Supplied',value:''},
                 {name:'Supplier',value:''},
                 {name:'Cartons Supplied',value:''},
-                {name:'Batch No',value:''},
+                {name:'Batch No.',value:''},
                 {name:'Pcs/Carton',value:''},
                 {name:'FNSKU',value:''},
                 {name:'Qty Warehoused',value:''},
-                {name:'International No',value:''},
+                {name:'International No.',value:''},
             ],
             currentArray:[],
             productlist:[],
@@ -148,7 +148,12 @@ export default {
                 sourceType:2,
                 stockInOrderId:null
             },
-            showPickUp:true
+            showPickUp:true,
+            stockIntypeList:[
+                {type:1,name:'Supply Warehousing No.'},
+                {type:2,name:'Transfer Warehousing No.'},
+                {type:3,name:'Sales Return Warehousing Order'}
+            ]
         };
     },
     computed: {
@@ -256,7 +261,9 @@ export default {
         outStock(){
             Dialog.confirm({
                 title: 'Tips',
-                message: 'Are you sure to warehouse?'
+                message: 'Are you sure to warehouse?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                 let arr = []
                 this.currentArray.forEach(good => {
@@ -278,7 +285,9 @@ export default {
                 if(this.currentArray.length < this.listLength){
                     Dialog.confirm({
                         title: 'Tips',
-                        message: 'The product qty is insufficient. Are you sure to continue warehousing?'
+                        message: 'The product qty is insufficient. Are you sure to continue warehousing?',
+                        confirmButtonText:'Yes',
+                        cancelButtonText:'No'
                     }).then(()=>{
                         this.scanproductbarcode(this.outStockObj)
                     }).catch(()=>{})
@@ -338,7 +347,17 @@ export default {
             if(type == 'no') return
             //取整
             val[name] = Math.ceil(val[name])
-        }
+        },
+        //编译状态
+        orderStatus(type,list){
+            let name = ''
+            this[list].forEach(statu => {
+                if(statu.type == type){
+                    name = statu.name
+                }
+            })
+            return name
+        },
     },
     components: {
         saomiaoHeader,

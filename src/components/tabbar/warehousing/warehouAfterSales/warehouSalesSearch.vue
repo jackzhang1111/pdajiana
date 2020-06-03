@@ -7,7 +7,7 @@
                 <div class="bscroll-con">
                     <div class="order" v-for="(data,index) in dataList" :key="index" >
                         <div class="order-header">
-                            <span>Return No:{{data.orderSn}}</span>
+                            <span>Return No.：{{data.orderSn}}</span>
                             <div class="fl-right">
                                 <span>{{orderStatus(data.orderState,'statusList')}}</span>
                             </div>

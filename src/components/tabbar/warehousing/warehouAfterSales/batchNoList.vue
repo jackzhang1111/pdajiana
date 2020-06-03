@@ -2,7 +2,7 @@
     <div>
         <div class="balance-header">
             <van-icon name="arrow-left" class="arrow-left" @click="$emit('choiceStatus',false)"/>
-            <span class="header-t2 c-orange" @click="isOk">确定</span>
+            <span class="header-t2 c-orange" @click="isOk">OK</span>
         </div>
         <div class="place"></div>
         <div class="batch-list" v-for="(batch,index) in noList" :key="index" @click="changeCheckbox(batch)">

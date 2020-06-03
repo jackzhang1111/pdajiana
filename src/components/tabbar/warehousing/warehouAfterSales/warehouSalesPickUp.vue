@@ -5,7 +5,7 @@
             <div v-show="!batchNoListStatus">
                 <saomiao-header @search="search"></saomiao-header>
                 <div class="pick-up-order">
-                   <span>Return No：{{detailData.orderSn}}</span>
+                   <span>Return No.：{{detailData.orderSn}}</span>
                    <span class="fl-right">{{listLength}}</span>
                 </div>
                 <div class="order-detail" v-if="currentArray.length > 0">
@@ -53,7 +53,7 @@
                     </div>
                     <div class="goods-shelves">
                         <div class="set-shelves">
-                            <span>Batch No</span>
+                            <span>Batch No.</span>
                         </div>
                         <div class="shelves-item" v-for="(batch,index) in currentProduct.batchList" :key="index">
                             <div class="item-title">
@@ -105,7 +105,7 @@ export default {
             detailedGuigeList:[
                 {name:'Specifications',value:''},
                 {name:'Supplier',value:''},
-                {name:'Batch No',value:'',sanjiao:true},
+                {name:'Batch No.',value:'',sanjiao:true},
                 {name:'Warehouse',value:'',sanjiao:true},
                 {name:'FNSKU',value:''},
                 {name:'Qty Returned',value:''},
@@ -205,6 +205,24 @@ export default {
                     this.produclist = res.Data.produclist.map(o => Object.assign({}, o));
                     setTimeout(()=>{this.currentProduct = this.currentArray[this.current-1]},0)
                     this.listLength = res.Data.produclist.length
+                    this.productArray = res.Data.productList
+                    this.productArray.forEach(ele => {
+                        if(ele.typeValue == 1){
+                            ele.stockIntype = 'Supply Warehousing No.'
+                        }else if(ele.typeValue == 2){
+                            ele.stockIntype = 'Transfer Warehousing No.'
+                        }else if(ele.typeValue == 3){
+                            ele.stockIntype = 'Sales Return Warehousing Order'
+                        }else if(ele.typeValue == 4){
+                            ele.stockIntype = 'Purchasing Return Ex-warehousing Order'
+                        }else if(ele.typeValue == 5){
+                            ele.stockIntype = 'Sales Ex-warehousing Order'
+                        }else if(ele.typeValue == 6){
+                            ele.stockIntype = 'Transfer Ex-warehousing Order'
+                        }else{
+                            ele.stockIntype = ''
+                        }
+                    })
                     this.outStockObj.stockInOrderId = res.Data.stockInOrderId
                     this.outStockObj.saleBackOrderId = this.detailData.produclist[0].saleBackOrderId
                     this.outStockObj.inWarehouseId = this.detailData.produclist[0].inWarehouseId
@@ -230,7 +248,7 @@ export default {
                 this.detailedGuigeList[5].value = this.currentProduct.detailNum
                 this.detailedGuigeList[6].value = this.currentProduct.intCode
                 this.detailedGuigeList[7].value = this.currentProduct.inDetailNum
-                this.detailedGuigeList[8].value = this.currentProduct.inStockType
+                this.detailedGuigeList[8].value = this.currentProduct.stockIntype
                 this.detailedGuigeList[9].value = this.currentProduct.unitWeight
             }catch(err){console.log(err)}
             
@@ -243,7 +261,7 @@ export default {
                 }else if(res.code == 1){
                     let txt = ''
                     JSON.parse(res.resdata).forEach(item => {
-                        txt+=`Batch No：${item.batchNo},Maximum Warehousing Qty：${item.maxCanStockInNum}.`
+                        txt+=`Batch No.：${item.batchNo},Maximum Warehousing Qty：${item.maxCanStockInNum}.`
                     })
                     Toast(`The warehousing qty cannot exceed the available qty of warehousing products(by subtracting the products of created warehousing order from the sales ex-warehousing qty). ${txt}`)
                 }else if(res.code == 2){
@@ -259,7 +277,7 @@ export default {
         },
         //更换批次
         replaceBatchNo(value){
-            if(value == 'Batch No'){
+            if(value == 'Batch No.'){
                 this.batchNoListStatus = true
                 this.dataList = this.currentProduct.outBatchList
                 this.typeName = 'pici'
@@ -325,7 +343,9 @@ export default {
             }
             Dialog.confirm({
                 title: 'Tips',
-                message: 'Are you sure to warehouse?'
+                message: 'Are you sure to warehouse?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                 let flag = true
                 if(this.outStockObj.inWarehouseId){
@@ -460,7 +480,7 @@ export default {
                     word-wrap:break-word;
                     vertical-align: middle;
                     &:nth-child(2){
-                        width: 60%;
+                        width: 50%;
                     }
                 }
                 .van-icon-play{

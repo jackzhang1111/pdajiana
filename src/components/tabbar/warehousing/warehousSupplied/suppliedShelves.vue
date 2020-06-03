@@ -2,7 +2,7 @@
 <!-- 上架 -->
     <div class="pick-up">
         <saomiao-header @search="search"></saomiao-header>
-        <div class="pick-up-order">Warehousing No：{{detailData.stockInOrderSn}}</div>
+        <div class="pick-up-order">Warehousing No.：{{detailData.stockInOrderSn}}</div>
         <div class="order-detail">
             <div class="detail-header">
                 <van-icon name="play" class="play-left" :color="playLeft ? '#DCDCDC':'#333'" @click="cliPlayLeft"/>
@@ -118,11 +118,11 @@ export default {
             detailedGuigeList:[
                 {name:'Specifications',value:''},
                 {name:'Supplier',value:''},
-                {name:'Batch No',value:''},
+                {name:'Batch No.',value:''},
                 {name:'Qty Warehoused',value:''},
                 {name:'FNSKU',value:''},
                 {name:'Pcs/Carton',value:''},
-                {name:'International No',value:''},
+                {name:'International No.',value:''},
                 {name:'Qty Shelved',value:''},
                 {name:'Type',value:''},
                 {name:'Unit Weight(kg)',value:''},
@@ -199,7 +199,7 @@ export default {
             stockInToShelvesApi({paramId,typeId}).then(res => {
                 if(res.code == 0){
                     this.detailData = res.Data
-                    this.currentProduct = res.Data.productList[this.current-1]
+                    
                     this.listLength = res.Data.productList.length
                     this.productArray = res.Data.productList
 
@@ -211,7 +211,23 @@ export default {
                     this.productArray.forEach(ele => {
                         ele.warehouselist = new Array()
                         ele.columns = this.columns.map(o => Object.assign({}, o));
+                        if(ele.typeValue == 1){
+                            ele.stockIntype = 'Supply Warehousing No.'
+                        }else if(ele.typeValue == 2){
+                            ele.stockIntype = 'Transfer Warehousing No.'
+                        }else if(ele.typeValue == 3){
+                            ele.stockIntype = 'Sales Return Warehousing Order'
+                        }else if(ele.typeValue == 4){
+                            ele.stockIntype = 'Purchasing Return Ex-warehousing Order'
+                        }else if(ele.typeValue == 5){
+                            ele.stockIntype = 'Sales Ex-warehousing Order'
+                        }else if(ele.typeValue == 6){
+                            ele.stockIntype = 'Transfer Ex-warehousing Order'
+                        }else{
+                            ele.stockIntype = ''
+                        }
                     })
+                    this.currentProduct = this.productArray[this.current-1]
                     this.setCurrentProduct()
                 }
             })
@@ -268,7 +284,9 @@ export default {
             });
             Dialog.confirm({
                 title: 'Tips',
-                message: 'Are you sure to shelve?'
+                message: 'Are you sure to shelve?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                 let productIndex, proRegionIndex,flag = true
                 if(flag){
@@ -354,7 +372,9 @@ export default {
         detailWarehouse(index,item){
             Dialog.confirm({
                 title: 'Tips',
-                message: 'Are you sure to delete the location?'
+                message: 'Are you sure to delete the location?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                 this.currentProduct.warehouselist.splice(index,1)
                 this.currentProduct.columns.push(item)

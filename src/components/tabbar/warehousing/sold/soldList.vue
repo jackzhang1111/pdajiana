@@ -9,13 +9,13 @@
                          <div class="bscroll-con">
                                 <div class="order" v-for="(data,index) in dataList" :key="index" >
                                     <div class="order-header">
-                                        <span>Ex-warehouse No:{{data.orderSn}}</span>
+                                        <span>Ex-warehouse No.:{{data.orderSn}}</span>
                                         <div class="fl-right">
                                             <span>{{orderStatus(data.orderStatus,'statusList')}}</span>
                                         </div>
                                     </div>
                                     <div class="order-con" @click="toDetail(data.orderId,data.orderStatus)">
-                                        <p>Order No:&nbsp;{{data.saleOrderSn}}</p>
+                                        <p>Order No.:&nbsp;{{data.saleOrderSn}}</p>
                                         <p>Supplier:&nbsp;{{data.businessName}}</p>
                                         <p>Warehouse:&nbsp;{{data.warehouseName}}</p>
                                         <p>Qty Ex-warehoused:&nbsp;{{data.totalNum}}</p>

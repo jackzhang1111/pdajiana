@@ -3,7 +3,7 @@
     <div class="shelve-list">
         <saomiao-header @search="search"></saomiao-header>
         <van-collapse v-model="activeNames" >
-            <van-collapse-item title="Warehousing No">
+            <van-collapse-item title="Warehousing No.">
                 <div @click="toPickUp(data)" v-for="(data,index) in dataList" :key="index" class="order-list">
                     <span>{{data.orderSn}}</span> 
                     <div class="fl-right">

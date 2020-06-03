@@ -5,8 +5,8 @@
             <div class="shxx" v-if="$route.query.type != 4">
                 <div class="shxx-header">
                     <p class="p1">Order Info</p> 
-                    <p>Return No:{{detailData.backSn}}</p>
-                    <p v-show="$route.query.type != 1">Warehousing No:{{detailData.backInSn}}</p>
+                    <p>Return No.:{{detailData.backSn}}</p>
+                    <p v-show="$route.query.type != 1">Warehousing No.:{{detailData.backInSn}}</p>
                 </div>
                 <div class="shxx-con">
                     <img :src="$webUrl+detailData.headImg" class="touxiang fl-left">
@@ -25,11 +25,11 @@
                 <div class="spqd-header">Order Info</div>
                 <div class="order-time">
                     <div class="time-item">
-                        <span class="c-333">Warehousing No</span>
+                        <span class="c-333">Warehousing No.</span>
                         <div class="fl-right fs-22 c-666">{{detailData.backInSn}}</div>
                     </div>
                     <div class="time-item">
-                        <span class="c-333">Shelving No</span>
+                        <span class="c-333">Shelving No.</span>
                         <div class="fl-right fs-22 c-666">{{detailData.shelfSn}}</div>
                     </div>
                     <div class="time-item">
@@ -57,7 +57,7 @@
                     <img :src="$webUrl+detail.skuImg" class="shangpin-img fl-left">
                     <div class="fl-left good-name">
                         <p class="p1 clamp-2 c-333">{{detail.skuName}}</p>
-                        <p class="p2 c-666" v-show="$route.query.type != 1">Store-in Batch No:{{detail.batchNo}}</p>
+                        <p class="p2 c-666" v-show="$route.query.type != 1">Store-in Batch No.:{{detail.batchNo}}</p>
                         <p class="p2 c-666">TSIN：{{detail.tisnCode}}</p>
                         <p class="p3 c-666">
                             <span>{{detail.titleValuesEng}}</span>

@@ -2,7 +2,7 @@
 <!-- 入库 -->
     <div class="pick-up">
         <saomiao-header @search="search"></saomiao-header>
-        <div class="pick-up-order">Warehousing No：{{detailData.orderSn}}</div>
+        <div class="pick-up-order">Warehousing No.：{{detailData.orderSn}}</div>
         <div class="order-detail">
             <div class="detail-header">
                 <van-icon name="play" class="play-left" :color="playLeft ? '#DCDCDC':'#333'" @click="cliPlayLeft"/>
@@ -85,11 +85,11 @@ export default {
             detailedGuigeList:[
                 {name:'Specifications',value:''},
                 {name:'Supplier',value:''},
-                {name:'Batch No',value:''},
+                {name:'Batch No.',value:''},
                 {name:'Qty of Warehousing',value:''},
                 {name:'FNSKU',value:''},
                 {name:'Pcs/Carton',value:''},
-                {name:'International No',value:''},
+                {name:'International No.',value:''},
                 {name:'Qty Shelved',value:''},
                 {name:'Type',value:''},
                 {name:'Unit Weight(kg)',value:''},
@@ -147,6 +147,23 @@ export default {
                 if(res.code == 0){
                     this.detailData = res.Data
                     this.productArray = res.Data.productlist
+                    this.productArray.forEach(ele => {
+                        if(ele.typeValue == 1){
+                            ele.stockIntype = 'Supply Warehousing No.'
+                        }else if(ele.typeValue == 2){
+                            ele.stockIntype = 'Transfer Warehousing No.'
+                        }else if(ele.typeValue == 3){
+                            ele.stockIntype = 'Sales Return Warehousing Order'
+                        }else if(ele.typeValue == 4){
+                            ele.stockIntype = 'Purchasing Return Ex-warehousing Order'
+                        }else if(ele.typeValue == 5){
+                            ele.stockIntype = 'Sales Ex-warehousing Order'
+                        }else if(ele.typeValue == 6){
+                            ele.stockIntype = 'Transfer Ex-warehousing Order'
+                        }else{
+                            ele.stockIntype = ''
+                        }
+                    })
                     this.currentProduct = res.Data.productlist[this.current-1]
                     this.listLength = res.Data.productlist.length
                     this.setCurrentProduct()
@@ -190,7 +207,9 @@ export default {
         allStock(){
             Dialog.confirm({
                 title: 'Tips',
-                message: 'Are you sure to warehouse?'
+                message: 'Are you sure to warehouse?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                 this.transferinstockdowmprobtnstock(this.detailData.stockInOrderId)
             }).catch(() => {});

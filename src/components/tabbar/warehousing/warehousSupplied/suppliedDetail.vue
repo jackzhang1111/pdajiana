@@ -5,16 +5,16 @@
             <div class="spqd-header">Order Info</div>
             <div class="order-time">
                 <div class="time-item">
-                    <span class="c-333">Supply No</span>
+                    <span class="c-333">Supply No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.orderSn}}</div>
                 </div>
 
                 <div class="time-item" v-if="typeSatus == 3 || typeSatus == 4">
-                    <span class="c-333">Warehousing No</span>
+                    <span class="c-333">Warehousing No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.stockInOrderSn}}</div>
                 </div>
                 <div class="time-item" v-if="typeSatus == 4">
-                    <span class="c-333">Shelving No</span>
+                    <span class="c-333">Shelving No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.shelveOrderSn}}</div>
                 </div>
 
@@ -61,7 +61,7 @@
                 <img :src="$webUrl+product.skuImg" class="shangpin-img fl-left">
                 <div class="fl-left good-name">
                     <p class="p1 clamp-2 c-333">{{product.skuName}}</p>
-                    <p class="p2 c-666">Store-in Batch No：{{product.batchNo}}</p>
+                    <p class="p2 c-666">Store-in Batch No.：{{product.batchNo}}</p>
                     <p class="p2 c-666">TSIN：{{product.tsinCode}}</p>
                     <p class="p3 c-666">
                         <span>{{product.skuValuesTitleEng}}</span>

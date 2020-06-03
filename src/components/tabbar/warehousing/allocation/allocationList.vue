@@ -25,7 +25,7 @@
                                         <div class="order-con" @click="toDetail(data.orderId,data.orderStatus,1)" v-else>
                                             <p>Type:&nbsp;&nbsp;{{data.orderType}}</p>
                                             <p>In:&nbsp;&nbsp;{{data.inWarehouseName}}</p>
-                                            <p>Ex-warehouse No:&nbsp;&nbsp;{{data.outorderSn}}</p>
+                                            <p>Ex-warehouse No.:&nbsp;&nbsp;{{data.outorderSn}}</p>
                                             <p>Qty of Warehousing:&nbsp;&nbsp;{{data.totalNum}}</p>
                                         </div>
                                         <div class="order-footer" v-if="data.orderStatus != 2">

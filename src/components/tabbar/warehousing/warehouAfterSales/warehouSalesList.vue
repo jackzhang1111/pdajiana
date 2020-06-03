@@ -9,11 +9,11 @@
                         <div class="bscroll-con">
                             <div class="order" v-for="(data,index) in dataList" :key="index" >
                                 <div class="order-header">
-                                    <span class="fl-left">Return No:{{data.orderSn}}</span>
+                                    <span class="fl-left">Return No.:{{data.orderSn}}</span>
                                     <div class="fl-right">
                                         <span>{{orderStatus(data.orderState,'statusList')}}</span>
                                     </div>
-                                    <div class="fl-left" v-if="data.logisticsOrderSn">Tracking No:{{data.logisticsOrderSn}}</div>
+                                    <div class="fl-left" v-if="data.logisticsOrderSn">Tracking No.:{{data.logisticsOrderSn}}</div>
                                 </div>
                                 <div class="order-con" @click="toDetail(data.backOrderId,data.orderState)">
                                     <img :src="$webUrl+data.headImg" class="touxiang fl-left">

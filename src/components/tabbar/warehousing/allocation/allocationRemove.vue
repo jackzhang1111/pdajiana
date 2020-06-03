@@ -2,13 +2,13 @@
 <!-- 下架 -->
     <div class="pick-up">
         <saomiao-header @search="search"></saomiao-header>
-        <div class="pick-up-order" v-if="!$route.query.type">Ex-warehouse No：{{detailData.shelfDownorderSn}}</div>
+        <div class="pick-up-order" v-if="!$route.query.type">Ex-warehouse No.：{{detailData.shelfDownorderSn}}</div>
 
         <van-collapse v-model="activeNames" class="collapse" v-if="$route.query.type == 'xiajia'">
             <van-collapse-item>
                 <template #title>
                     <div>
-                        <span>Ex-warehouse No：</span>
+                        <span>Ex-warehouse No.：</span>
                         <span class="fl-right fs-20">{{detailData.shelfDownorderSn}}</span>
                     </div>
                 </template>
@@ -124,11 +124,11 @@ export default {
             detailedGuigeList:[
                 {name:'Specifications',value:''},
                 {name:'Supplier',value:''},
-                {name:'Batch No',value:''},
+                {name:'Batch No.',value:''},
                 {name:'Qty of Ex-warehousing',value:''},
                 {name:'FNSKU',value:''},
                 {name:'Pcs/Carton',value:''},
-                {name:'International No',value:''},
+                {name:'International No.',value:''},
                 {name:'Qty Removed',value:''},
                 {name:'Type',value:''},
                 {name:'Unit Weight(kg)',value:''},
@@ -200,7 +200,23 @@ export default {
                     this.currentProduct = res.Data.productList[this.current-1]
                     this.listLength = res.Data.productList.length
                     this.productArray = res.Data.productList
-                    
+                    this.productArray.forEach(ele => {
+                        if(ele.typeValue == 1){
+                            ele.stockIntype = 'Supply Warehousing No.'
+                        }else if(ele.typeValue == 2){
+                            ele.stockIntype = 'Transfer Warehousing No.'
+                        }else if(ele.typeValue == 3){
+                            ele.stockIntype = 'Sales Return Warehousing Order'
+                        }else if(ele.typeValue == 4){
+                            ele.stockIntype = 'Purchasing Return Ex-warehousing Order'
+                        }else if(ele.typeValue == 5){
+                            ele.stockIntype = 'Sales Ex-warehousing Order'
+                        }else if(ele.typeValue == 6){
+                            ele.stockIntype = 'Transfer Ex-warehousing Order'
+                        }else{
+                            ele.stockIntype = ''
+                        }
+                    })
                     this.removeData.shelfDownOrderId = this.detailData.shelfDownOrderId
                     this.setCurrentProduct()
                 }
@@ -216,7 +232,7 @@ export default {
             this.detailedGuigeList[5].value = this.currentProduct.goodnumPerBox
             this.detailedGuigeList[6].value = this.currentProduct.intCode
             this.detailedGuigeList[7].value = this.currentProduct.detailNum
-            this.detailedGuigeList[8].value = this.currentProduct.stockOuttype
+            this.detailedGuigeList[8].value = this.currentProduct.stockIntype
             this.detailedGuigeList[9].value = this.currentProduct.unitWeight
             this.detailedGuigeList[10].value = this.currentProduct.warehouseName
             this.detailedGuigeList[11].value = this.currentProduct.boxWeight
@@ -250,7 +266,9 @@ export default {
             });
             Dialog.confirm({
                 title: 'Tips',
-                message: 'Are you sure to remove?'
+                message: 'Are you sure to remove?',
+                confirmButtonText:'Yes',
+                cancelButtonText:'No'
             }).then(() => {
                 let productIndex, proRegionIndex,flag = true
                 // if(this.productArray.length != this.removeData.productlist.length){

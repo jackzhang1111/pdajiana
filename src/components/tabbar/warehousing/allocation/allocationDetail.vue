@@ -22,7 +22,7 @@
                     <div class="fl-right fs-22 c-666">{{detailData.transferSourceTypeTxt}}</div>
                 </div>
                 <div class="time-item">
-                    <span class="c-333">Supply No</span>
+                    <span class="c-333">Supply No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.rlaOrderSn}}</div>
                 </div>
                 <div class="time-item">
@@ -47,7 +47,7 @@
                     <div class="fl-right fs-22 c-666">{{detailData.inWarehouseName}}</div>
                 </div>
                 <div class="time-item">
-                    <span class="c-333">Ex-warehouse No</span>
+                    <span class="c-333">Ex-warehouse No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.rlaOrderSn}}</div>
                 </div>
                 <div class="time-item">
@@ -71,7 +71,7 @@
                         <span>{{product.skuValuesTitleEng}}</span>
                         <span class="fl-right">x{{product.detailNum}}</span>
                     </p>
-                   <p class="p2 c-666">Store-in Batch No:{{product.batchNo}}</p>
+                   <p class="p2 c-666">Store-in Batch No.:{{product.batchNo}}</p>
                 </div>
             </div>
             <div class="spqd-footer">

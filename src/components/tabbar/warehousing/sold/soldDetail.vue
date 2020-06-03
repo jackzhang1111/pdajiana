@@ -5,11 +5,11 @@
             <div class="spqd-header">Order Info</div>
             <div class="order-time">
                 <div class="time-item">
-                    <span class="c-333">Ex-warehouse No</span>
+                    <span class="c-333">Ex-warehouse No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.shelfDownorderSn}}</div>
                 </div>
                 <div class="time-item">
-                    <span class="c-333">Sale No</span>
+                    <span class="c-333">Sale No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.saleOrderSn}}</div>
                 </div>
                 <div class="time-item">
@@ -45,7 +45,7 @@
                 <img :src="$webUrl+product.skuImg" class="shangpin-img fl-left">
                 <div class="fl-left good-name">
                     <p class="p1 clamp-2 c-333">{{product.skuName}}</p>
-                    <p class="p2 c-666">Store-in Batch No：{{product.batchNo}}</p>
+                    <p class="p2 c-666">Store-in Batch No.：{{product.batchNo}}</p>
                     <p class="p2 c-666">TSIN：{{product.tsinCode}}</p>
                     <p class="p3 c-666">
                         <span>{{product.skuValuesTitleEng}}</span>

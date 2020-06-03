@@ -5,9 +5,9 @@
         </div>
         <div class="place"></div>
         <div class="input-line">
-            <input type="text" placeholder="请输入商品条形码" v-model="orderNum" >
+            <input type="text" placeholder="Enter the barcode" v-model="orderNum" >
         </div>
-        <div class="qd-btn" @click="submit">确定</div>
+        <div class="qd-btn" @click="submit">Confirm</div>
     </div>
 </template>
 
