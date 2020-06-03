@@ -74,7 +74,7 @@ export default {
 				}, [{
 					tag: 'font',
 					id: 'text',
-					text: '将条码放入框内,即可快速扫码',
+					text: 'Scan the barcode',
 					textStyles: {
 						color: '#FFFFFF'
 					}
@@ -84,7 +84,7 @@ export default {
             function createView(){
                 scanBarVew = new plus.nativeObj.View('test',{bottom:'60px',left:'10%',height:'44px',width:'80%',backgroundColor:'#fff'});
                 scanBarVew.drawRect("#fff", {top:'25%',left:'25%',width:'50%',height:'50%'}, 'test');
-                scanBarVew.drawText('手动输入', {bottom:'0px',height:'44px'}, {color:'#333333'}, 'font2');
+                scanBarVew.drawText('Manual Input', {bottom:'0px',height:'44px'}, {color:'#333333'}, 'font2');
                 scanBarVew.show();
                 scanBarVew.interceptTouchEvent(true);
                 scanBarVew.addEventListener("click", function(e) {

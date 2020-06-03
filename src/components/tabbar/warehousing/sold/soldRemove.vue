@@ -402,7 +402,7 @@ export default {
         },
         //更换批次
         replaceBatchNo(value){
-            if(value != 'Batch No') return
+            if(value != 'Batch No.') return
             this.dataObj.skuId = this.currentProduct.skuId
             this.batchNoListStatus = true
             this.checkBatchNo = this.currentProduct.batchNo

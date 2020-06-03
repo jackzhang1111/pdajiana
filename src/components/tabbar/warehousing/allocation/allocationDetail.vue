@@ -7,7 +7,7 @@
             <div class="order-time" v-if="$route.query.status == 0">
                 <div class="time-item">
                     <span class="c-333">Type</span>
-                    <div class="fl-right fs-22 c-666">{{detailData.orderType}}</div>
+                    <div class="fl-right fs-22 c-666">{{orderStatus(detailData.typeValue,'typeStatus')}}</div>
                 </div>
                 <div class="time-item">
                     <span class="c-333">Out</span>
@@ -19,9 +19,9 @@
                 </div>
                 <div class="time-item">
                     <span class="c-333">Source</span>
-                    <div class="fl-right fs-22 c-666">{{detailData.transferSourceTypeTxt}}</div>
+                    <div class="fl-right fs-22 c-666">{{orderStatus(detailData.transferSourceType,'transferSource')}}</div>
                 </div>
-                <div class="time-item">
+                <div class="time-item" v-if="detailData.transferSourceType != 5">
                     <span class="c-333">Supply No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.rlaOrderSn}}</div>
                 </div>
@@ -40,7 +40,7 @@
             <div class="order-time" v-else>
                 <div class="time-item">
                     <span class="c-333">Type</span>
-                    <div class="fl-right fs-22 c-666">{{detailData.orderType}}</div>
+                    <div class="fl-right fs-22 c-666">{{orderStatus(detailData.typeValue,'typeStatus')}}</div>
                 </div>
                 <div class="time-item">
                     <span class="c-333">In</span>
@@ -126,6 +126,21 @@ export default {
                 {name:'Not removed',type:0},
                 {name:'Not ex-warehoused',type:1},
                 {name:'Warehoused',type:2},
+            ],
+            typeStatus:[
+                {name:'Supply Warehousing No.',type:1},
+                {name:'Transfer Warehousing No.',type:2},
+                {name:'Sales Return Warehousing Order',type:3},
+                {name:'Purchasing Return Ex-warehousing Order',type:4},
+                {name:'Sales Ex-warehousing Order',type:5},
+                {name:'Transfer Ex-warehousing Order',type:6}
+            ],
+            transferSource:[
+                {name:'Supply Warehousing No.',type:1},
+                {name:'Transfer Warehousing No.',type:2},
+                {name:'Sales Return Warehousing Order',type:3},
+                {name:'Supply Order',type:4},
+                {name:'Product、Batch',type:5},
             ],
             detailData:{},
             typeSatus:0

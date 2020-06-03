@@ -17,13 +17,13 @@
                                             </div>
                                         </div>
                                         <div class="order-con" @click="toDetail(data.orderId,data.orderStatus,0)" v-if="activeOne == 0">
-                                            <p>Type:&nbsp;&nbsp;{{data.orderType}}</p>
+                                            <p>Type:&nbsp;&nbsp;{{orderStatus(data.typeValue,'typeStatus')}}</p>
                                             <p>Out:&nbsp;&nbsp;{{data.outWarehouseName}}</p>
                                             <p>In:&nbsp;&nbsp;{{data.inWarehouseName}}</p>
                                             <p>Qty of Ex-warehousing:&nbsp;&nbsp;{{data.totalNum}}</p>
                                         </div>
                                         <div class="order-con" @click="toDetail(data.orderId,data.orderStatus,1)" v-else>
-                                            <p>Type:&nbsp;&nbsp;{{data.orderType}}</p>
+                                            <p>Type:&nbsp;&nbsp;{{orderStatus(data.typeValue,'typeStatus')}}</p>
                                             <p>In:&nbsp;&nbsp;{{data.inWarehouseName}}</p>
                                             <p>Ex-warehouse No.:&nbsp;&nbsp;{{data.outorderSn}}</p>
                                             <p>Qty of Warehousing:&nbsp;&nbsp;{{data.totalNum}}</p>
@@ -77,6 +77,14 @@ export default {
                 {name:'Not ex-warehoused',type:1},
                 {name:'Ex-warehoused',type:2},
                 {}
+            ],
+            typeStatus:[
+                {name:'Supply Warehousing No.',type:1},
+                {name:'Transfer Warehousing No.',type:2},
+                {name:'Sales Return Warehousing Order',type:3},
+                {name:'Purchasing Return Ex-warehousing Order',type:4},
+                {name:'Sales Ex-warehousing Order',type:5},
+                {name:'Transfer Ex-warehousing Order',type:6}
             ],
             activeOne:0,
             active:0,
