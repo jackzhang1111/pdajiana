@@ -150,8 +150,8 @@ export default {
             },
             showPickUp:true,
             stockIntypeList:[
-                {type:1,name:'Supply Warehousing No.'},
-                {type:2,name:'Transfer Warehousing No.'},
+                {type:1,name:'Supply Warehousing Order'},
+                {type:2,name:'Transfer Warehousing Order'},
                 {type:3,name:'Sales Return Warehousing Order'}
             ]
         };

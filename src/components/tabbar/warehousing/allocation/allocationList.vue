@@ -79,8 +79,8 @@ export default {
                 {}
             ],
             typeStatus:[
-                {name:'Supply Warehousing No.',type:1},
-                {name:'Transfer Warehousing No.',type:2},
+                {name:'Supply Warehousing Order',type:1},
+                {name:'Transfer Warehousing Order',type:2},
                 {name:'Sales Return Warehousing Order',type:3},
                 {name:'Purchasing Return Ex-warehousing Order',type:4},
                 {name:'Sales Ex-warehousing Order',type:5},

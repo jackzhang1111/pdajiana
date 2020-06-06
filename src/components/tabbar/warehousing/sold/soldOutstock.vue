@@ -132,9 +132,9 @@ export default {
                     this.productArray = res.Data.productList
                     this.productArray.forEach(ele => {
                         if(ele.typeValue == 1){
-                            ele.stockIntype = 'Supply Warehousing No.'
+                            ele.stockIntype = 'Supply Warehousing Order'
                         }else if(ele.typeValue == 2){
-                            ele.stockIntype = 'Transfer Warehousing No.'
+                            ele.stockIntype = 'Transfer Warehousing Order'
                         }else if(ele.typeValue == 3){
                             ele.stockIntype = 'Sales Return Warehousing Order'
                         }else if(ele.typeValue == 4){

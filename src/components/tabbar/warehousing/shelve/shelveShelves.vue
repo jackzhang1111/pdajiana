@@ -177,7 +177,7 @@ export default {
             return  this.current == this.listLength
         },
         orderName(){
-            return this.typeVal == 1 ? 'Supply Warehousing No.' : this.typeVal == 2 ? 'Transfer Warehousing No.':'Return No.'
+            return this.typeVal == 1 ? 'Supply Warehousing Order' : this.typeVal == 2 ? 'Transfer Warehousing Order':'Return No.'
         }
     },
     mounted() {
@@ -256,9 +256,9 @@ export default {
                         ele.warehouselist = new Array()
                         ele.columns = this.columns.map(o => Object.assign({}, o));
                         if(ele.typeValue == 1){
-                            ele.stockIntype = 'Supply Warehousing No.'
+                            ele.stockIntype = 'Supply Warehousing Order'
                         }else if(ele.typeValue == 2){
-                            ele.stockIntype = 'Transfer Warehousing No.'
+                            ele.stockIntype = 'Transfer Warehousing Order'
                         }else if(ele.typeValue == 3){
                             ele.stockIntype = 'Sales Return Warehousing Order'
                         }else if(ele.typeValue == 4){
@@ -293,9 +293,9 @@ export default {
                         ele.warehouselist = new Array()
                         ele.columns = this.columns.map(o => Object.assign({}, o));
                         if(ele.typeValue == 1){
-                            ele.stockIntype = 'Supply Warehousing No.'
+                            ele.stockIntype = 'Supply Warehousing Order'
                         }else if(ele.typeValue == 2){
-                            ele.stockIntype = 'Transfer Warehousing No.'
+                            ele.stockIntype = 'Transfer Warehousing Order'
                         }else if(ele.typeValue == 3){
                             ele.stockIntype = 'Sales Return Warehousing Order'
                         }else if(ele.typeValue == 4){
@@ -330,9 +330,9 @@ export default {
                         ele.warehouselist = new Array()
                         ele.columns = this.columns.map(o => Object.assign({}, o));
                         if(ele.typeValue == 1){
-                            ele.stockIntype = 'Supply Warehousing No.'
+                            ele.stockIntype = 'Supply Warehousing Order'
                         }else if(ele.typeValue == 2){
-                            ele.stockIntype = 'Transfer Warehousing No.'
+                            ele.stockIntype = 'Transfer Warehousing Order'
                         }else if(ele.typeValue == 3){
                             ele.stockIntype = 'Sales Return Warehousing Order'
                         }else if(ele.typeValue == 4){

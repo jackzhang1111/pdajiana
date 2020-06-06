@@ -179,9 +179,9 @@ export default {
                         ele.warehouselist = new Array()
                         ele.columns = this.columns.map(o => Object.assign({}, o));
                         if(ele.typeValue == 1){
-                            ele.stockIntype = 'Supply Warehousing No.'
+                            ele.stockIntype = 'Supply Warehousing Order'
                         }else if(ele.typeValue == 2){
-                            ele.stockIntype = 'Transfer Warehousing No.'
+                            ele.stockIntype = 'Transfer Warehousing Order'
                         }else if(ele.typeValue == 3){
                             ele.stockIntype = 'Sales Return Warehousing Order'
                         }else if(ele.typeValue == 4){
