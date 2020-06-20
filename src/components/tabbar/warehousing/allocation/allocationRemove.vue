@@ -335,6 +335,12 @@ export default {
                     Toast('There are sales ex-warehousing orders applied for refund')
                 }else if(res.code == 9){
                     Toast('It was removed. No more operation')
+                }else if(res.code == 11){
+                    Toast('The source ex-warehousing order is inexistent.')
+                }else if(res.code == 12){
+                    Toast('The removing qty cannot be less than 0.')
+                }else if(res.code == 13){
+                    Toast('It cannot be operated because of the counting of goods at target location. ')
                 }
             })
         },

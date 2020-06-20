@@ -365,6 +365,10 @@ export default {
                     Toast('It cannot be putaway in the superior area of non-site warehouse.')
                 }else if(res.code == 11){
                     Toast('The details of original warehousing order are inexistent.')
+                }else if(res.code == 12){
+                    Toast('The putaway qty cannot be less than 0.')
+                }else if(res.code == 13){
+                    Toast('It cannot be operated because of the counting of goods at target location.  ')
                 }
             })
         },
