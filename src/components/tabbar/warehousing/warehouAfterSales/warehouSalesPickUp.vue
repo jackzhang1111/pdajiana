@@ -205,8 +205,7 @@ export default {
                     this.produclist = res.Data.produclist.map(o => Object.assign({}, o));
                     setTimeout(()=>{this.currentProduct = this.currentArray[this.current-1]},0)
                     this.listLength = res.Data.produclist.length
-                    this.productArray = res.Data.produclist
-                    this.productArray.forEach(ele => {
+                    this.produclist.forEach(ele => {
                         if(ele.typeValue == 1){
                             ele.stockIntype = 'Supply Warehousing Order'
                         }else if(ele.typeValue == 2){
@@ -226,7 +225,6 @@ export default {
                     this.outStockObj.stockInOrderId = res.Data.stockInOrderId
                     this.outStockObj.saleBackOrderId = this.detailData.produclist[0].saleBackOrderId
                     this.outStockObj.inWarehouseId = this.detailData.produclist[0].inWarehouseId
-                    console.log(this.outStockObj.inWarehouseId,'this.outStockObj.inWarehouseId');
                     if(this.detailData.produclist[0].warehouseName){
                         this.detailData.warehouselist.forEach(item => {
                             if(item.warehouseId == this.detailData.produclist[0].inWarehouseId){
@@ -349,7 +347,6 @@ export default {
                 cancelButtonText:'No'
             }).then(() => {
                 let flag = true
-                console.log(this.outStockObj,'this.outStockObj');
                 if(this.outStockObj.inWarehouseId){
                     this.outStockObj.outBatchList.forEach(outBatch => {
                         if(!outBatch.saleStockOutOrderDetailIds){
@@ -361,7 +358,6 @@ export default {
                     })
                 }else{
                     flag = false
-                    console.log(3);
                 }
 
                 if(flag){

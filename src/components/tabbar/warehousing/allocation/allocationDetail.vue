@@ -71,7 +71,9 @@
                         <span>{{product.skuValuesTitleEng}}</span>
                         <span class="fl-right">x{{product.detailNum}}</span>
                     </p>
-                   <p class="p2 c-666">Store-in Batch No.:{{product.batchNo}}</p>
+                    <p class="p2 c-666">Store-in Batch No.:{{product.batchNo}}</p>
+                    <p class="p2 c-666">FNSKU：{{product.fnskuCode}}</p>
+                    <p class="p2 c-666">Seller's SKU：{{product.skuCode}}</p>
                 </div>
             </div>
             <div class="spqd-footer">

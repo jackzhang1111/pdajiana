@@ -6,7 +6,7 @@
                 <div class="shxx-header">
                     <p class="p1">Order Info</p> 
                     <p>Return No.:{{detailData.backSn}}</p>
-                    <p v-show="$route.query.type != 1">Warehousing No.:{{detailData.backInSn}}</p>
+                    <p v-show="$route.query.type != 1 && detailData.backInSn">Warehousing No.:{{detailData.backInSn}}</p>
                 </div>
                 <div class="shxx-con">
                     <img :src="$webUrl+detailData.headImg" class="touxiang fl-left">
@@ -63,6 +63,8 @@
                             <span>{{detail.titleValuesEng}}</span>
                             <span class="fl-right">x{{detail.totalNum}}</span>
                         </p>
+                        <p class="p2 c-666">FNSKU：{{detail.fnskuCode}}</p>
+                        <p class="p2 c-666">Seller's SKU：{{detail.skuCode}}</p>
                     </div>
                 </div>
                 <div class="spqd-footer">
@@ -71,11 +73,11 @@
                 </div>
             </div>
             <div class="order-time">
-                <div class="time-item">
+                <div class="time-item" v-if="detailData.acceptTimeEng">
                     <span class="c-333">Date of Confirming</span>
                     <div class="fl-right fs-22 c-666">{{detailData.acceptTimeEng}}</div>
                 </div>
-                <div class="time-item" v-if="$route.query.type != 1">
+                <div class="time-item" v-if="$route.query.type != 1 && detailData.pickupTimeEng">
                     <span class="c-333">Date of Receiving</span>
                     <div class="fl-right fs-22 c-666">{{detailData.pickupTimeEng}}</div>
                 </div>
