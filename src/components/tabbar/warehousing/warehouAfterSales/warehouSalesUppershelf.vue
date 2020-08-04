@@ -3,6 +3,7 @@
     <div class="pick-up">
         <saomiao-header @search="search"></saomiao-header>
         <div class="pick-up-order">Return No.：{{detailData.stockInOrderSn}}</div>
+        <div class="pick-up-order">afterSales No.：{{detailData.backOrderSn}}</div>
         <div class="order-detail">
             <div class="detail-header">
                 <van-icon name="play" class="play-left" :color="playLeft ? '#DCDCDC':'#333'" @click="cliPlayLeft"/>
@@ -461,6 +462,9 @@ export default {
         color: #333;
         background-color: #fff;
         margin-bottom: 20px;
+        &:nth-child(2){
+            margin:0
+        }
     }
     .order-detail{
         background-color: #fff;
