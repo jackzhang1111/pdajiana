@@ -9,6 +9,10 @@
                         <span>{{orderName}}</span>
                         <span class="fl-right fs-20">{{detailData.stockInOrderSn}}</span>
                     </div>
+                    <div v-if="typeVal == 3">
+                        <span>afterSales No.:</span>
+                        <span class="fl-right fs-20">{{detailData.backOrderSn ? detailData.backOrderSn : 'no'}}</span>
+                    </div>
                 </template>
                 <div @click="toPickUp(data)" v-for="(data,index) in dataList" :key="index" class="order-list">
                     <span>{{data.orderSn}}</span> 
@@ -630,7 +634,7 @@ export default {
                                     if(two.children.length > 0){
                                         two.children.forEach((three,threeIndex) => {
                                             three.text = three.regionName
-                                            three.fuseName = one.regionName + '/' + two.regionName + '/' + three.regionName
+                                            three.fuseName = one.regionName + '-' + two.regionName + '-' + three.regionName
                                         })
                                         if(twoIndex == (one.children.length - 1)){
                                             this.goodsShelves.push(one)

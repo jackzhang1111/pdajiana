@@ -12,6 +12,10 @@
                             <span>Sale No.：</span>
                             <span class="fl-right fs-20">{{detailData.shelfDownorderSn}}</span>
                         </div>
+                        <div>
+                            <span>saleOrder No.：</span>
+                            <span class="fl-right fs-20">{{detailData.shelfDownorderSn}}</span>
+                        </div>
                     </template>
                     <div v-for="(data,index) in dataList" :key="index" class="order-list" @click="toPickUp(data)">
                         <span>{{data.orderSn}}</span> 
