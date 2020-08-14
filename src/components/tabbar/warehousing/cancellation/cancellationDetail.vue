@@ -88,8 +88,8 @@ export default {
     data() {
         return {
             statusList:[
-                {name:'Not removed',type:0},
-                {name:'Not ex-warehoused',type:1},
+                {name:'Not Removed',type:0},
+                {name:'Not Ex-warehoused',type:1},
                 {name:'Warehoused',type:2},
             ],
             detailData:{},
@@ -98,7 +98,7 @@ export default {
     },
     computed: {
         detailStatus(){
-            return this.orderStatus(this.$route.query.type,'statusList') + 'detail'
+            return this.orderStatus(this.$route.query.type,'statusList') + ' Detail'
         }
     },
     created() {

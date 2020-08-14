@@ -275,7 +275,11 @@ export default {
                         }
                     })
                     this.setCurrentProduct()
-                    this.getwarehouseregionID({warehouseId:res.Data.warehouseId})
+                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                        this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
+                    }else{
+                        this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)
+                    }
                 }
             })
         },
@@ -309,7 +313,11 @@ export default {
                         }
                     })
                     this.setCurrentProduct()
-                    this.getwarehouseregionID({warehouseId:res.Data.warehouseId})
+                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                        this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
+                    }else{
+                        this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)
+                    }
                 }
             })
         },
@@ -343,7 +351,11 @@ export default {
                         }
                     })
                     this.setCurrentProduct()
-                    this.getwarehouseregionID({warehouseId:res.Data.warehouseId})
+                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                        this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
+                    }else{
+                        this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)
+                    }
                 }
             })
         },

@@ -2,8 +2,8 @@
 <!-- 出库 -->
     <div class="pick-up">
         <saomiao-header @search="search"></saomiao-header>
-        <div class="pick-up-order">Sale No.：{{detailData.shelfDownorderSn}}</div>
-        <div class="pick-up-order">saleOrder No.：{{detailData.saleOrderSn}}</div>
+        <div class="pick-up-order">EX N0.：{{detailData.shelfDownorderSn}}</div>
+        <div class="pick-up-order">Sale No.：{{detailData.saleOrderSn}}</div>
         <div class="order-detail">
             <div class="detail-header">
                 <van-icon name="play" class="play-left" :color="playLeft ? '#DCDCDC':'#333'" @click="cliPlayLeft"/>

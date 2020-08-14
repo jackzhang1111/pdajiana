@@ -9,7 +9,7 @@
                          <div class="bscroll-con">
                                 <div class="order" v-for="(data,index) in dataList" :key="index" >
                                     <div class="order-header">
-                                        <span>Ex-warehouse No.:{{data.orderSn}}</span>
+                                        <span>EX No.:{{data.orderSn}}</span>
                                         <div class="fl-right">
                                             <span>{{orderStatus(data.orderStatus,'statusList')}}</span>
                                         </div>

@@ -106,7 +106,7 @@ export default {
     data() {
         return {
             statusList:[
-                {name:'Not received',type:1},
+                {name:'Not Received',type:1},
                 {name:'Not Stored',type:2},
                 {name:'Not Stored',type:3},
                 {name:'Finished',type:4},

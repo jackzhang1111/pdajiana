@@ -116,7 +116,7 @@ export default {
     },
     computed: {
         detailStatus(){
-            return this.orderStatus(this.$route.query.type,'statusList') + 'detail'
+            return this.orderStatus(this.$route.query.type,'statusList') + ' Detail'
         }
     },
     created() {

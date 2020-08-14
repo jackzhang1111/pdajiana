@@ -125,8 +125,8 @@ export default {
     data() {
         return {
             statusList:[
-                {name:'Not removed',type:0},
-                {name:'Not ex-warehoused',type:1},
+                {name:'Not Removed',type:0},
+                {name:'Not Ex-warehoused',type:1},
                 {name:'Warehoused',type:2},
             ],
             typeStatus:[
@@ -150,7 +150,7 @@ export default {
     },
     computed: {
         detailStatus(){
-            return this.orderStatus(this.$route.query.type,'statusList') + 'detail'
+            return this.orderStatus(this.$route.query.type,'statusList') + ' Detail'
         }
     },
     created() {
@@ -160,10 +160,10 @@ export default {
         this.typeSatus = this.$route.query.type
         if(this.$route.query.status == 0){
             this.transferouttockdowmprodetail(this.$route.query.orderid)
-            this.statusList = [{name:'Not removed',type:0},{name:'Not ex-warehoused',type:1},{name:'Warehoused',type:2}]
+            this.statusList = [{name:'Not Removed',type:0},{name:'Not Ex-warehoused',type:1},{name:'Warehoused',type:2}]
         }else{
             this.transferinstockdowmprodetail(this.$route.query.orderid)
-            this.statusList = [{name:'Not Stored',type:0},{name:'Not added',type:1},{name:'Warehoused',type:2}]
+            this.statusList = [{name:'Not Stored',type:0},{name:'Not Added',type:1},{name:'Warehoused',type:2}]
         }
     },
     watch: {

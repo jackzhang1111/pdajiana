@@ -5,7 +5,7 @@
             <div class="spqd-header">Order Info</div>
             <div class="order-time">
                 <div class="time-item">
-                    <span class="c-333">Ex-warehouse No.</span>
+                    <span class="c-333">EX No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.shelfDownorderSn}}</div>
                 </div>
                 <div class="time-item">
@@ -85,8 +85,8 @@ export default {
     data() {
         return {
             statusList:[
-                {name:'Not packed',type:0},
-                {name:'Not ex-warehoused',type:1},
+                {name:'Not Packed',type:0},
+                {name:'Not Ex-warehoused',type:1},
                 {name:'Warehoused',type:2},
             ],
             detailData:{},
@@ -95,7 +95,7 @@ export default {
     },
     computed: {
         detailStatus(){
-            return this.orderStatus(this.$route.query.type,'statusList') + 'detail'
+            return this.orderStatus(this.$route.query.type,'statusList') + ' Detail'
         }
     },
     created() {
