@@ -3,18 +3,18 @@
     <div class="pick-up">
         <div v-show="!batchNoListStatus">
             <saomiao-header @search="search"></saomiao-header>
-            <div class="pick-up-order" v-if="!$route.query.type">EX N0.：{{detailData.shelfDownorderSn}}</div>
-            <div class="pick-up-order">Sale No.：{{detailData.saleOrderSn}}</div>
+            <div class="pick-up-order" v-if="!$route.query.type">EX No.：{{detailData.shelfDownorderSn}}</div>
+            <div class="pick-up-order" v-if="!$route.query.type">Sale No.：{{detailData.saleOrderSn}}</div>
             <van-collapse v-model="activeNames" class="collapse" v-if="$route.query.type == 'xiajia'">
                 <van-collapse-item>
                     <template #title>
                         <div>
-                            <span>EX N0.：</span>
+                            <span>EX No.：</span>
                             <span class="fl-right fs-20">{{detailData.shelfDownorderSn}}</span>
                         </div>
                         <div>
                             <span>Sale No.：</span>
-                            <span class="fl-right fs-20">{{detailData.shelfDownorderSn}}</span>
+                            <span class="fl-right fs-20">{{detailData.saleOrderSn}}</span>
                         </div>
                     </template>
                     <div v-for="(data,index) in dataList" :key="index" class="order-list" @click="toPickUp(data)">

@@ -2,8 +2,9 @@
 <!-- 售后上架 -->
     <div class="pick-up">
         <saomiao-header @search="search"></saomiao-header>
-        <div class="pick-up-order">Return No.：{{detailData.stockInOrderSn}}</div>
-        <div class="pick-up-order">afterSales No.：{{detailData.backOrderSn}}</div>
+        <div class="pick-up-order">Warehousing No.:{{detailData.stockInOrderSn}}</div>
+        <div class="pick-up-order">Return No.:{{detailData.backOrderSn}}</div>
+        <div class="pick-up-order">Sale No.: {{detailData.saleOrderSn ? detailData.saleOrderSn : ''}}</div>
         <div class="order-detail">
             <div class="detail-header">
                 <van-icon name="play" class="play-left" :color="playLeft ? '#DCDCDC':'#333'" @click="cliPlayLeft"/>
@@ -43,6 +44,11 @@
                         <span>Volume:</span>
                         <span class="tijitotal">{{currentProduct.unitSize}}</span>
                         <span>m³</span>
+                    </div>
+                </div>
+                <div class="tiji">
+                    <div class="clearfix">
+                        <span class="pl-30">Original Location : {{currentProduct.outRegionName?currentProduct.outRegionName:'no'}}</span>
                     </div>
                 </div>
             </div>
@@ -476,7 +482,7 @@ export default {
         color: #333;
         background-color: #fff;
         margin-bottom: 20px;
-        &:nth-child(2){
+        &:nth-child(2),&:nth-child(3){
             margin:0
         }
     }
