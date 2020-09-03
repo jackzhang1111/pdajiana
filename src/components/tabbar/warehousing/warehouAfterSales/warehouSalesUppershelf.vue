@@ -200,7 +200,7 @@ export default {
                         }
                     })
                     this.setCurrentProduct()
-                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                    if(!res.Data.shelvesOrderId){
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
                     }else{
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)

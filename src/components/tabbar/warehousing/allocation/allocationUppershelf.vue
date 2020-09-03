@@ -214,7 +214,7 @@ export default {
                     this.removeData.shelfDownOrderId = this.detailData.shelfDownOrderId
                     this.shelvesData.shelvesOrderId = res.Data.shelvesOrderId
                     this.setCurrentProduct()
-                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                    if(!res.Data.shelvesOrderId){
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
                     }else{
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)
@@ -455,7 +455,6 @@ export default {
                             this.goodsShelves.push(one)
                         }
                     })
-
                     this.productArray.forEach(ele => {
                         if(flag){
                             ele.warehouselist = new Array()

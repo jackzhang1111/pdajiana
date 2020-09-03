@@ -13,6 +13,10 @@
                         <span>afterSales No.:</span>
                         <span class="fl-right fs-20">{{detailData.backOrderSn ? detailData.backOrderSn : 'no'}}</span>
                     </div>
+                    <div>
+                        <span>Sale No.:</span>
+                        <span  class="fl-right fs-20"> {{detailData.saleOrderSn ? detailData.saleOrderSn : '无'}}</span>
+                    </div>
                 </template>
                 <div @click="toPickUp(data)" v-for="(data,index) in dataList" :key="index" class="order-list">
                     <span>{{data.orderSn}}</span> 
@@ -79,6 +83,11 @@
                         <span>Volume:</span>
                         <span class="tijitotal">{{currentProduct.boxSize}}</span>
                         <span>m³</span>
+                    </div>
+                </div>
+                <div class="tiji">
+                    <div class="clearfix">
+                        <span class="pl-30">Original Location : {{currentProduct.outRegionName?currentProduct.outRegionName:'no'}}</span>
                     </div>
                 </div>
             </div>
@@ -275,7 +284,7 @@ export default {
                         }
                     })
                     this.setCurrentProduct()
-                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                    if(!res.Data.shelvesOrderId){
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
                     }else{
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)
@@ -318,7 +327,7 @@ export default {
                         }
                     })
                     this.setCurrentProduct()
-                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                    if(!res.Data.shelvesOrderId){
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
                     }else{
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)
@@ -361,7 +370,7 @@ export default {
                         }
                     })
                     this.setCurrentProduct()
-                    if(!res.Data.shelvesOrderId && res.Data.shelvesOrderId==0){
+                    if(!res.Data.shelvesOrderId){
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},true)
                     }else{
                         this.getwarehouseregionID({warehouseId:res.Data.warehouseId},false)

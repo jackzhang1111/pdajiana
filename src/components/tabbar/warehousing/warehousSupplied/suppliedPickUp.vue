@@ -318,7 +318,7 @@ export default {
                 }else if(res.code == 3){
                     Toast('The store-in warehouse of the supply order is inconsistent.')
                 }else if(res.code == 4){
-                    Toast('There are supply orders with the status being non Pending Warehousing. ')
+                    Toast('It has been put into storage, no repeat operation is required. ')
                 }else if(res.code == 5){
                     Toast('The are supply orders with the current warehousing qty being less than o.')
                 }else if(res.code == 6){
