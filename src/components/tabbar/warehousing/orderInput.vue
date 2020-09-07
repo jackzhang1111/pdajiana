@@ -72,6 +72,8 @@ export default {
                     Toast('Ex-warehoused! No more operation')
                 }else if(res.code == 3){
                     Toast('Removed! Please finish the ex-warehousing')
+                }else if(res.code == 4){
+                    Toast('There are sales ex-warehousing orders applied for refund')
                 }
             })
         },

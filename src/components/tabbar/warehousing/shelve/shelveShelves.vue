@@ -15,7 +15,7 @@
                     </div>
                     <div>
                         <span>Sale No.:</span>
-                        <span  class="fl-right fs-20"> {{detailData.saleOrderSn ? detailData.saleOrderSn : '无'}}</span>
+                        <span  class="fl-right fs-20"> {{detailData.saleOrderSn ? detailData.saleOrderSn : 'no'}}</span>
                     </div>
                 </template>
                 <div @click="toPickUp(data)" v-for="(data,index) in dataList" :key="index" class="order-list">
