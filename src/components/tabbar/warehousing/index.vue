@@ -97,6 +97,8 @@ export default {
             saomiaoList:[
                 {name:'Warehouse',value:1},
                 {name:'Ex-warehouse',value:2},
+                {name:'Scan product',value:3},
+                {name:'Scanning on shelves',value:4}
             ],
         };
     },

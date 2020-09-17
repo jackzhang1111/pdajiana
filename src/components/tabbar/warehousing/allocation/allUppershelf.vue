@@ -2,7 +2,7 @@
   <!-- 上架 -->
   <div class="pick-up">
     <saomiao-header @search="search"></saomiao-header>
-    <div class="pick-up-order">Warehousing No.：{{detailData.stockInOrderSn}}</div>
+    <div class="pick-up-order">Warehousing No.:{{detailData.transferStockInOrderSn}}</div>
     <div class="order-detail">
       <div class="detail-header">
         <van-icon
@@ -22,7 +22,6 @@
           :color="playRight ? '#DCDCDC':'#333'"
           @click="cliPlayRight"
         />
-        <div class="printing-btn" @click="print">print batchNo</div>
       </div>
       <div class="order-product">
         <img :src="$webUrl+currentProduct.skuImg" />
@@ -74,7 +73,6 @@
         </div>
       </div>
     </div>
-
     <div class="goods-shelves">
       <div class="set-shelves">
         <span @click="showPicker = true">Set a Location</span>
@@ -113,7 +111,6 @@
         </div>
       </div>
     </div>
-
     <div class="btns">
       <div class="btn-qbrk" @click="finishPicking">Shelve</div>
     </div>
@@ -122,21 +119,18 @@
 </template>
 
 <script>
-var device = null,
-  main = null,
-  BluetoothAdapter = null,
-  UUID = null,
-  uuid = null,
-  BAdapter = null,
-  bluetoothSocket = null;
 import saomiaoHeader from "@/multiplexing/saomiaoHeader.vue";
 import { Dialog, Toast } from "vant";
 import {
-  stockInToShelvesApi,
+  transferinstockdowmproshelvesApi,
+  getshelfuporderconfirminfoApi,
+  getcanupregionlistApi,
+  confirmtransfershelfuporderApi,
+} from "@/api/warehousing/allocation/index.js";
+import {
   stockInToShelvesAllApi,
   getwarehouseregionIDApi,
 } from "@/api/warehousing/warehousSupplied/index.js";
-import BTool from "@/static/js/BluetoothTool.js";
 export default {
   props: {},
   data() {
@@ -149,7 +143,7 @@ export default {
         { name: "Specifications", value: "" },
         { name: "Supplier", value: "" },
         { name: "Batch No.", value: "" },
-        { name: "Qty Warehoused", value: "" },
+        { name: "Qty of Warehousing", value: "" },
         { name: "FNSKU", value: "" },
         { name: "Pcs/Carton", value: "" },
         { name: "International No.", value: "" },
@@ -159,18 +153,15 @@ export default {
         { name: "Warehouse", value: "" },
         { name: "Gross Weight/Carton(kg)", value: "" },
       ],
-      shelvesData: {
-        shelvesOrderId: 0,
-        sourceType: 2,
-        productlist: [],
-      },
-
-      value: "",
+      productList: [
+        { type: 1, name: "Supply Warehousing Order" },
+        { type: 2, name: "Transfer Warehousing Order" },
+        { type: 3, name: "Sales Return Warehousing Order" },
+      ],
+      shelvesData: {},
+      productArray: [],
       showPicker: false,
       columns: [],
-      bluetoothState: {},
-      pairedDevices: [],
-      address: null,
       goodsShelves: [], //接口货架货位
     };
   },
@@ -182,21 +173,9 @@ export default {
       return this.current == this.listLength;
     },
   },
-  created() {
-    setTimeout(() => {
-      this.getBluetooth();
-    }, 300);
-  },
+  created() {},
   mounted() {
-    this.stockInToShelves(this.$route.query.paramId, this.$route.query.typeId);
-  },
-  beforeDestroy() {
-    try {
-      device = null; //这里关键
-      bluetoothSocket.close();
-    } catch (err) {
-      console.log(err, "beforeDestroy");
-    }
+    this.getshelfuporderconfirminfo({ orderSn: this.$route.query.orderid });
   },
   watch: {
     currentProduct: {
@@ -211,7 +190,7 @@ export default {
       this.productArray.forEach((item, index) => {
         if (item.fnskuCode == val) {
           this.current = index + 1;
-          this.currentProduct = this.detailData.productList[index];
+          this.currentProduct = this.detailData.batchList[index];
         }
       });
     },
@@ -219,78 +198,89 @@ export default {
     cliPlayLeft() {
       if (this.current <= 1) return;
       this.current--;
-      this.currentProduct = this.detailData.productList[this.current - 1];
+      this.currentProduct = this.detailData.batchList[this.current - 1];
     },
     //下一个
     cliPlayRight() {
       if (this.current >= this.listLength) return;
       this.current++;
-      this.currentProduct = this.detailData.productList[this.current - 1];
+      this.currentProduct = this.detailData.batchList[this.current - 1];
     },
-    //入库信息
-    stockInToShelves(paramId, typeId) {
-      stockInToShelvesApi({ paramId, typeId }).then((res) => {
+    //上架详情
+    getshelfuporderconfirminfo(data) {
+      getshelfuporderconfirminfoApi(data).then((res) => {
         if (res.code == 0) {
-          this.detailData = res.Data;
-
-          this.listLength = res.Data.productList.length;
-          this.productArray = res.Data.productList;
-
-          this.shelvesData.shelvesOrderId = res.Data.shelvesOrderId;
-          this.productArray.forEach((ele) => {
-            ele.warehouselist = new Array();
-            ele.columns = this.columns.map((o) => Object.assign({}, o));
-            if (ele.typeValue == 1) {
-              ele.stockIntype = "Supply Warehousing Order";
-            } else if (ele.typeValue == 2) {
-              ele.stockIntype = "Transfer Warehousing Order";
-            } else if (ele.typeValue == 3) {
-              ele.stockIntype = "Sales Return Warehousing Order";
-            } else if (ele.typeValue == 4) {
-              ele.stockIntype = "Purchasing Return Ex-warehousing Order";
-            } else if (ele.typeValue == 5) {
-              ele.stockIntype = "Sales Ex-warehousing Order";
-            } else if (ele.typeValue == 6) {
-              ele.stockIntype = "Transfer Ex-warehousing Order";
-            } else {
-              ele.stockIntype = "";
-            }
+          this.detailData = res.orderModel;
+          this.detailData.batchList.forEach((item) => {
+            item.regionList = [];
           });
-          this.currentProduct = this.productArray[this.current - 1];
+          this.currentProduct = res.orderModel.batchList[this.current - 1];
+          this.listLength = res.orderModel.batchList.length;
+          this.productArray = res.orderModel.batchList;
           this.setCurrentProduct();
-          if (!res.Data.shelvesOrderId) {
-            this.getwarehouseregionID(
-              { warehouseId: res.Data.warehouseId },
-              true
-            );
-          } else {
-            this.getwarehouseregionID(
-              { warehouseId: res.Data.warehouseId },
-              false
-            );
-            res.Data.productList.forEach((ele) => {
-              ele.warehouselist.forEach((item) => {
-                item.text = "wms";
-              });
-            });
-          }
+          this.getcanupregionlist({
+            warehouseId: this.detailData.inWarehouseId,
+          });
+        } else if (res.code == 3) {
+          this.$router.replace({ name: "noOrder", query: { type: 3 } });
+        } else if (res.code == 4) {
+          this.$router.replace({ name: "noOrder", query: { type: 5 } });
+        } else if (res.code == 6) {
+          this.$router.replace({ name: "noOrder", query: { type: 4 } });
+        } else {
+          Toast(res.msg);
         }
       });
     },
     //当前商品基本属性
     setCurrentProduct() {
-      this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitleEng;
-      this.detailedGuigeList[1].value = this.currentProduct.businessName;
-      this.detailedGuigeList[2].value = this.currentProduct.batchNo;
-      this.detailedGuigeList[3].value = this.currentProduct.detailNum;
-      this.detailedGuigeList[4].value = this.currentProduct.fnskuCode;
-      this.detailedGuigeList[5].value = this.currentProduct.goodnumPerBox;
-      this.detailedGuigeList[6].value = this.currentProduct.intCode;
-      this.detailedGuigeList[7].value = this.currentProduct.hasInDetailNum;
-      this.detailedGuigeList[8].value = this.currentProduct.stockIntype;
+      this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle;
+      this.detailedGuigeList[1].value = this.currentProduct.inDetailNum;
+      this.detailedGuigeList[2].value = this.currentProduct.businessName;
+      this.detailedGuigeList[3].value = this.currentProduct.goodnumPerBox;
+      this.detailedGuigeList[4].value = this.currentProduct.batchNo;
+      this.detailedGuigeList[5].value = this.currentProduct.upDetailNum;
+      this.detailedGuigeList[6].value = this.currentProduct.fnskuCode;
+      this.detailedGuigeList[7].value = this.currentProduct.hasUpDetailNum;
+      this.detailedGuigeList[8].value = this.orderStatus(
+        this.currentProduct.stockInOrderType,
+        "productList"
+      );
       this.detailedGuigeList[9].value = this.currentProduct.unitWeight;
-      this.detailedGuigeList[10].value = this.currentProduct.stockInWarehouse;
-      this.detailedGuigeList[11].value = this.currentProduct.boxWeight;
+      this.detailedGuigeList[10].value = this.currentProduct.inWarehouseName;
+      this.detailedGuigeList[11].value = this.currentProduct.goodnumPerBox;
+    },
+    //编译状态
+    orderStatus(type, list) {
+      let name = "";
+      this[list].forEach((statu) => {
+        if (statu.type == type) {
+          name = statu.name;
+        }
+      });
+      return name;
+    },
+    //全部上架
+    finishPicking() {
+      let arr = [];
+      this.shelvesData = this.$fn.deepCopy(this.detailData);
+      this.shelvesData.batchList.forEach((ele) => {
+        ele.warehouselist.forEach((item) => {
+          let obj = {
+            regionId: item.regionId,
+            upItemNum: item.upItemNum,
+          };
+          ele.regionList.push(obj);
+        });
+      });
+      Dialog.confirm({
+        title: "tips",
+        message: "Are you sure to shelve?",
+      })
+        .then(() => {
+          this.confirmtransfershelfuporder(this.shelvesData);
+        })
+        .catch(() => {});
     },
     //小数点计算
     accMul(arg1, arg2) {
@@ -308,91 +298,7 @@ export default {
         Math.pow(10, m)
       );
     },
-    //完成取件
-    finishPicking() {
-      let arr = [];
-      this.productArray.forEach((ele) => {
-        let obj = {
-          batchNo: ele.batchNo,
-          skuId: ele.skuId,
-          stockInOrderType: 1,
-          orderDetailId: ele.orderDetailId,
-          unitSize: ele.unitSize,
-          proRegion: [],
-        };
-        ele.warehouselist.forEach((item) => {
-          if (Number(item.upItemNum) > 0) {
-            let proRegionObj = {
-              regionId: item.regionId,
-              orderDetailId: ele.orderDetailId,
-              stockInOrderType: 1,
-              upItemNum: Number(item.upItemNum),
-            };
-            obj.proRegion.push(proRegionObj);
-          }
-        });
-        if (obj.proRegion.length > 0) {
-          arr.push(obj);
-        }
-        this.shelvesData.productlist = arr;
-      });
-      Dialog.confirm({
-        title: "Tips",
-        message: "Are you sure to shelve?",
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-      })
-        .then(() => {
-          let productIndex,
-            proRegionIndex,
-            flag = true;
-          if (flag) {
-            for (
-              productIndex = 0;
-              productIndex < this.shelvesData.productlist.length;
-              productIndex++
-            ) {
-              let num = 0,
-                num2 = 0,
-                allNum = 0;
-              for (
-                proRegionIndex = 0;
-                proRegionIndex <
-                this.shelvesData.productlist[productIndex].proRegion.length;
-                proRegionIndex++
-              ) {
-                num += this.shelvesData.productlist[productIndex].proRegion[
-                  proRegionIndex
-                ].upItemNum;
-              }
-              this.productArray.forEach((ele) => {
-                allNum += ele.hasInDetailNum;
-              });
-              this.shelvesData.productlist.forEach((ele) => {
-                ele.proRegion.forEach((item) => {
-                  num2 += item.upItemNum;
-                });
-              });
-              if (this.productArray[productIndex].hasInDetailNum != num) {
-                flag = false;
-              }
-              if (allNum != num2) {
-                flag = false;
-              }
-            }
-          }
-          if (!flag) {
-            Toast("All putaway quantities are incorrect");
-            return;
-          }
-          if (this.shelvesData.productlist.length == 0) {
-            Toast("Please select an inventory area for putaway");
-            return;
-          }
-          this.stockInToShelvesAll(this.shelvesData);
-        })
-        .catch(() => {});
-    },
+    //库区货位选择
     onConfirm(value, valueIndexs) {
       let threeShel = null,
         twoShel = null,
@@ -407,7 +313,6 @@ export default {
       ].children[valueIndexs[2]];
       this.currentProduct.warehouselist.push(this.$fn.copy(threeShel));
       this.showPicker = false;
-
       this.currentProduct.columns.forEach((one, oneIndex) => {
         let oneId = one.regionId;
         one.children.forEach((two, twoIndex) => {
@@ -430,55 +335,10 @@ export default {
         this.currentProduct.columns.splice(valueIndexs[0], 1);
       }
     },
-    //全部上架
-    stockInToShelvesAll(data) {
-      stockInToShelvesAllApi(data).then((res) => {
-        if (res.code == 0) {
-          Toast("Successful putaway");
-          setTimeout(() => {
-            this.$router.go(-1);
-          }, 1500);
-        } else if (res.code == 1) {
-          Toast(
-            "The current putaway qty exceeds the maximum qty of available putaway products (by subtracting the product qty of the created putaway order from the warehousing product qty of the warehousing order)"
-          );
-        } else if (res.code == 2) {
-          Toast("Repeated warehousing orders!");
-        } else if (res.code == 3) {
-          Toast("Inconsistent warehouse!");
-        } else if (res.code == 4) {
-          Toast("Finished putaway! No more operation!");
-        } else if (res.code == 5) {
-          Toast("There are warehousing order with 0 adding");
-        } else if (res.code == 6) {
-          Toast(
-            "The adding volume exceeds the available maximum volume(by subtracting the volume of created Not-Added order from the available volume)"
-          );
-        } else if (res.code == 7) {
-          Toast("It  isn’t pending putaway order and cannot be changed.");
-        } else if (res.code == 8) {
-          Toast(
-            "The putaway location must be an inventory area without shelf or a location."
-          );
-        } else if (res.code == 9) {
-          Toast(
-            "It cannot be putaway in the superior area of non-site warehouse."
-          );
-        } else if (res.code == 11) {
-          Toast("The details of original warehousing order are inexistent.");
-        } else if (res.code == 12) {
-          Toast("The putaway qty cannot be less than 0.");
-        } else if (res.code == 13) {
-          Toast(
-            "It cannot be operated because of the counting of goods at target location.  "
-          );
-        }
-      });
-    },
     //垃圾桶
     detailWarehouse(index, item) {
       Dialog.confirm({
-        title: "Tips",
+        title: "tips",
         message: "Are you sure to delete the location?",
         confirmButtonText: "Yes",
         cancelButtonText: "No",
@@ -494,7 +354,6 @@ export default {
                   onecolumnIndex = columnIndex;
                   twocolumnIndex = twoIndex;
                   item.upItemNum = 0;
-                  if (item.text == "wms") return;
                   two.children.push(item);
                 }
               });
@@ -510,9 +369,9 @@ export default {
                 ele.upItemNum = 0;
               }
             });
-            if (item.text == "wms") return;
             this.currentProduct.columns.push(ele);
           }
+          this.$forceUpdate();
         })
         .catch(() => {});
     },
@@ -524,7 +383,7 @@ export default {
       } else if (this.current < 1) {
         this.current = 1;
       }
-      this.currentProduct = this.detailData.productList[this.current - 1];
+      this.currentProduct = this.detailData.batchList[this.current - 1];
     },
     //修改数量
     changNum(val, name) {
@@ -533,9 +392,9 @@ export default {
       //取整
       val[name] = Math.ceil(val[name]);
     },
-    //PDA获取所有库位信息接口
-    getwarehouseregionID(data, flag) {
-      getwarehouseregionIDApi(data).then((res) => {
+    //通过入库仓库Id获取可上架的位置
+    getcanupregionlist(data) {
+      getcanupregionlistApi(data).then((res) => {
         if (res.code == 0) {
           res.Data.forEach((one, oneIndex) => {
             one.text = one.regionName;
@@ -587,111 +446,25 @@ export default {
               this.goodsShelves.push(one);
             }
           });
-
           this.productArray.forEach((ele) => {
-            if (flag) {
-              ele.warehouselist = new Array();
-            }
+            ele.warehouselist = new Array();
             ele.columns = this.$fn.copy(this.goodsShelves);
           });
         }
       });
     },
-    //初始化打印机参数
-    getReady() {
-      main = plus.android.runtimeMainActivity();
-      BluetoothAdapter = plus.android.importClass(
-        "android.bluetooth.BluetoothAdapter"
-      );
-      UUID = plus.android.importClass("java.util.UUID");
-      uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //不需要更改
-      BAdapter = BluetoothAdapter.getDefaultAdapter();
-      BAdapter.cancelDiscovery(); //停止扫描
-      device = BAdapter.getRemoteDevice(this.address); //这里是蓝牙打印机的蓝牙地址
-      plus.android.importClass(device);
-      bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
-      plus.android.importClass(bluetoothSocket);
-    },
-    //初始化寻找打印机参数
-    getBluetooth() {
-      var that = this;
-      var onPlusReady = function () {
-        that.bluetoothTool = BTool.BluetoothTool();
-        that.bluetoothState = that.bluetoothTool.state;
-        that.getPairedDevices();
-      };
-      if (typeof plus != "undefined") {
-        onPlusReady();
-      }
-    },
-    //获取蓝牙地址
-    getPairedDevices: function () {
-      try {
-        this.pairedDevices = this.bluetoothTool.getPairedDevices();
-        this.address = this.pairedDevices[0].address;
-        this.getReady();
-      } catch (error) {
-        Toast("Please re-connect the Bluetooth");
-        console.log(error, "error");
-      }
-    },
-    print() {
-      if (!bluetoothSocket.isConnected()) {
-        try {
-          bluetoothSocket.connect();
-        } catch (error) {
-          Toast("It’s disconnected with printer!Re-connecting now.");
-          this.getReady();
+    //调拨入库确认上架（支持部分上架）
+    confirmtransfershelfuporder(data) {
+      confirmtransfershelfuporderApi(data).then((res) => {
+        if (res.code == 0) {
+          Toast("success");
+          setTimeout(() => {
+            this.$router.go(-1);
+          }, 1500);
+        } else {
+          Toast(res.msg);
         }
-      }
-      if (bluetoothSocket.isConnected()) {
-        var outputStream = bluetoothSocket.getOutputStream();
-        plus.android.importClass(outputStream);
-        var s = plus.android.importClass("java.lang.String");
-        var bytes;
-
-        var size = "SIZE 10mm,30mm\n";
-        bytes = plus.android.invoke(size, "getBytes", "gb18030");
-        outputStream.write(bytes);
-        outputStream.flush();
-
-        var gap = "GAP 2mm\n";
-        bytes = plus.android.invoke(gap, "getBytes", "gb18030");
-        outputStream.write(bytes);
-        outputStream.flush();
-
-        var speed = "SPEED 5\n";
-        bytes = plus.android.invoke(speed, "getBytes", "gb18030");
-        outputStream.write(bytes);
-        outputStream.flush();
-
-        var density = "DENSITY 8\n";
-        bytes = plus.android.invoke(density, "getBytes", "gb18030");
-        outputStream.write(bytes);
-        outputStream.flush();
-
-        var cls = "CLS \n";
-        bytes = plus.android.invoke(cls, "getBytes", "gb18030");
-        outputStream.write(bytes);
-        outputStream.flush();
-
-        // var values1=`TEXT 10,10,\"TSS24.BF2\",0,1,1,\"${this.currentProduct.batchNo}\"\n`
-        // bytes = plus.android.invoke(values1, 'getBytes', 'gb18030');
-        // outputStream.write(bytes);
-        // outputStream.flush();
-
-        var values2 = `BARCODE 25,10,\"128\",50,1,0,1,1,\"${this.currentProduct.batchNo}\"\n`;
-        bytes = plus.android.invoke(values2, "getBytes", "gb18030");
-        outputStream.write(bytes);
-        outputStream.flush();
-
-        var string = "PRINT 1\n"; //必须以创建字符串对象的形式创建对象，否则返回NULL
-        bytes = plus.android.invoke(string, "getBytes", "gb18030");
-        outputStream.write(bytes);
-        outputStream.flush();
-      } else {
-        Toast("Failed Bluetooth connection");
-      }
+      });
     },
   },
   components: {
@@ -718,7 +491,6 @@ export default {
       line-height: 88px;
       text-align: center;
       border-bottom: 1px solid #f2f3f5;
-      position: relative;
       .play-left {
         transform: rotate(180deg);
         margin-right: 30px;
@@ -747,15 +519,6 @@ export default {
       .header-font {
         font-size: 34px;
         color: #999;
-      }
-      .printing-btn {
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        height: 50px;
-        border: 1px solid;
-        padding: 0 10px;
-        line-height: 50px;
       }
     }
     .order-product {
@@ -897,8 +660,8 @@ export default {
     background-color: #333;
   }
 }
-.fs-22 {
-  font-size: 22px;
+.fs-18 {
+  font-size: 18px;
 }
 .pl-30 {
   padding-left: 30px;

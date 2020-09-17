@@ -9,7 +9,7 @@ import 'lib-flexible/flexible'
 import '@/assets/css/reset.css'
 import '@/assets/css/common.less'
 import '@/assets/css/animation.less'
-import {isDisabled,formValidate,strTrim,objTrim,priceReg,objDeepCopy,deepnull,compare} from '@/common/utils'
+import {isDisabled,formValidate,strTrim,objTrim,priceReg,objDeepCopy,deepnull,compare,deepCopy} from '@/common/utils'
 import store from './store/index'
 import * as mycomponents from '@/common/mycomponents.js'
 import {gethttpimgurlApi} from '@/api/login/index'
@@ -33,6 +33,7 @@ gethttpimgurlApi().then(res => {
 
 Vue.prototype.$fn = {
   copy:objDeepCopy,
+  deepCopy: deepCopy,
   isDisabled,
   formValidate,
   strTrim,
