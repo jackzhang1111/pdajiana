@@ -152,6 +152,8 @@ export default {
         { name: "Unit Weight(kg)", value: "" },
         { name: "Warehouse", value: "" },
         { name: "Gross Weight/Carton(kg)", value: "" },
+        { name: "category", value: "" },
+        { name: "remaining Qty to be put on shelves", value: "" },
       ],
       productList: [
         { type: 1, name: "Supply Warehousing Order" },
@@ -227,6 +229,16 @@ export default {
           this.$router.replace({ name: "noOrder", query: { type: 5 } });
         } else if (res.code == 6) {
           this.$router.replace({ name: "noOrder", query: { type: 4 } });
+        } else if (res.code == 1) {
+          Toast("Parameter 'request Model' Required");
+        } else if (res.code == 2) {
+          Toast("Warehousing Barcode Required");
+        } else if (res.code == 5) {
+          Toast("Nothing is pending to putaway");
+        } else if (res.code == 7) {
+          Toast(
+            "Related Putaway Order hasn't finished. If you want to putaway here,pls cancel it on PC first."
+          );
         } else {
           Toast(res.msg);
         }
@@ -249,6 +261,8 @@ export default {
       this.detailedGuigeList[9].value = this.currentProduct.unitWeight;
       this.detailedGuigeList[10].value = this.currentProduct.inWarehouseName;
       this.detailedGuigeList[11].value = this.currentProduct.goodnumPerBox;
+      this.detailedGuigeList[12].value = this.currentProduct.categoryNamesRealEng;
+      this.detailedGuigeList[13].value = this.currentProduct.maxCanShelfUpNum;
     },
     //编译状态
     orderStatus(type, list) {
@@ -461,6 +475,8 @@ export default {
           setTimeout(() => {
             this.$router.go(-1);
           }, 1500);
+        } else if (res.code == 99 || res.code == 999) {
+          Toast("error");
         } else {
           Toast(res.msg);
         }

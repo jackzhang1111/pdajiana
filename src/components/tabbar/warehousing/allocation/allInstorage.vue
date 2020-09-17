@@ -366,8 +366,20 @@ export default {
             this.currentProduct = this.currentArray[this.current - 1];
           }, 0);
           this.listLength = res.orderModel.skuList.length;
+        } else if (res.code == 1) {
+          Toast("Parameter 'Request Model' Required");
+        } else if (res.code == 2) {
+          Toast("Transfer Ex-warehousing No. ID must be greater than 0");
+        } else if (res.code == 3) {
+          Toast("Invalid Ex-warehouseing No.");
+        } else if (res.code == 4) {
+          Toast("Can't Allocate,Need to finish Ex-warehousing First");
+        } else if (res.code == 5) {
+          Toast("None Items to be Warehousing");
+        } else if (res.code == 6) {
+          Toast("All Done,No need to Confirm warehousing Again");
         } else {
-          Toast(res.msg);
+          Toast("error");
         }
       });
     },
@@ -375,11 +387,45 @@ export default {
     confirmtransferinstockorder(data) {
       confirmtransferinstockorderApi(data).then((res) => {
         if (res.code == 0) {
-          Toast("入库成功,打印入库单号");
+          Toast("Success,Print Batch No.");
           this.print(JSON.parse(res.resdata).orderAidSn);
           setTimeout(() => {
             this.$router.go(-1);
           }, 1500);
+        } else if (res.code == 99) {
+          Toast("error");
+        } else if (res.code == 101) {
+          Toast(
+            "The Warehousing Qty exceeds the Maximum Available Qty(Transfer Ex-warehousing Qty-Warehousing No. created Qty)"
+          );
+        } else if (res.code == 107) {
+          Toast("All Done,No need to Confirm Again");
+        } else if (res.code == 105) {
+          Toast("Can't Warehousing,Need to finish Ex-warehousing First");
+        } else if (res.code == -5) {
+          Toast(
+            "Total Warehousing Qty of Product Batch must be greater than 0"
+          );
+        } else if (res.code == -6) {
+          Toast("The ID of transfer Ex-warehousing detail must be more than 0");
+        } else if (res.code == -7) {
+          Toast(
+            "SKU Warehousing Qty must be equal to the sum of SKU Product Batch Warehousing Qty"
+          );
+        } else if (res.code == -8) {
+          Toast("Warehousing Qty can not be less than 0");
+        } else if (res.code == -9) {
+          Toast(
+            "Warehousing Qty can not exceed the Maximum Warehousing Quantity"
+          );
+        } else if (res.code == -21) {
+          Toast("Parameter 'Request Model' Required");
+        } else if (res.code == -22) {
+          Toast("Transfer Ex-warehousing No. ID must be greater than 0");
+        } else if (res.code == -23) {
+          Toast("Pls Select Warehousing Products");
+        } else if (res.code == -24) {
+          Toast("Pls Select Warehousing Products Batch");
         } else {
           Toast(res.msg);
         }
@@ -493,6 +539,8 @@ export default {
     },
     //当前入库数量修改
     changeInDetailNum(value, list) {
+      value = value.replace(/[^\d]/g, "");
+      this.currentProduct.inDetailNum = value;
       if (list.length === 1) {
         list[0].inDetailNum = value;
       }

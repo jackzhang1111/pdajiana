@@ -7,7 +7,8 @@
         <template #title>
           <div>
             <span>{{orderName}}</span>
-            <span class="fl-right fs-20">{{detailData.stockInOrderSn}}</span>
+            <span class="fl-right fs-20" v-if="typeVal == 2">{{detailData.transferStockInOrderSn}}</span>
+            <span class="fl-right fs-20" v-else>{{detailData.stockInOrderSn}}</span>
           </div>
           <div v-if="typeVal == 3">
             <span>afterSales No.:</span>
@@ -299,20 +300,28 @@ export default {
     cliPlayLeft() {
       if (this.current <= 1) return;
       this.current--;
-      this.currentProduct = this.detailData.productList[this.current - 1];
+      if (this.typeVal == 2) {
+        this.currentProduct = this.detailData.batchList[this.current - 1];
+      } else {
+        this.currentProduct = this.detailData.productList[this.current - 1];
+      }
     },
     //下一个
     cliPlayRight() {
       if (this.current >= this.listLength) return;
       this.current++;
-      this.currentProduct = this.detailData.productList[this.current - 1];
+      if (this.typeVal == 2) {
+        this.currentProduct = this.detailData.batchList[this.current - 1];
+      } else {
+        this.currentProduct = this.detailData.productList[this.current - 1];
+      }
     },
     //供货入库上架信息
     stockInToShelves(data) {
       stockInToShelvesApi(data).then((res) => {
         if (res.code == 0) {
           this.detailData = res.Data;
-          this.currentProduct = res.Data.productList[this.current - 1];
+          this.currentProduct = res.Data.productList[0];
           this.listLength = res.Data.productList.length;
           this.productArray = res.Data.productList;
 
@@ -336,7 +345,6 @@ export default {
               ele.stockIntype = "";
             }
           });
-          this.setCurrentProduct();
           if (!res.Data.shelvesOrderId) {
             this.getwarehouseregionID(
               { warehouseId: res.Data.warehouseId },
@@ -361,7 +369,7 @@ export default {
       customerservicebackordershelvesApi(data).then((res) => {
         if (res.code == 0) {
           this.detailData = res.Data;
-          this.currentProduct = res.Data.productList[this.current - 1];
+          this.currentProduct = res.Data.productList[0];
           this.listLength = res.Data.productList.length;
           this.productArray = res.Data.productList;
           this.removeData.shelfDownOrderId = this.detailData.shelfDownOrderId;
@@ -385,7 +393,6 @@ export default {
               ele.stockIntype = "";
             }
           });
-          this.setCurrentProduct();
           if (!res.Data.shelvesOrderId) {
             this.getwarehouseregionID(
               { warehouseId: res.Data.warehouseId },
@@ -413,10 +420,9 @@ export default {
           this.detailData.batchList.forEach((item) => {
             item.regionList = [];
           });
-          this.currentProduct = res.orderModel.batchList[this.current - 1];
+          this.currentProduct = res.orderModel.batchList[0];
           this.listLength = res.orderModel.batchList.length;
           this.productArray = res.orderModel.batchList;
-          this.setCurrentProduct();
           this.getcanupregionlist({
             warehouseId: this.detailData.inWarehouseId,
           });
@@ -428,6 +434,18 @@ export default {
           this.$router.replace({ name: "noOrder", query: { type: 4 } });
         } else if (res.code == 6) {
           this.$router.replace({ name: "noOrder", query: { type: 4 } });
+        } else if (res.code == 1) {
+          Toast("Parameter 'request Model' Required");
+        } else if (res.code == 2) {
+          Toast("Warehousing Barcode Required");
+        } else if (res.code == 5) {
+          Toast("Nothing is pending to putaway");
+        } else if (res.code == 7) {
+          Toast(
+            "Related Putaway Order hasn't finished. If you want to putaway here,pls cancel it on PC first."
+          );
+        } else {
+          Toast(res.msg);
         }
       });
     },
@@ -520,18 +538,20 @@ export default {
         this.detailedGuigeList[9].value = this.currentProduct.unitWeight;
       } else if (this.typeVal == 2) {
         this.detailedGuigeList = [
-          { name: "规格属性", value: "" },
-          { name: "调拨入库数量", value: "" },
-          { name: "卖家", value: "" },
-          { name: "装箱数量", value: "" },
-          { name: "批次号", value: "" },
-          { name: "上架数量", value: "" },
+          { name: "Specifications", value: "" },
+          { name: "Supplier", value: "" },
+          { name: "Batch No.", value: "" },
+          { name: "Qty of Warehousing", value: "" },
           { name: "FNSKU", value: "" },
-          { name: "已上架数量", value: "" },
-          { name: "入库类型", value: "" },
-          { name: "单位重量(kg)", value: "" },
-          { name: "入库仓库", value: "" },
-          { name: "装箱重量(kg)", value: "" },
+          { name: "Pcs/Carton", value: "" },
+          { name: "International No.", value: "" },
+          { name: "Qty Shelved", value: "" },
+          { name: "Type", value: "" },
+          { name: "Unit Weight(kg)", value: "" },
+          { name: "Warehouse", value: "" },
+          { name: "Gross Weight/Carton(kg)", value: "" },
+          { name: "category", value: "" },
+          { name: "remaining Qty to be put on shelves", value: "" },
         ];
         this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle;
         this.detailedGuigeList[1].value = this.currentProduct.inDetailNum;
@@ -548,6 +568,8 @@ export default {
         this.detailedGuigeList[9].value = this.currentProduct.unitWeight;
         this.detailedGuigeList[10].value = this.currentProduct.inWarehouseName;
         this.detailedGuigeList[11].value = this.currentProduct.goodnumPerBox;
+        this.detailedGuigeList[12].value = this.currentProduct.categoryNamesRealEng;
+        this.detailedGuigeList[13].value = this.currentProduct.maxCanShelfUpNum;
       } else {
         //供货入库单,调拨入库单
         this.detailedGuigeList = [
@@ -714,6 +736,8 @@ export default {
           setTimeout(() => {
             this.$router.go(-1);
           }, 1500);
+        } else if (res.code == 99 || res.code == 999) {
+          Toast("error");
         } else {
           Toast(res.msg);
         }
@@ -816,6 +840,7 @@ export default {
     },
     //选择单号
     toPickUp(orderData) {
+      this.current = 1;
       if (this.paraObj.paramId == orderData.orderId) return;
       this.dataList.forEach((item) => {
         item.checked = false;
