@@ -2,7 +2,7 @@
   <!-- 上架 -->
   <div class="pick-up">
     <saomiao-header @search="search"></saomiao-header>
-    <van-collapse v-model="activeNames" class="collapse">
+    <van-collapse v-model="activeNames" class="collapse" accordion name="1">
       <van-collapse-item>
         <template #title>
           <div>
@@ -221,7 +221,7 @@ export default {
       },
       typeVal: 0,
       dataList: [],
-      activeNames: [],
+      activeNames: 1,
       bluetoothState: {},
       pairedDevices: [],
       address: null,
@@ -722,6 +722,8 @@ export default {
       Dialog.confirm({
         title: "tips",
         message: "Are you sure to shelve?",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
       })
         .then(() => {
           this.confirmtransfershelfuporder(this.shelvesData);
@@ -736,6 +738,48 @@ export default {
           setTimeout(() => {
             this.$router.go(-1);
           }, 1500);
+        } else if (res.code == -5) {
+          Toast("SKU ID must be greater than 0");
+        } else if (res.code == -6) {
+          Toast("Product Batch Required");
+        } else if (res.code == -7) {
+          Toast("Unit Volume of Products cannot be less than 0");
+        } else if (res.code == -8) {
+          Toast("Location (Stock Area) ID must be greater than 0");
+        } else if (res.code == -9) {
+          Toast(
+            "Total Putaway Number of Product Batches must be greater than 0"
+          );
+        } else if (res.code == -10) {
+          Toast("Putaway Qty can not exceed than the Maximum avaliable Qty");
+        } else if (res.code == -11) {
+          Toast(
+            "Related Putaway Order haven't finished.If you want to putaway here,pls cancel it on PC first."
+          );
+        } else if (res.code == -12) {
+          Toast("Done in Warehoused and Putaway");
+        } else if (res.code == -13) {
+          Toast("Putaway Qty can not exceed than the Maximum avaliable Qty");
+        } else if (res.code == -21) {
+          Toast("Parameter 'Request Model' Required");
+        } else if (res.code == -22) {
+          Toast("Warehousing No. ID must be greater than 0");
+        } else if (res.code == -23) {
+          Toast("Pls Select Warehousing Products");
+        } else if (res.code == -24) {
+          Toast("Pls Select Warehousing Products Batch");
+        } else if (res.code == 99 || res.code == 999) {
+          Toast("error");
+        } else if (res.code == 113) {
+          Toast(
+            "Can't OperateThe goods at the target location are in stocktaking."
+          );
+        } else if (res.code == 102) {
+          Toast("Putaway Qty can not exceed than the Maximum avaliable Qty");
+        } else if (res.code == 106) {
+          Toast(
+            "The product volume exceeds the Maximum available volume of the current area.(Area available volume - volume of pending putaway products -volume of pending transfer products"
+          );
         } else if (res.code == 99 || res.code == 999) {
           Toast("error");
         } else {
@@ -841,6 +885,7 @@ export default {
     //选择单号
     toPickUp(orderData) {
       this.current = 1;
+      this.activeNames = 2;
       if (this.paraObj.paramId == orderData.orderId) return;
       this.dataList.forEach((item) => {
         item.checked = false;

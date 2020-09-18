@@ -54,6 +54,7 @@
               @input="changeInDetailNum(currentProduct.inDetailNum,currentProduct.batchList)"
             />
           </div>
+          <div class="detailed-item"></div>
         </div>
       </div>
       <div class="goods-shelves">
@@ -180,6 +181,7 @@ export default {
         { name: "type", value: "" },
         { name: "Qty of Warehousing", value: "" },
         { name: "Warehouse", value: "" },
+        { name: "Remaining Qty to Shelve", value: "" },
       ],
       productList: [
         { type: 1, name: "Supply Warehousing Order" },
@@ -285,6 +287,7 @@ export default {
         );
         this.detailedGuigeList[5].value = this.currentProduct.hasInDetailNum;
         this.detailedGuigeList[6].value = this.currentProduct.inWarehouseName;
+        this.detailedGuigeList[7].value = this.currentProduct.maxCanStockInNum;
       } catch (err) {
         console.log(err);
       }
