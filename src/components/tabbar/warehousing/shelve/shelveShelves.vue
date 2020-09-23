@@ -947,6 +947,7 @@ export default {
             });
             this.currentProduct.columns.push(ele);
           }
+          this.$forceUpdate();
         })
         .catch(() => {});
     },
