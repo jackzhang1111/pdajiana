@@ -399,7 +399,6 @@ export default {
       confirmtransferinstockorderApi(data).then((res) => {
         if (res.code == 0) {
           Toast("Success,Print Batch No.");
-          this.print(JSON.parse(res.resdata).orderAidSn);
           setTimeout(() => {
             Dialog.alert({
               message: `${
@@ -409,6 +408,7 @@ export default {
               this.$router.go(-1);
             });
           }, 1500);
+          this.print(JSON.parse(res.resdata).orderAidSn);
         } else if (res.code == 99) {
           Toast("error");
         } else if (res.code == 101) {
