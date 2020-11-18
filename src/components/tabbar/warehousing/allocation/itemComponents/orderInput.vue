@@ -1,7 +1,16 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-11-16 16:14:52
+ * @LastEditTime: 2020-11-18 16:53:28
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \pdajiana\src\components\tabbar\warehousing\allocation\itemComponents\orderInput.vue
+-->
 <template>
   <div class="order-input">
     <div class="nosaomiao-header">
       <van-icon name="arrow-left" size="20" class="arrow-left" @click="showPickUp" />
+      1
     </div>
     <div class="place"></div>
     <div class="input-line">

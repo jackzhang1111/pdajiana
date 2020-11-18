@@ -47,6 +47,9 @@ import shangjia from '@/assets/img/shangjia.png'
 import xiajia from '@/assets/img/xiajia.png'
 import zhezhao from '@/multiplexing/zhezhao.vue'
 import {pdaselecthomeordertotalApi} from '@/api/warehousing/warehousSupplied/index.js'
+import {getuserApi} from '@/api/login/index.js'
+// vue动态修改路由的query参数
+import merge from 'webpack-merge'
 export default {
     props: {
 
@@ -106,10 +109,26 @@ export default {
 
     },
     created() {
-
+        let query=this.$route.query
+        console.log("created -> query 老版系统", query)
+        console.log('第一步');
+        // window.open(`${res.jumpDomainEng}?token=${localStorage.token}&type=${that.code}&barcode=${result}`);
+        this.$router.push({
+            query:merge({})
+        })
+        if(query.token && query.type && query.barcode){
+            localStorage.token=query.token
+            this.newtoSweepCode(query.type,query.barcode)
+            this.getuser()
+            // this.$router.push({query:{}})
+        }else if(query.token){
+            localStorage.token=query.token
+            this.getuser()
+        }
+        console.log('localStorage.token',localStorage.token);
+        this.pdaselecthomeordertotal()
     },
     mounted() {
-        this.pdaselecthomeordertotal()
     },
     watch: {
 
@@ -134,6 +153,10 @@ export default {
         toSweepCode(value){
             this.$router.push({name:'warehousweepCode',query:{code:value}})
         },
+        //扫码 新版
+        newtoSweepCode(type,barcode){
+            this.$router.push({name:'warehousweepCode',query:{code:type,barcode:barcode}})
+        },
         saomiaoBtn(){
             this.zhezhaoStatus = true;
         },
@@ -144,6 +167,12 @@ export default {
                     this.outordertotal = res.Data.outordertotal
                     this.transordertotal = res.Data.transordertotal
                 }
+            })
+        },
+        // 获取用户信息
+        getuser(){
+            getuserApi({}).then(res=>{
+               localStorage.userinfoPda = JSON.stringify(res.user); 
             })
         }
     },

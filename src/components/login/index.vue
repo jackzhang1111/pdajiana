@@ -94,6 +94,8 @@ export default {
         if (res.code == 0) {
           localStorage.token = res.token;
           localStorage.userinfoPda = JSON.stringify(res.user);
+          // 英文版本信息
+          localStorage.relateDomainListEng = JSON.stringify(res.relateDomainListEng);
           if (res.user.personnelId) {
             this.$router.push({ name: "logistics" });
           } else {

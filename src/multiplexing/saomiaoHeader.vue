@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-11-16 16:14:52
+ * @LastEditTime: 2020-11-18 14:41:14
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \pdajiana\src\multiplexing\saomiaoHeader.vue
+-->
 <template>
     <div>
         <div class="saomiao-header">

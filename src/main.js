@@ -31,6 +31,7 @@ gethttpimgurlApi().then(res => {
 })
 
 
+
 Vue.prototype.$fn = {
   copy:objDeepCopy,
   deepCopy: deepCopy,

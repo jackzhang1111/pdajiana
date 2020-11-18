@@ -97,3 +97,12 @@ export function getwarehouseregionIDApi(params) {
         data:params
     })
 }
+
+// 检查条码所属平台
+export function checkbarcodesourceApi(params) {
+    return park({
+        url:`/PDAlogin/checkbarcodesource`,
+        method: 'post',
+        data:params
+    })
+}

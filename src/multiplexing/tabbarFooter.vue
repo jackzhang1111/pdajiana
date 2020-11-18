@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-11-16 16:14:52
+ * @LastEditTime: 2020-11-18 16:04:57
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \pdajiana\src\multiplexing\tabbarFooter.vue
+-->
 <template>
     <!-- 底部导航 -->
     <div class="tabbar">
@@ -33,6 +41,7 @@ import tongji from '@/assets/img/statistical-01@2x.png'
 import tongji1 from '@/assets/img/statistical@2x.png'
 import wode from '@/assets/img/account-01@2x.png'
 import wode1 from '@/assets/img/account@2x.png'
+import {getuserApi} from '@/api/login/index.js'
 export default {
     props: {
 
@@ -60,13 +69,27 @@ export default {
 
     },
     mounted() {
-        this.userinfoPda = JSON.parse(localStorage.userinfoPda)
+        setTimeout(()=>{
+            let userinfoPda=localStorage.userinfoPda
+            if(userinfoPda){
+                this.userinfoPda = JSON.parse(localStorage.userinfoPda)
+            }else{
+                this.getuser()
+            }
+        },2000)
+        
     },
     watch: {
 
     },
     methods: {
-
+        // 获取用户信息
+        getuser(){
+            getuserApi({}).then(res=>{
+                this.userinfoPda = res.user
+                localStorage.userinfoPda = JSON.stringify(res.user); 
+            })
+        }
     },
     components: {
 

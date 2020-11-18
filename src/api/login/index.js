@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-11-16 16:14:52
+ * @LastEditTime: 2020-11-18 17:24:08
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \pdajiana\src\api\login\index.js
+ */
 import {main, park} from '@/api/index'
 //登录
 export function loginApi(params) {
@@ -32,3 +40,21 @@ export function getversionApi() {
         method: 'POST',
     })
 }
+
+//获取其他相关的域
+export function getrelatedomainApi() {
+    return park({
+        url:`/PDAlogin/getrelatedomain`,
+        method: 'POST',
+    })
+}
+
+//获取用户信息
+export function getuserApi(params) {
+    return park({
+        url:`/PDAlogin/getuser`,
+        method: 'POST',
+        data:params
+    })
+}
+

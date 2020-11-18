@@ -15,6 +15,7 @@ import { getlogisticsorderbyordersnApi } from "@/api/logistics/index.js";
 import {
   pdascanningordernoinApi,
   pdascanningordernooutApi,
+  checkbarcodesourceApi
 } from "@/api/warehousing/warehousSupplied/index.js";
 import { Dialog, Toast } from "vant";
 export default {
@@ -28,8 +29,32 @@ export default {
   computed: {},
   created() {},
   mounted() {
-    this.startRecognize();
-    this.code = this.$route.query.code;
+    console.log('第二步');
+    let query= this.$route.query
+    this.code = query.code;
+    console.log('323232332',query);
+    // 判断是否从老版pda跳转过来自带 条码值
+    if(query.barcode){
+      if (this.code == 1) {
+        this.pdascanningordernoin(query.barcode);
+      } else if (this.code == 2) {
+        this.pdascanningordernoout(query.barcode);
+      } else if (this.code == 3) {
+        this.$router.replace({
+          name: "orderList",
+          query: { fnskuCode: query.barcode },
+        });
+      } else if (this.code == 4) {
+        this.$router.replace({
+          name: "allUppershelf",
+          query: { orderid: query.barcode },
+        });
+      }
+      // this.startRecognize();
+    }else{
+      // window.open(`http://192.168.3.59:8082/#/control/warehousing?token=${localStorage.token}&type=1&barcode=BGHD2020111810162400000389`,'_black');
+      this.startRecognize();
+    }
   },
   beforeDestroy() {
     this.closeScan();
@@ -58,22 +83,32 @@ export default {
             text = "CODE39: ";
             break;
         }
-
-        if (that.code == 1) {
-          that.pdascanningordernoin(result);
-        } else if (that.code == 2) {
-          that.pdascanningordernoout(result);
-        } else if (that.code == 3) {
-          that.$router.replace({
-            name: "orderList",
-            query: { fnskuCode: result },
-          });
-        } else if (that.code == 4) {
-          that.$router.replace({
-            name: "allUppershelf",
-            query: { orderid: result },
-          });
-        }
+        checkbarcodesourceApi({barcode:result}).then(res=>{
+          // needJump 是否需要跳转到新的域名（1：是，0：否） 
+          if(res.code===0 ){
+            if(res.needJump==1){
+              // type 扫码类型 barcode 条码
+              window.open(`${res.jumpDomainEng}#/control/warehousing?token=${localStorage.token}&type=${that.code}&barcode=${result}`,'_black');
+              // window.location.href=`${res.jumpDomainEng}#/control/warehousing?token=${localStorage.token}&type=${that.code}&barcode=${result}`
+            }else{
+              if (that.code == 1) {
+                that.pdascanningordernoin(result);
+              } else if (that.code == 2) {
+                that.pdascanningordernoout(result);
+              } else if (that.code == 3) {
+                that.$router.replace({
+                  name: "orderList",
+                  query: { fnskuCode: result },
+                });
+              } else if (that.code == 4) {
+                that.$router.replace({
+                  name: "allUppershelf",
+                  query: { orderid: result },
+                });
+              }
+            }
+          }
+        })
         // alert(text + result);
         that.closeScan();
       }
@@ -133,18 +168,26 @@ export default {
     },
     //开始扫描
     startScan() {
-      scan.start();
+      if(scan){
+        scan.start();
+      }
     },
     //关闭条码识别控件
     closeScan() {
-      scan.close();
-      this.closeView();
-      this.panelStatus = false;
+      if(scan){
+        scan.close();
+        this.closeView();
+        this.panelStatus = false;
+      }
     },
     //关闭视图控件
     closeView() {
-      view.close();
-      scanBarVew.close();
+      if(view){
+        view.close();
+      }
+      if(scanBarVew){
+        scanBarVew.close();
+      }
     },
 
     //PDA扫描入库

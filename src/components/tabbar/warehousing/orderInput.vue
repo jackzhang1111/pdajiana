@@ -13,6 +13,7 @@ import nosaomiaoHeader from "@/multiplexing/nosaomiaoHeader.vue";
 import {
   pdascanningordernoinApi,
   pdascanningordernooutApi,
+  checkbarcodesourceApi
 } from "@/api/warehousing/warehousSupplied/index.js";
 import { Dialog, Toast } from "vant";
 export default {
@@ -91,21 +92,32 @@ export default {
       });
     },
     submit() {
-      if (this.code == 1) {
-        this.pdascanningordernoin(this.orderNum);
-      } else if (this.code == 2) {
-        this.pdascanningordernoout(this.orderNum);
-      } else if (this.code == 3) {
-        this.$router.replace({
-          name: "orderList",
-          query: { fnskuCode: this.orderNum },
-        });
-      } else if (this.code == 4) {
-        this.$router.replace({
-          name: "allUppershelf",
-          query: { orderid: this.orderNum },
-        });
-      }
+      checkbarcodesourceApi({barcode:this.orderNum}).then(res=>{
+        // needJump 是否需要跳转到新的域名（1：是，0：否） 
+        if(res.code===0 ){
+          if(res.needJump==1){
+            // type 扫码类型 barcode 条码
+            window.open(`${res.jumpDomainEng}#/control/warehousing?token=${localStorage.token}&type=${this.code}&barcode=${this.orderNum}`,'_black');
+            // window.location.href=`${res.jumpDomainEng}#/control/warehousing?token=${localStorage.token}&type=${that.code}&barcode=${this.orderNum}`
+          }else{
+            if (this.code == 1) {
+              this.pdascanningordernoin(this.orderNum);
+            } else if (this.code == 2) {
+              this.pdascanningordernoout(this.orderNum);
+            } else if (this.code == 3) {
+              this.$router.replace({
+                name: "orderList",
+                query: { fnskuCode: this.orderNum },
+              });
+            } else if (this.code == 4) {
+              this.$router.replace({
+                name: "allUppershelf",
+                query: { orderid: this.orderNum },
+              });
+            }
+          }
+        }
+      })
     },
   },
   components: {
