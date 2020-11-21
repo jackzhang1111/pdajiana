@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-16 16:14:52
- * @LastEditTime: 2020-11-18 16:50:25
+ * @LastEditTime: 2020-11-19 16:09:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \pdajiana\src\multiplexing\tabbarHeader.vue
 -->
 <template>
     <div class="tabbar-header">
-        <span class="left" v-if="relateDomainListEng" @click="toUrl(relateDomainListEng[0].domain)">{{relateDomainListEng[0].name}}</span>
+        <span class="left" v-if="relateDomainListEng" @click="toUrl(relateDomainListEng[0].domain)">Go {{relateDomainListEng[0].name}}</span>
         <span>{{headerTitle}}</span>
         <van-icon name="chat-o" size="20" class="chat"/>
     </div>
