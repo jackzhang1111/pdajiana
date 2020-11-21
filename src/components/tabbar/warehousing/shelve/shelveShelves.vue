@@ -6,26 +6,34 @@
       <van-collapse-item>
         <template #title>
           <div>
-            <span>{{orderName}}</span>
-            <span class="fl-right fs-20" v-if="typeVal == 2">{{detailData.transferStockInOrderSn}}</span>
-            <span class="fl-right fs-20" v-else>{{detailData.stockInOrderSn}}</span>
+            <span>{{ orderName }}</span>
+            <span class="fl-right fs-20" v-if="typeVal == 2">{{
+              detailData.transferStockInOrderSn
+            }}</span>
+            <span class="fl-right fs-20" v-else>{{
+              detailData.stockInOrderSn
+            }}</span>
           </div>
           <div v-if="typeVal == 3">
             <span>afterSales No.:</span>
-            <span class="fl-right fs-20">{{detailData.backOrderSn ? detailData.backOrderSn : 'no'}}</span>
+            <span class="fl-right fs-20">{{
+              detailData.backOrderSn ? detailData.backOrderSn : "no"
+            }}</span>
           </div>
           <div v-if="typeVal == 3">
             <span>Sale No.:</span>
-            <span class="fl-right fs-20">{{detailData.saleOrderSn ? detailData.saleOrderSn : 'no'}}</span>
+            <span class="fl-right fs-20">{{
+              detailData.saleOrderSn ? detailData.saleOrderSn : "no"
+            }}</span>
           </div>
         </template>
         <div
           @click="toPickUp(data)"
-          v-for="(data,index) in dataList"
+          v-for="(data, index) in dataList"
           :key="index"
           class="order-list"
         >
-          <span>{{data.orderSn}}</span>
+          <span>{{ data.orderSn }}</span>
           <div class="fl-right">
             <van-checkbox v-model="data.checked"></van-checkbox>
           </div>
@@ -37,50 +45,57 @@
         <van-icon
           name="play"
           class="play-left"
-          :color="playLeft ? '#DCDCDC':'#333'"
+          :color="playLeft ? '#DCDCDC' : '#333'"
           @click="cliPlayLeft"
         />
         <div class="num-input">
           <input type="number" v-model="current" @change="changeInput" />
         </div>
         <span class="ma-35 header-font">/</span>
-        <span class="header-font">{{listLength}}</span>
+        <span class="header-font">{{ listLength }}</span>
         <van-icon
           name="play"
           class="play-right"
-          :color="playRight ? '#DCDCDC':'#333'"
+          :color="playRight ? '#DCDCDC' : '#333'"
           @click="cliPlayRight"
         />
-        <div class="printing-btn" @click="print" v-if="$route.query.type == 1">print batchNo</div>
+        <div class="printing-btn" @click="print" v-if="$route.query.type == 1">
+          print batchNo
+        </div>
       </div>
       <div class="order-product">
-        <img :src="$webUrl+currentProduct.skuImg" />
+        <img :src="$webUrl + currentProduct.skuImg" />
         <div class="product">
-          <p>{{currentProduct.skuName}}</p>
-          <p class="guige">TSIN：{{currentProduct.tsinCode}}</p>
-          <p class="c-666">FNSKU：{{currentProduct.fnskuCode}}</p>
-          <p class="c-666">Seller's SKU：{{currentProduct.skuCode}}</p>
+          <p>{{ currentProduct.skuName }}</p>
+          <p class="guige">TSIN：{{ currentProduct.tsinCode }}</p>
+          <p class="c-666">FNSKU：{{ currentProduct.fnskuCode }}</p>
+          <p class="c-666">Seller's SKU：{{ currentProduct.skuCode }}</p>
         </div>
       </div>
       <div class="detailed">
-        <div class="detailed-item" v-for="(detailedGuige,index) in detailedGuigeList" :key="index">
-          <span class="c-999">{{detailedGuige.name}}</span>&nbsp;&nbsp;&nbsp;
-          <span class="c-666">{{detailedGuige.value}}</span>
+        <div
+          class="detailed-item"
+          v-for="(detailedGuige, index) in detailedGuigeList"
+          :key="index"
+        >
+          <span class="c-999">{{ detailedGuige.name }}</span
+          >&nbsp;&nbsp;&nbsp;
+          <span class="c-666">{{ detailedGuige.value }}</span>
         </div>
         <div class="tiji">
           <div class="clearfix">
             <span class="pl-30">Product Dimensions L*W*H(cm)</span>
             <div class="fl-right">
-              <span class="kuang">{{currentProduct.unitLength}}</span>
+              <span class="kuang">{{ currentProduct.unitLength }}</span>
               <span>X</span>
-              <span class="kuang">{{currentProduct.unitWidth}}</span>
+              <span class="kuang">{{ currentProduct.unitWidth }}</span>
               <span>X</span>
-              <span class="kuang">{{currentProduct.unitHeight}}</span>
+              <span class="kuang">{{ currentProduct.unitHeight }}</span>
             </div>
           </div>
           <div class="total">
             <span>Volume:</span>
-            <span class="tijitotal">{{currentProduct.unitSize}}</span>
+            <span class="tijitotal">{{ currentProduct.unitSize }}</span>
             <span>m³</span>
           </div>
         </div>
@@ -88,24 +103,29 @@
           <div class="clearfix">
             <span class="pl-30">Carton Dimensions L*W*H(cm)</span>
             <div class="fl-right">
-              <span class="kuang">{{currentProduct.boxLength}}</span>
+              <span class="kuang">{{ currentProduct.boxLength }}</span>
               <span>X</span>
-              <span class="kuang">{{currentProduct.boxWidth}}</span>
+              <span class="kuang">{{ currentProduct.boxWidth }}</span>
               <span>X</span>
-              <span class="kuang">{{currentProduct.boxHeight}}</span>
+              <span class="kuang">{{ currentProduct.boxHeight }}</span>
             </div>
           </div>
           <div class="total">
             <span>Volume:</span>
-            <span class="tijitotal">{{currentProduct.boxSize}}</span>
+            <span class="tijitotal">{{ currentProduct.boxSize }}</span>
             <span>m³</span>
           </div>
         </div>
         <div class="tiji" v-if="typeVal == 3">
           <div class="clearfix">
-            <span
-              class="pl-30"
-            >Original Location : {{currentProduct.outRegionName?currentProduct.outRegionName:'no'}}</span>
+            <span class="pl-30"
+              >Original Location :
+              {{
+                currentProduct.outRegionName
+                  ? currentProduct.outRegionName
+                  : "no"
+              }}</span
+            >
           </div>
         </div>
       </div>
@@ -129,21 +149,36 @@
       </div>
       <div
         class="shelves-item"
-        v-for="(warehouse,index) in currentProduct.warehouselist"
+        v-for="(warehouse, index) in currentProduct.warehouselist"
         :key="index"
       >
         <div class="item-title">
-          <span>{{warehouse.fuseName ? warehouse.fuseName : warehouse.regionName}}</span>
-          <img src="@/assets/img/lajitong.svg" @click="detailWarehouse(index,warehouse)" />
+          <span>{{
+            warehouse.fuseName ? warehouse.fuseName : warehouse.regionName
+          }}</span>
+          <img
+            src="@/assets/img/lajitong.svg"
+            @click="detailWarehouse(index, warehouse)"
+          />
         </div>
         <div class="item-number">
-          <div>{{warehouse.volume}}/{{warehouse.volume-warehouse.takeVolume}}m³</div>
-          <div>{{warehouse.upItemNum*currentProduct.unitSize ? accMul(warehouse.upItemNum,currentProduct.unitSize) : 0}}m³</div>
+          <div>
+            {{ warehouse.volume }}/{{
+              warehouse.volume - warehouse.takeVolume
+            }}m³
+          </div>
+          <div>
+            {{
+              warehouse.upItemNum * currentProduct.unitSize
+                ? accMul(warehouse.upItemNum, currentProduct.unitSize)
+                : 0
+            }}m³
+          </div>
           <div class="item-input">
             <input
               type="number"
               v-model="warehouse.upItemNum"
-              @change="changNum(warehouse,'upItemNum')"
+              @change="changNum(warehouse, 'upItemNum')"
             />
           </div>
         </div>
@@ -1034,6 +1069,7 @@ export default {
             ele.columns = this.$fn.copy(this.goodsShelves);
           });
         }
+        console.log(this.goodsShelves, "this.goodsShelves");
       });
     },
     //初始化打印机参数
