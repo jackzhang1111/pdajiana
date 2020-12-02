@@ -18,7 +18,7 @@ import sweepCode from '@/multiplexing/sweepCode'
 Vue.use(Router)
 
 let routes = [
-  {path:'/',redirect:{name:"logistics"}},  // 重定向到主页
+  { path: '/', redirect: { name: "login" } },  // 重定向到主页
   {
     path: '/login',
     name: 'login',
@@ -29,7 +29,7 @@ let routes = [
     path: '/control',
     name: 'control',
     component: person,
-    children:[
+    children: [
       {
         path: 'warehousing',
         name: 'warehousing',
@@ -39,7 +39,7 @@ let routes = [
         path: 'logistics',
         name: 'logistics',
         component: logistics,
-        
+
       },
       {
         path: 'statistical',
