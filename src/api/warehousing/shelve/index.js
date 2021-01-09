@@ -3,8 +3,8 @@ import {main, park} from '@/api/index'
 export function waitingforlaunchorderlistApi(params) {
     return park({
         url:`/storage/waitingforlaunchorderlist`,
-        method: 'GET',
-        params
+        method: 'POST',
+        data: params
     })
 }
 

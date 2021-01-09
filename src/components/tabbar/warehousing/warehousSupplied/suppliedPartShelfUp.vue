@@ -2,7 +2,7 @@
   <!-- 上架 -->
   <div class="pick-up">
     <saomiao-header @search="search"></saomiao-header>
-    <div class="pick-up-order">Warehousing No.:{{detailData.transferStockInOrderSn}}</div>
+    <div class="pick-up-order">Warehousing No.:{{detailData.supplyStockInOrderSn}}</div>
     <div class="order-detail">
       <div class="detail-header">
         <van-icon
@@ -30,6 +30,15 @@
           <p class="guige">TSIN：{{currentProduct.tsinCode}}</p>
           <p class="c-666">FNSKU：{{currentProduct.fnskuCode}}</p>
           <p class="c-666">Seller's SKU：{{currentProduct.skuCode}}</p>
+        </div>
+        <div class="product">
+          <div class="new-printing-btn" @click="print">
+            print batchNo
+          </div>
+
+          <div class="new-printing-btn" @click="printfnsku">
+            print FNSKU
+          </div>
         </div>
       </div>
       <div class="detailed">
@@ -119,18 +128,21 @@
 </template>
 
 <script>
+var device = null,
+  main = null,
+  BluetoothAdapter = null,
+  UUID = null,
+  uuid = null,
+  BAdapter = null,
+  bluetoothSocket = null;
 import saomiaoHeader from "@/multiplexing/saomiaoHeader.vue";
 import { Dialog, Toast } from "vant";
 import {
-  transferinstockdowmproshelvesApi,
-  getshelfuporderconfirminfoApi,
+  getsupplyshelfuporderconfirminfoApi,
   getcanupregionlistApi,
-  confirmtransfershelfuporderApi,
-} from "@/api/warehousing/allocation/index.js";
-import {
-  stockInToShelvesAllApi,
-  getwarehouseregionIDApi,
+  confirmsupplyshelfuporderApi,
 } from "@/api/warehousing/warehousSupplied/index.js";
+import BTool from "@/static/js/BluetoothTool.js";
 export default {
   props: {},
   data() {
@@ -175,9 +187,21 @@ export default {
       return this.current == this.listLength;
     },
   },
-  created() {},
+  created() {
+    setTimeout(() => {
+      this.getBluetooth();
+    }, 500);
+  },
+  beforeDestroy() {
+    try {
+      device = null; //这里关键
+      bluetoothSocket.close();
+    } catch (err) {
+      console.log(err, "beforeDestroy");
+    }
+  },
   mounted() {
-    this.getshelfuporderconfirminfo({ orderSn: this.$route.query.orderid });
+    this.getsupplyshelfuporderconfirminfo({ orderSn: this.$route.query.orderid });
   },
   watch: {
     currentProduct: {
@@ -187,6 +211,95 @@ export default {
     },
   },
   methods: {
+
+    //初始化打印机参数
+    getReady() {
+      main = plus.android.runtimeMainActivity();
+      BluetoothAdapter = plus.android.importClass(
+        "android.bluetooth.BluetoothAdapter"
+      );
+      UUID = plus.android.importClass("java.util.UUID");
+      uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //不需要更改
+      BAdapter = BluetoothAdapter.getDefaultAdapter();
+      BAdapter.cancelDiscovery(); //停止扫描
+      device = BAdapter.getRemoteDevice(this.address); //这里是蓝牙打印机的蓝牙地址
+      plus.android.importClass(device);
+      bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
+      plus.android.importClass(bluetoothSocket);
+    },
+    //初始化寻找打印机参数
+    getBluetooth() {
+      debugger;
+      var that = this;
+      var onPlusReady = function () {
+        that.bluetoothTool = BTool.BluetoothTool();
+        that.bluetoothState = that.bluetoothTool.state;
+        that.getPairedDevices();
+      };
+      if (typeof plus != "undefined") {
+        onPlusReady();
+      }
+    },
+    //获取蓝牙地址
+    getPairedDevices: function () {
+      try {
+        this.pairedDevices = this.bluetoothTool.getPairedDevices();
+        this.address = this.pairedDevices[0].address;
+        this.getReady();
+      } catch (error) {
+        Toast("Please re-connect the Bluetooth");
+        console.log(error, "error");
+      }
+    },
+
+    print() {
+      if (!bluetoothSocket.isConnected()) {
+        try {
+          bluetoothSocket.connect();
+        } catch (error) {
+          Toast("It’s disconnected with printer!Re-connecting now.");
+          this.getReady();
+        }
+      }
+
+      if (bluetoothSocket.isConnected()) {
+        var outputStream = bluetoothSocket.getOutputStream();
+        plus.android.importClass(outputStream);
+        var s = plus.android.importClass("java.lang.String");
+        var bytes;
+        var size = `! 0 200 200 210 1\r\nBARCODE-TEXT 7 2 5\r\nBARCODE 128 1 1 50 100 80 ${this.currentProduct.batchNo}\r\nFORM\r\nPRINT\r\n`;
+        bytes = plus.android.invoke(size, "getBytes", "gb18030");
+        outputStream.write(bytes);
+        outputStream.flush();
+      } else {
+        Toast("Failed Bluetooth connection");
+      }
+    },
+
+    printfnsku() {
+      if (!bluetoothSocket.isConnected()) {
+        try {
+          bluetoothSocket.connect();
+        } catch (error) {
+          Toast("It’s disconnected with printer!Re-connecting now.");
+          this.getReady();
+        }
+      }
+
+      if (bluetoothSocket.isConnected()) {
+        var outputStream = bluetoothSocket.getOutputStream();
+        plus.android.importClass(outputStream);
+        var s = plus.android.importClass("java.lang.String");
+        var bytes;
+        var size = `! 0 200 200 210 1\r\nBARCODE-TEXT 7 2 5\r\nBARCODE 128 1 1 50 100 80 ${this.currentProduct.fnskuCode}\r\nFORM\r\nPRINT\r\n`;
+        bytes = plus.android.invoke(size, "getBytes", "gb18030");
+        outputStream.write(bytes);
+        outputStream.flush();
+      } else {
+        Toast("Failed Bluetooth connection");
+      }
+    },
+
     //搜索框
     search(val) {
       this.productArray.forEach((item, index) => {
@@ -209,8 +322,8 @@ export default {
       this.currentProduct = this.detailData.batchList[this.current - 1];
     },
     //上架详情
-    getshelfuporderconfirminfo(data) {
-      getshelfuporderconfirminfoApi(data).then((res) => {
+    getsupplyshelfuporderconfirminfo(data) {
+      getsupplyshelfuporderconfirminfoApi(data).then((res) => {
         if (res.code == 0) {
           this.detailData = res.orderModel;
           this.detailData.batchList.forEach((item) => {
@@ -246,25 +359,7 @@ export default {
     },
     //当前商品基本属性
     setCurrentProduct() {
-      /*this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle;
-      this.detailedGuigeList[1].value = this.currentProduct.inDetailNum;
-      this.detailedGuigeList[2].value = this.currentProduct.businessName;
-      this.detailedGuigeList[3].value = this.currentProduct.goodnumPerBox;
-      this.detailedGuigeList[4].value = this.currentProduct.batchNo;
-      this.detailedGuigeList[5].value = this.currentProduct.upDetailNum;
-      this.detailedGuigeList[6].value = this.currentProduct.fnskuCode;
-      this.detailedGuigeList[7].value = this.currentProduct.hasUpDetailNum;
-      this.detailedGuigeList[8].value = this.orderStatus(
-        this.currentProduct.stockInOrderType,
-        "productList"
-      );
-      this.detailedGuigeList[9].value = this.currentProduct.unitWeight;
-      this.detailedGuigeList[10].value = this.currentProduct.inWarehouseName;
-      this.detailedGuigeList[11].value = this.currentProduct.goodnumPerBox;
-      this.detailedGuigeList[12].value = this.currentProduct.categoryNamesRealEng;
-      this.detailedGuigeList[13].value = this.currentProduct.maxCanShelfUpNum;*/
-
-      this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle;
+      this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitleEng;
       this.detailedGuigeList[1].value = this.currentProduct.businessName;;
       this.detailedGuigeList[2].value = this.currentProduct.batchNo;
       this.detailedGuigeList[3].value = this.currentProduct.inDetailNum;
@@ -281,7 +376,6 @@ export default {
       this.detailedGuigeList[11].value = this.currentProduct.boxWeight;
       this.detailedGuigeList[12].value = this.currentProduct.categoryNamesRealEng;
       this.detailedGuigeList[13].value = this.currentProduct.maxCanShelfUpNum;
-
     },
     //编译状态
     orderStatus(type, list) {
@@ -313,7 +407,7 @@ export default {
         cancelButtonText: "No",
       })
         .then(() => {
-          this.confirmtransfershelfuporder(this.shelvesData);
+          this.confirmsupplyshelfuporder(this.shelvesData);
         })
         .catch(() => {});
     },
@@ -352,7 +446,7 @@ export default {
       if(value!=null&&value.length>2&&(value[2]==null||value[2]==undefined)){
         return;
       }
-
+      
       twoShel = this.currentProduct.columns[valueIndexs[0]].children[
         valueIndexs[1]
       ];
@@ -501,13 +595,14 @@ export default {
         }
       });
     },
-    //调拨入库确认上架（支持部分上架）
-    confirmtransfershelfuporder(data) {
-      confirmtransfershelfuporderApi(data).then((res) => {
+    //供货入库确认上架（支持部分上架）
+    confirmsupplyshelfuporder(data) {
+      confirmsupplyshelfuporderApi(data).then((res) => {
         if (res.code == 0) {
           Toast("success");
           setTimeout(() => {
-            this.$router.go(-1);
+            //this.$router.go(-1);
+            this.$router.push({path: '/control/warehousing'});
           }, 1500);
         } else if (res.code == -5) {
           Toast("SKU ID must be greater than 0");
@@ -540,7 +635,8 @@ export default {
         } else if (res.code == -24) {
           Toast("Pls Select Warehousing Products Batch");
         } else if (res.code == 99 || res.code == 999) {
-          Toast("error");
+          //Toast("error");
+          Toast("Frequent operation,please try again!");//请重试
         } else if (res.code == 113) {
           Toast(
             "Can't OperateThe goods at the target location are in stocktaking."
@@ -756,4 +852,20 @@ export default {
 .pl-30 {
   padding-left: 30px;
 }
+
+.new-printing-btn {
+  /*position: absolute;
+  right: 20px;
+  top: 20px;*/
+  height: 50px;
+  border: 1px solid;
+  padding: 0 10px;
+  line-height: 50px;
+  width: 26vw;
+  text-align:center;
+  margin-top:1vw;
+  float:left;
+  margin-right:1vw;
+}
+
 </style>

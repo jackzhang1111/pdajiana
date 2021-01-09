@@ -41,11 +41,15 @@ export default {
       activeNames: [],
       dataList: [],
       zhezhaoStatus: false,
+      getorderlistforsupplyorder:0,
+      supplyorderid:0,
     };
   },
   computed: {},
   created() {},
   mounted() {
+    this.getorderlistforsupplyorder= this.$route.query.getorderlistforsupplyorder;
+    this.supplyorderid= this.$route.query.supplyorderid;
     this.waitingforlaunchorderlist();
   },
   watch: {},
@@ -61,11 +65,25 @@ export default {
           typeId: 2,
           type: orderData.type,
           orderSn: orderData.orderSn,
+          getorderlistforsupplyorder:this.getorderlistforsupplyorder,
+          supplyorderid:this.supplyorderid,
         },
       });
     },
     waitingforlaunchorderlist() {
-      waitingforlaunchorderlistApi().then((res) => {
+
+      var paramsPost={};
+      var getorderlistforsupplyorder=0;
+      getorderlistforsupplyorder=this.getorderlistforsupplyorder;
+      var supplyorderid=0;
+      if(getorderlistforsupplyorder==1){
+        supplyorderid=this.supplyorderid;
+
+        paramsPost.getorderlistforsupplyorder=1;
+        paramsPost.supplyorderid=supplyorderid;
+      }
+
+      waitingforlaunchorderlistApi(paramsPost).then((res) => {
         if (res.code == 0) {
           this.dataList = res.Data;
         }

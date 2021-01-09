@@ -40,6 +40,12 @@
         </div>
       </van-collapse-item>
     </van-collapse>
+    <!--<div class="order-detail">
+      <div>
+        <span>Supply No.:</span>
+        <span>{{ detailData.supplyOrderSn }}</span>
+      </div>
+    </div>-->
     <div class="order-detail">
       <div class="detail-header">
         <van-icon
@@ -59,9 +65,9 @@
           :color="playRight ? '#DCDCDC' : '#333'"
           @click="cliPlayRight"
         />
-        <div class="printing-btn" @click="print" v-if="$route.query.type == 1">
+        <!--<div class="printing-btn" @click="print" v-if="$route.query.type == 1">
           print batchNo
-        </div>
+        </div>-->
       </div>
       <div class="order-product">
         <img :src="$webUrl + currentProduct.skuImg" />
@@ -70,6 +76,15 @@
           <p class="guige">TSIN：{{ currentProduct.tsinCode }}</p>
           <p class="c-666">FNSKU：{{ currentProduct.fnskuCode }}</p>
           <p class="c-666">Seller's SKU：{{ currentProduct.skuCode }}</p>
+        </div>
+        <div class="product" v-if="$route.query.type == 1">
+          <div class="new-printing-btn" @click="print">
+            print batchNo
+          </div>
+
+          <div class="new-printing-btn" @click="printfnsku">
+            print FNSKU
+          </div>
         </div>
       </div>
       <div class="detailed">
@@ -206,6 +221,9 @@ import {
   stockInToShelvesApi,
   stockInToShelvesAllApi,
   getwarehouseregionIDApi,
+  waitingforshelfuporderlistApi,
+  getsupplyshelfuporderconfirminfoApi,
+  confirmsupplyshelfuporderApi,
 } from "@/api/warehousing/warehousSupplied/index.js";
 import {
   transferinstockdowmproshelvesApi,
@@ -266,6 +284,10 @@ export default {
         { type: 2, name: "Transfer Warehousing Order" },
         { type: 3, name: "Sales Return Warehousing Order" },
       ],
+
+      getorderlistforsupplyorder:0,
+      supplyorderid:0,
+
     };
   },
   computed: {
@@ -287,9 +309,14 @@ export default {
     this.paraObj.paramId = this.$route.query.paramId;
     this.paraObj.typeId = this.$route.query.typeId;
     this.typeVal = this.$route.query.type;
+
+    this.getorderlistforsupplyorder= this.$route.query.getorderlistforsupplyorder;
+    this.supplyorderid= this.$route.query.supplyorderid;
+
     this.waitingforlaunchorderlist();
     if (this.$route.query.type == 1) {
-      this.stockInToShelves(this.paraObj);
+      //this.stockInToShelves(this.paraObj);
+      this.getsupplyshelfuporderconfirminfo({ orderSn: this.$route.query.orderSn });
     } else if (this.$route.query.type == 2) {
       this.getshelfuporderconfirminfo({ orderSn: this.$route.query.orderSn });
     } else if (this.$route.query.type == 3) {
@@ -335,7 +362,7 @@ export default {
     cliPlayLeft() {
       if (this.current <= 1) return;
       this.current--;
-      if (this.typeVal == 2) {
+      if (this.typeVal == 1||this.typeVal == 2) {
         this.currentProduct = this.detailData.batchList[this.current - 1];
       } else {
         this.currentProduct = this.detailData.productList[this.current - 1];
@@ -345,7 +372,7 @@ export default {
     cliPlayRight() {
       if (this.current >= this.listLength) return;
       this.current++;
-      if (this.typeVal == 2) {
+      if (this.typeVal == 1||this.typeVal == 2) {
         this.currentProduct = this.detailData.batchList[this.current - 1];
       } else {
         this.currentProduct = this.detailData.productList[this.current - 1];
@@ -447,8 +474,51 @@ export default {
         }
       });
     },
+
+    //供货入库上架详情
+    getsupplyshelfuporderconfirminfo(data) {
+      getsupplyshelfuporderconfirminfoApi(data).then((res) => {
+        if (res.code == 0) {
+          this.detailData = res.orderModel;
+          this.detailData.batchList.forEach((item) => {
+            item.regionList = [];
+          });
+          this.currentProduct = res.orderModel.batchList[0];
+          this.listLength = res.orderModel.batchList.length;
+          this.productArray = res.orderModel.batchList;
+          this.getcanupregionlist({
+            warehouseId: this.detailData.inWarehouseId,
+          });
+
+
+        } else if (res.code == 3) {
+          this.$router.replace({ name: "noOrder", query: { type: 3 } });
+        } else if (res.code == 4) {
+          this.$router.replace({ name: "noOrder", query: { type: 5 } });
+        } else if (res.code == 5) {
+          this.$router.replace({ name: "noOrder", query: { type: 4 } });
+        } else if (res.code == 6) {
+          this.$router.replace({ name: "noOrder", query: { type: 4 } });
+        } else if (res.code == 1) {
+          Toast("Parameter 'request Model' Required");
+        } else if (res.code == 2) {
+          Toast("Warehousing Barcode Required");
+        } else if (res.code == 5) {
+          Toast("Nothing is pending to putaway");
+        } else if (res.code == 7) {
+          Toast(
+            "Related Putaway Order hasn't finished. If you want to putaway here,pls cancel it on PC first."
+          );
+        } else {
+          Toast(res.msg);
+        }
+      });
+    },
+    
     //调拨入库上架详情
     getshelfuporderconfirminfo(data) {
+
+
       getshelfuporderconfirminfoApi(data).then((res) => {
         if (res.code == 0) {
           this.detailData = res.orderModel;
@@ -461,6 +531,8 @@ export default {
           this.getcanupregionlist({
             warehouseId: this.detailData.inWarehouseId,
           });
+
+
         } else if (res.code == 3) {
           this.$router.replace({ name: "noOrder", query: { type: 3 } });
         } else if (res.code == 4) {
@@ -588,7 +660,7 @@ export default {
           { name: "category", value: "" },
           { name: "remaining Qty to be put on shelves", value: "" },
         ];
-        this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle;
+        /*this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitle;
         this.detailedGuigeList[1].value = this.currentProduct.inDetailNum;
         this.detailedGuigeList[2].value = this.currentProduct.businessName;
         this.detailedGuigeList[3].value = this.currentProduct.goodnumPerBox;
@@ -604,14 +676,33 @@ export default {
         this.detailedGuigeList[10].value = this.currentProduct.inWarehouseName;
         this.detailedGuigeList[11].value = this.currentProduct.goodnumPerBox;
         this.detailedGuigeList[12].value = this.currentProduct.categoryNamesRealEng;
+        this.detailedGuigeList[13].value = this.currentProduct.maxCanShelfUpNum;*/
+
+        this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitleEng;
+        this.detailedGuigeList[1].value = this.currentProduct.businessName;;
+        this.detailedGuigeList[2].value = this.currentProduct.batchNo;
+        this.detailedGuigeList[3].value = this.currentProduct.inDetailNum;
+        this.detailedGuigeList[4].value = this.currentProduct.fnskuCode;
+        this.detailedGuigeList[5].value = this.currentProduct.goodnumPerBox;
+        this.detailedGuigeList[6].value = this.currentProduct.intCode;
+        this.detailedGuigeList[7].value = this.currentProduct.hasUpDetailNum;
+        this.detailedGuigeList[8].value = this.orderStatus(
+          this.currentProduct.stockInOrderType,
+          "productList"
+        );
+        this.detailedGuigeList[9].value = this.currentProduct.unitWeight;
+        this.detailedGuigeList[10].value = this.currentProduct.inWarehouseName;
+        this.detailedGuigeList[11].value = this.currentProduct.boxWeight;
+        this.detailedGuigeList[12].value = this.currentProduct.categoryNamesRealEng;
         this.detailedGuigeList[13].value = this.currentProduct.maxCanShelfUpNum;
+
       } else {
-        //供货入库单,调拨入库单
+        //供货入库单
         this.detailedGuigeList = [
           { name: "Specifications", value: "" },
           { name: "Supplier", value: "" },
           { name: "Batch No.", value: "" },
-          { name: "Qty Warehoused", value: "" },
+          { name: "Qty of Warehousing", value: "" },
           { name: "FNSKU", value: "" },
           { name: "Pcs/Carton", value: "" },
           { name: "International No.", value: "" },
@@ -620,19 +711,28 @@ export default {
           { name: "Unit Weight(kg)", value: "" },
           { name: "Warehouse", value: "" },
           { name: "Gross Weight/Carton(kg)", value: "" },
+          { name: "category", value: "" },
+          { name: "remaining Qty to be put on shelves", value: "" },
         ];
         this.detailedGuigeList[0].value = this.currentProduct.skuValuesTitleEng;
         this.detailedGuigeList[1].value = this.currentProduct.businessName;
         this.detailedGuigeList[2].value = this.currentProduct.batchNo;
-        this.detailedGuigeList[3].value = this.currentProduct.detailNum;
+        this.detailedGuigeList[3].value = this.currentProduct.inDetailNum;
         this.detailedGuigeList[4].value = this.currentProduct.fnskuCode;
         this.detailedGuigeList[5].value = this.currentProduct.goodnumPerBox;
         this.detailedGuigeList[6].value = this.currentProduct.intCode;
-        this.detailedGuigeList[7].value = this.currentProduct.hasInDetailNum;
-        this.detailedGuigeList[8].value = this.currentProduct.stockIntype;
+        this.detailedGuigeList[7].value = this.currentProduct.hasUpDetailNum;
+        this.detailedGuigeList[8].value = this.orderStatus(
+          this.currentProduct.stockInOrderType,
+          "productList"
+        );
         this.detailedGuigeList[9].value = this.currentProduct.unitWeight;
-        this.detailedGuigeList[10].value = this.currentProduct.stockInWarehouse;
+
+
+        this.detailedGuigeList[10].value = this.currentProduct.inWarehouseName;
         this.detailedGuigeList[11].value = this.currentProduct.boxWeight;
+        this.detailedGuigeList[12].value = this.currentProduct.categoryNamesRealEng;
+        this.detailedGuigeList[13].value = this.currentProduct.maxCanShelfUpNum;
       }
     },
     //小数点计算
@@ -663,6 +763,12 @@ export default {
     },
     //确认全部上架
     finishPicking() {
+
+      if (this.typeVal == 1) {
+        this.finishPicking1();
+        return;
+      }
+
       if (this.typeVal == 2) {
         this.finishPicking2();
         return;
@@ -741,6 +847,91 @@ export default {
         })
         .catch(() => {});
     },
+
+
+    //调拨入库全部上架
+    finishPicking1() {
+      let arr = [];
+      this.shelvesData = this.$fn.deepCopy(this.detailData);
+      this.shelvesData.batchList.forEach((ele) => {
+        ele.warehouselist.forEach((item) => {
+          let obj = {
+            regionId: item.regionId,
+            upItemNum: item.upItemNum,
+          };
+          ele.regionList.push(obj);
+        });
+      });
+      Dialog.confirm({
+        title: "tips",
+        message: "Are you sure to shelve?",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      })
+        .then(() => {
+          this.confirmsupplyshelfuporder(this.shelvesData);
+        })
+        .catch(() => {});
+    },
+    //供货入库确认上架（支持部分上架）
+    confirmsupplyshelfuporder(data) {
+      confirmsupplyshelfuporderApi(data).then((res) => {
+        if (res.code == 0) {
+          Toast("success");
+          setTimeout(() => {
+            this.$router.go(-1);
+          }, 1500);
+        } else if (res.code == -5) {
+          Toast("SKU ID must be greater than 0");
+        } else if (res.code == -6) {
+          Toast("Product Batch Required");
+        } else if (res.code == -7) {
+          Toast("Unit Volume of Products cannot be less than 0");
+        } else if (res.code == -8) {
+          Toast("Location (Stock Area) ID must be greater than 0");
+        } else if (res.code == -9) {
+          Toast(
+            "Total Putaway Number of Product Batches must be greater than 0"
+          );
+        } else if (res.code == -10) {
+          Toast("Putaway Qty can not exceed than the Maximum avaliable Qty");
+        } else if (res.code == -11) {
+          Toast(
+            "Related Putaway Order haven't finished.If you want to putaway here,pls cancel it on PC first."
+          );
+        } else if (res.code == -12) {
+          Toast("Done in Warehoused and Putaway");
+        } else if (res.code == -13) {
+          Toast("Putaway Qty can not exceed than the Maximum avaliable Qty");
+        } else if (res.code == -21) {
+          Toast("Parameter 'Request Model' Required");
+        } else if (res.code == -22) {
+          Toast("Warehousing No. ID must be greater than 0");
+        } else if (res.code == -23) {
+          Toast("Pls Select Warehousing Products");
+        } else if (res.code == -24) {
+          Toast("Pls Select Warehousing Products Batch");
+        } else if (res.code == 99 || res.code == 999) {
+          Toast("error");
+        } else if (res.code == 113) {
+          Toast(
+            "Can't OperateThe goods at the target location are in stocktaking."
+          );
+        } else if (res.code == 102) {
+          Toast("Putaway Qty can not exceed than the Maximum avaliable Qty");
+        } else if (res.code == 106) {
+          Toast(
+            "The product volume exceeds the Maximum available volume of the current area.(Area available volume - volume of pending putaway products -volume of pending transfer products"
+          );
+        } else if (res.code == 99 || res.code == 999) {
+          Toast("error");
+        } else {
+          Toast(res.msg);
+        }
+      });
+    },
+
+
     //调拨入库全部上架
     finishPicking2() {
       let arr = [];
@@ -823,11 +1014,26 @@ export default {
       });
     },
     onConfirm(value, valueIndexs) {
+
       let threeShel = null,
         twoShel = null,
         currIndex = null,
         isOne = null;
       if (this.currentProduct.columns.length == 0) return;
+
+      
+      if(value!=null&&value.length>0&&(value[0]==null||value[0]==undefined)){
+        return;
+      }
+
+      if(value!=null&&value.length>1&&(value[1]==null||value[1]==undefined)){
+        return;
+      }
+
+      if(value!=null&&value.length>2&&(value[2]==null||value[2]==undefined)){
+        return;
+      }
+
       twoShel = this.currentProduct.columns[valueIndexs[0]].children[
         valueIndexs[1]
       ];
@@ -905,17 +1111,31 @@ export default {
       });
     },
     waitingforlaunchorderlist() {
-      waitingforlaunchorderlistApi().then((res) => {
-        if (res.code == 0) {
-          this.dataList = res.Data;
-          this.dataList.forEach((item) => {
-            item.checked = false;
-            if (item.orderId == this.$route.query.paramId) {
-              item.checked = true;
-            }
-          });
-        }
+
+      var paramsPost={};
+      var getorderlistforsupplyorder=0;
+      getorderlistforsupplyorder=this.getorderlistforsupplyorder;
+      var supplyorderid=0;
+      if(getorderlistforsupplyorder==1){
+        supplyorderid=this.supplyorderid;
+
+        paramsPost.getorderlistforsupplyorder=1;
+        paramsPost.supplyorderid=supplyorderid;
+      }
+
+      waitingforlaunchorderlistApi(paramsPost).then((res) => {
+          if (res.code == 0) {
+            this.dataList = res.Data;
+            this.dataList.forEach((item) => {
+              item.checked = false;
+              if (item.orderId == this.$route.query.paramId) {
+                item.checked = true;
+              }
+            });
+          }
       });
+
+      
     },
     //选择单号
     toPickUp(orderData) {
@@ -935,10 +1155,13 @@ export default {
           typeId: 2,
           type: orderData.type,
           orderSn: orderData.orderSn,
+          getorderlistforsupplyorder:this.getorderlistforsupplyorder,
+          supplyorderid:this.supplyorderid,
         },
       });
       if (this.$route.query.type == 1) {
-        this.stockInToShelves(this.paraObj);
+        //this.stockInToShelves(this.paraObj);
+        this.getsupplyshelfuporderconfirminfo({ orderSn: this.$route.query.orderSn });
       } else if (this.$route.query.type == 2) {
         this.getshelfuporderconfirminfo({ orderSn: this.$route.query.orderSn });
       } else if (this.$route.query.type == 3) {
@@ -1133,6 +1356,30 @@ export default {
         Toast("Failed Bluetooth connection");
       }
     },
+
+    printfnsku() {
+      if (!bluetoothSocket.isConnected()) {
+        try {
+          bluetoothSocket.connect();
+        } catch (error) {
+          Toast("It’s disconnected with printer!Re-connecting now.");
+          this.getReady();
+        }
+      }
+
+      if (bluetoothSocket.isConnected()) {
+        var outputStream = bluetoothSocket.getOutputStream();
+        plus.android.importClass(outputStream);
+        var s = plus.android.importClass("java.lang.String");
+        var bytes;
+        var size = `! 0 200 200 210 1\r\nBARCODE-TEXT 7 2 5\r\nBARCODE 128 1 1 50 100 80 ${this.currentProduct.fnskuCode}\r\nFORM\r\nPRINT\r\n`;
+        bytes = plus.android.invoke(size, "getBytes", "gb18030");
+        outputStream.write(bytes);
+        outputStream.flush();
+      } else {
+        Toast("Failed Bluetooth connection");
+      }
+    }
   },
   components: {
     saomiaoHeader,
@@ -1356,6 +1603,21 @@ export default {
     .fl-right {
       margin-top: 14px;
     }
+  }
+
+  .new-printing-btn {
+    /*position: absolute;
+    right: 20px;
+    top: 20px;*/
+    height: 50px;
+    border: 1px solid;
+    padding: 0 10px;
+    line-height: 50px;
+    width: 26vw;
+    text-align:center;
+    margin-top:1vw;
+    float:left;
+    margin-right:1vw;
   }
 }
 </style>

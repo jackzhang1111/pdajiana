@@ -21,9 +21,12 @@
                                     </div>
                                     <div class="order-footer" v-show="data.wmsOrderStatus == 2 || data.wmsOrderStatus == 3">
                                         <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 2">打印供货单</div> -->
-                                        <div class="btn fl-right" v-if="data.wmsOrderStatus == 2" @click="toPickUp(data.orderId,data.wmsOrderStatus)">Warehouse</div>
+                                        <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 2" @click="toPickUp(data.orderId,data.wmsOrderStatus)">Warehouse</div> -->
+                                        
                                         <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 3">打印入库单</div> -->
-                                        <div class="btn fl-right" v-if="data.wmsOrderStatus == 3" @click="toshelves(data.orderId)">Shelve</div>
+                                        <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 3" @click="toshelves(data.orderId)">Shelve</div> -->
+                                        <div class="btn fl-right" v-if="data.canShelfUp == 1" @click="toshelves(data.orderId)">Shelve</div>
+                                        <div class="btn fl-right" v-if="data.canStockIn == 1" @click="toPickUp(data.orderId,data.wmsOrderStatus)">Warehouse</div>
                                         <!-- <div class="btn fl-right" v-if="data.wmsOrderStatus == 4">打印上架单</div> -->
                                     </div>
                                 </div>
@@ -164,11 +167,14 @@ export default {
         },
         //去入库页面
         toPickUp(orderid){
-            this.$router.push({name:'suppliedPickUp',query:{orderid}})
+            //this.$router.push({name:'suppliedPickUp',query:{orderid}})
+            this.$router.push({name:'suppliedPartStockIn',query:{orderId:orderid}})
         },
         //去上架页面
         toshelves(paramId){
-            this.$router.push({name:'suppliedShelves',query:{paramId,typeId:1}})
+            //this.$router.push({name:'suppliedShelves',query:{paramId,typeId:1}})
+            this.$router.push({path: '/warehousing/shelveList', query: {getorderlistforsupplyorder:1,supplyorderid:paramId}})
+           
         }
     },
     components: {

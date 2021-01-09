@@ -8,7 +8,7 @@
 -->
 <template>
     <div class="tabbar-header">
-        <span class="left" v-if="relateDomainListEng" @click="toUrl(relateDomainListEng[0].domain)">Go {{relateDomainListEng[0].name}}</span>
+        <span class="left" v-if="relateDomainListEng" @click="toUrl(relateDomainListEng[0].domain)">Goto {{relateDomainListEng[0].name}}</span>
         <span>{{headerTitle}}</span>
         <van-icon name="chat-o" size="20" class="chat"/>
     </div>

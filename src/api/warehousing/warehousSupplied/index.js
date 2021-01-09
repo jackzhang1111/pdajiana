@@ -106,3 +106,60 @@ export function checkbarcodesourceApi(params) {
         data:params
     })
 }
+
+
+//通过供货单Id +商品条码得到确认入库页面的信息
+export function getsupplyinstockorderconfirminfoApi(params) {
+    return park({
+        url: `/supplystockinorder/getsupplyinstockorderconfirminfo`,
+        method: 'POST',
+        data: params
+    })
+}
+
+
+//确认供货入库
+export function confirmsupplyinstockorderApi(params) {
+    return park({
+        url: `/supplystockinorder/confirmsupplyinstockorder`,
+        method: 'POST',
+        data: params
+    })
+}
+
+
+//通过供货入库单号得到确认上架页面的信息
+export function getsupplyshelfuporderconfirminfoApi(params) {
+    return park({
+        url: `/supplystockinorder/getshelfuporderconfirminfo`,
+        method: 'POST',
+        data: params
+    })
+}
+
+
+//通过入库仓库Id获取可上架的位置
+export function getcanupregionlistApi(params) {
+    return park({
+        url: `/transferstockinorder/getcanupregionlist`,
+        method: 'POST',
+        data: params
+    })
+}
+//供货入库确认上架（支持部分上架）
+export function confirmsupplyshelfuporderApi(params) {
+    return park({
+        url: `/supplystockinorder/confirmsupplyshelfuporder`,
+        method: 'POST',
+        data: params
+    })
+}
+
+//待上架入库单列表
+export function waitingforshelfuporderlistApi(params) {
+    return park({
+        url:`/supplystockinorder/waitingforshelfuporderlist`,
+        method: 'POST',
+        params
+    })
+}

@@ -9,14 +9,29 @@
                     <div class="fl-right fs-22 c-666">{{detailData.orderSn}}</div>
                 </div>
 
-                <div class="time-item" v-if="typeSatus == 3 || typeSatus == 4">
+                <!--<div class="time-item" v-if="typeSatus == 3 || typeSatus == 4">
                     <span class="c-333">Warehousing No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.stockInOrderSn}}</div>
-                </div>
-                <div class="time-item" v-if="typeSatus == 4">
+                </div>-->
+                <!-- 新的供货入库上架逻辑：一个供货单对应多个入库单，一个供货单对应多个上架单 -->
+                <template v-if="detailData.finishedStockInOrderList!=null&&detailData.finishedStockInOrderList.length>0">
+                    <div class="time-item" v-for="(orderItem,index) in detailData.finishedStockInOrderList" :key="'inOrderItem'+index">
+                        <span class="c-333" v-if="index==0">Warehousing No.</span>
+                        <div class="fl-right fs-22 c-666">{{orderItem.orderSn}}</div>
+                    </div>
+                </template>
+
+                <!--<div class="time-item" v-if="typeSatus == 4">
                     <span class="c-333">Shelving No.</span>
                     <div class="fl-right fs-22 c-666">{{detailData.shelveOrderSn}}</div>
-                </div>
+                </div>-->
+                <!-- 新的供货入库上架逻辑：一个供货单对应多个入库单，一个供货单对应多个上架单 -->
+                <template v-if="detailData.finishedShelfUpOrderList!=null&&detailData.finishedShelfUpOrderList.length>0">
+                    <div class="time-item" v-for="(orderItem,index) in detailData.finishedShelfUpOrderList" :key="'upOrderItem'+index">
+                        <span class="c-333" v-if="index==0">Shelving No.</span>
+                        <div class="fl-right fs-22 c-666">{{orderItem.orderSn}}</div>
+                    </div>
+                </template>
 
 
                 <div class="time-item">
@@ -37,14 +52,29 @@
                 </div>
 
 
-                <div class="time-item" v-if="typeSatus == 3 || typeSatus == 4">
+                <!--<div class="time-item" v-if="typeSatus == 3 || typeSatus == 4">
                     <span class="c-333">Qty Warehoused</span>
                     <div class="fl-right fs-22 c-666">{{detailData.stockInNum}}</div>
+                </div>-->
+                <div class="time-item" v-if="detailData.wmsOrderStatus==2||detailData.wmsOrderStatus==3||detailData.wmsOrderStatus==4">
+                    <span class="c-333">Qty Warehoused</span>
+                    <div class="fl-right fs-22 c-666">{{detailData.hasUpTotalNum}}</div>
                 </div>
-                <div class="time-item" v-if="typeSatus == 4">
+                <!--<div class="time-item" v-if="typeSatus == 4">
                     <span class="c-333">Location</span>
                     <div class="fl-right fs-22 c-666">
                         <div v-for="(warehouse,index) in detailData.warehouseList" :key="index">
+                            <span>{{warehouse.regionName}}</span>&nbsp;&nbsp;&nbsp;
+                            <span>{{warehouse.upItemNum}}</span>
+                        </div>
+                    </div>
+                    
+                    
+                </div>-->
+                <div class="time-item" v-if="detailData.warehouseList!=null&&detailData.warehouseList.length>0">
+                    <span class="c-333">Location</span>
+                    <div class="fl-right fs-22 c-666">
+                        <div v-for="(warehouse,index) in detailData.warehouseList" :key="'warehouse'+index">
                             <span>{{warehouse.regionName}}</span>&nbsp;&nbsp;&nbsp;
                             <span>{{warehouse.upItemNum}}</span>
                         </div>
@@ -76,7 +106,7 @@
                 <span>{{detailData.totalProNum?detailData.totalProNum:0}}</span>
             </div>
         </div>
-        <div class="order-time" v-if="typeSatus != 1">
+        <!--<div class="order-time" v-if="typeSatus != 1">
             <div class="time-item" >
                 <span class="c-333">Date of Delivery</span>
                 <div class="fl-right fs-22 c-666">{{detailData.deliverTimeEng}}</div>
@@ -89,6 +119,21 @@
             <div class="time-item" v-if='typeSatus != 2 && typeSatus != 3'>
                 <span class="c-333">Date of Shelving</span>
                 <div class="fl-right fs-22 c-666">{{detailData.shelveDate}}</div>
+            </div>  
+        </div>-->
+        <div class="order-time">
+            <div class="time-item" v-if="detailData.deliverTimeEng!=null">
+                <span class="c-333">Date of Delivery</span>
+                <div class="fl-right fs-22 c-666">{{detailData.deliverTimeEng}}</div>
+            </div>
+            <div class="time-item" v-if="detailData.stockInTimeEng!=null">
+                
+                <span class="c-333">Date of Warehousing</span>
+                <div class="fl-right fs-22 c-666">{{detailData.stockInTimeEng}}</div>
+            </div>
+            <div class="time-item" v-if='detailData.shelveDateEng!=null'>
+                <span class="c-333">Date of Shelving</span>
+                <div class="fl-right fs-22 c-666">{{detailData.shelveDateEng}}</div>
             </div>  
         </div>
         <div class="place"></div>

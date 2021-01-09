@@ -45,10 +45,33 @@ export default {
           query: { fnskuCode: query.barcode },
         });
       } else if (this.code == 4) {
-        this.$router.replace({
-          name: "allUppershelf",
-          query: { orderid: query.barcode },
-        });
+
+        var stockInOrderType=this.checkStockInOrderType(query.barcode);
+
+        Toast(stockInOrderType);
+
+        //如果是调拨入库单
+        if(stockInOrderType==2){
+          this.$router.replace({
+            name: "allUppershelf",
+            query: { orderid: query.barcode },
+          });
+        }
+        //如果是供货入库单
+        else if(stockInOrderType==1){
+          this.$router.push(
+            {
+              path: '/warehousing/suppliedList/suppliedPartShelfUp', 
+              query: {
+                orderid: query.barcode
+              }
+            }
+          )
+        }
+        else{
+          Toast("Warehousing Order barcode not exists");
+        }
+
       }
       // this.startRecognize();
     }else{
@@ -101,10 +124,33 @@ export default {
                   query: { fnskuCode: result },
                 });
               } else if (that.code == 4) {
-                that.$router.replace({
-                  name: "allUppershelf",
-                  query: { orderid: result },
-                });
+
+                var stockInOrderType=that.checkStockInOrderType(result);
+
+                Toast(stockInOrderType);
+
+                //如果是调拨入库单
+                if(stockInOrderType==2){
+                  that.$router.replace({
+                    name: "allUppershelf",
+                    query: { orderid: result },
+                  });
+                }
+                //如果是供货入库单
+                else if(stockInOrderType==1){
+                  that.$router.push(
+                    {
+                      path: '/warehousing/suppliedList/suppliedPartShelfUp', 
+                      query: {
+                        orderid: result
+                      }
+                    }
+                  )
+                }
+                else{
+                  Toast("Warehousing Order barcode not exists");
+                }
+                
               }
             }
           }
@@ -195,10 +241,11 @@ export default {
       pdascanningordernoinApi({ orderSn }).then((res) => {
         if (res.code == 0) {
           if (res.Data.type == 1) {
-            this.$router.replace({
+            /*this.$router.replace({
               name: "suppliedPickUp",
               query: { orderid: res.Data.orderId, code: "sweepCode" },
-            });
+            });*/
+            this.$router.replace({name:'suppliedPartStockIn',query:{orderId:res.Data.orderId}})
           } else if (res.Data.type == 2) {
             this.$router.replace({
               name: "allocationInstorage",
@@ -216,7 +263,9 @@ export default {
           Toast("Warehoused! No more operation");
         } else if (res.code == 3) {
           Toast("Warehoused! Please put it away");
-        }
+        } else if (res.Data.type == 1 && res.code == 5) {
+          Toast("Related Warehousing Order haven't confirm warehousing.If you want to warehousing here,pls cancel it on PC first.");
+        } 
       });
     },
     //PDA扫描出库
@@ -249,6 +298,69 @@ export default {
           Toast("There are sales ex-warehousing orders applied for refund");
         }
       });
+    },
+    //根据条码格式判断入库单类型
+    checkStockInOrderType(barcode){
+      if(barcode==null||barcode==undefined){
+        barcode='';
+      }
+      var barcodeStr=barcode.trim().toLowerCase();
+
+      if((/^(bgrd)\d{22}$/).test(barcodeStr)){
+        return 1;
+      }
+
+      if((/^(bgrd)\d{8}$/).test(barcodeStr)){
+        return 1;
+      }
+
+      if((/^(bgr)\d{1,8}$/).test(barcodeStr)){
+        return 1;
+      }
+
+
+      if((/^(ghrkd)\d{22}$/).test(barcodeStr)){
+        return 1;
+      }
+
+      if((/^(grd)\d{8}$/).test(barcodeStr)){
+        return 1;
+      }
+
+      if((/^(gr)\d{1,8}$/).test(barcodeStr)){
+        return 1;
+      }
+
+
+
+      if((/^(bdrd)\d{22}$/).test(barcodeStr)){
+        return 2;
+      }
+
+      if((/^(bdrd)\d{8}$/).test(barcodeStr)){
+        return 2;
+      }
+
+      if((/^(bdr)\d{1,8}$/).test(barcodeStr)){
+        return 2;
+      }
+
+
+      if((/^(dbrkd)\d{22}$/).test(barcodeStr)){
+        return 2;
+      }
+
+      if((/^(dbrkd)\d{8}$/).test(barcodeStr)){
+        return 2;
+      }
+
+      if((/^(dr)\d{1,8}$/).test(barcodeStr)){
+        return 2;
+      }
+
+
+
+      return -1;
     },
   },
   components: {},
