@@ -45,6 +45,8 @@ import xsck from '@/assets/img/xsck.png'
 import diaobo from '@/assets/img/diaobo.png'
 import shangjia from '@/assets/img/shangjia.png'
 import xiajia from '@/assets/img/xiajia.png'
+import reporting from '@/assets/img/reporting.svg'
+import inspection from '@/assets/img/inspection.svg'
 import zhezhao from '@/multiplexing/zhezhao.vue'
 import {pdaselecthomeordertotalApi} from '@/api/warehousing/warehousSupplied/index.js'
 import {getuserApi} from '@/api/login/index.js'
@@ -91,6 +93,16 @@ export default {
                     icon:xiajia,
                     name:'Remove',
                     routerName:'removeList'
+                },
+                {
+                    icon:reporting,
+                    name:'reporting',
+                    routerName:'reportingList'
+                },
+                {
+                    icon:inspection,
+                    name:'inspection',
+                    routerName:'inspectionList'
                 },
             ],
             zhezhaoStatus:false,

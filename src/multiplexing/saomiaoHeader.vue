@@ -16,7 +16,7 @@
         @click="$router.go(-1)"
       />
       <van-search
-        placeholder="Enter Order No./Ex No."
+        :placeholder="placeholder"
         v-model="searchName"
         class="v-middle"
         @search="onSearch"
@@ -34,6 +34,10 @@ export default {
       type: String,
       default: "",
     },
+    placeholder:{
+      type: String,
+      default: "Enter key word",
+    }
   },
   data() {
     return {
