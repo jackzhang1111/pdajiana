@@ -49,8 +49,6 @@
                             <span>{{warehouse.upItemNum}}</span>
                         </div>
                     </div>
-                    
-                    
                 </div>
             </div>
 

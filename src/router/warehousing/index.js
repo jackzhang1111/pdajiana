@@ -8,12 +8,14 @@ import sold from './sold/index'
 import warehouAfterSales from './warehouAfterSales/index'
 import warehousweepCode from '@/components/tabbar/warehousing/sweepCode.vue'
 import orderInput from '@/components/tabbar/warehousing/orderInput'
+import reporting from './reporting/index'
+import inspection from './inspection/index'
 let routes = [
     {
         path: '/warehousing',
         name: 'warehousing',
         component: warehousing,
-        children:[
+        children: [
             ...warehousSupplied,
             ...allocation,
             ...cancellation,
@@ -21,7 +23,8 @@ let routes = [
             ...shelve,
             ...sold,
             ...warehouAfterSales,
-            
+            ...reporting,
+            ...inspection
         ]
     },
     {
