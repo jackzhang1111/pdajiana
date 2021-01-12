@@ -78,13 +78,14 @@
           <p class="c-666">Seller's SKU：{{ currentProduct.skuCode }}</p>
         </div>
         <div class="product" v-if="$route.query.type == 1">
-          <div class="new-printing-btn" @click="print">
+          <!--暂时隐藏打印 入库批次号，FNSKU码-->
+          <!--<div class="new-printing-btn" @click="print">
             print batchNo
           </div>
 
           <div class="new-printing-btn" @click="printfnsku">
             print FNSKU
-          </div>
+          </div>-->
         </div>
       </div>
       <div class="detailed">
