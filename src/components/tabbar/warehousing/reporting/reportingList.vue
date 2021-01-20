@@ -230,6 +230,7 @@ export default {
     },
     //去上报
     toUpload(outWarehouseId, skuId, data) {
+      localStorage.reportingData = JSON.stringify(data);
       this.$router.push({
         name: "reportingUpload",
         query: { outWarehouseId, skuId },
